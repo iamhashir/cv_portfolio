@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { motion, useReducedMotion } from "framer-motion"
+import { motion, type Variants, useReducedMotion } from "framer-motion"
 import styles from "./section-header.module.css"
 
 interface SectionHeaderProps {
@@ -24,7 +24,7 @@ export default function SectionHeader({ label, title, description }: SectionHead
   }
 
   // Animation configuration
-  const containerVariants: any = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -35,7 +35,7 @@ export default function SectionHeader({ label, title, description }: SectionHead
     }
   }
 
-  const childVariants: any = {
+  const childVariants: Variants = {
     hidden: { opacity: 0, y: 15 },
     visible: { 
       opacity: 1, 

@@ -1,7 +1,7 @@
 "use client"
 
 import React, { ReactNode } from "react"
-import { motion, useReducedMotion } from "framer-motion"
+import { motion, type TargetAndTransition, useReducedMotion } from "framer-motion"
 
 interface ScrollRevealProps {
   children: ReactNode
@@ -35,13 +35,13 @@ export default function ScrollReveal({
     none: {}
   }
 
-  const hiddenState: any = {
+  const hiddenState: TargetAndTransition = {
     opacity: 0,
     clipPath: "inset(0 0 100% 0)",
     ...directions[direction]
   }
 
-  const visibleState: any = {
+  const visibleState: TargetAndTransition = {
     opacity: 1,
     clipPath: "inset(0 0 0% 0)",
     x: 0,

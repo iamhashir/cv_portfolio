@@ -11,8 +11,8 @@
   display: flex;
   align-items: center;
   overflow: hidden;
-  padding: 120px 0 80px 0;
-  background-color: var(--bg-primary);
+  padding: 200px 0 120px 0;
+  background-color: transparent;
 }
 
 .heroContainer {
@@ -97,21 +97,13 @@
   }
 }
 
-/* 2. Marquee Section */
-.marqueeSection {
-  background-color: var(--bg-secondary);
-  border-top: 1px solid var(--border-muted);
-  border-bottom: 1px solid var(--border-muted);
-  padding: 16px 0;
-}
-
-/* 3. Section Common Styles */
+/* 2. Section Common Styles */
 .section {
-  padding: 120px 0;
+  padding: 160px 0 120px 0;
 }
 
 .sectionSecondary {
-  padding: 120px 0;
+  padding: 160px 0 120px 0;
   background-color: var(--bg-secondary);
   border-top: 1px solid var(--border-muted);
   border-bottom: 1px solid var(--border-muted);

@@ -6,6 +6,7 @@ import { ArrowRight, Activity } from "lucide-react"
 import { motion } from "framer-motion"
 import { Project } from "@/data/projects"
 import ExplodedProjectView from "@/components/ExplodedProjectView"
+import { useAppStore } from "@/lib/store"
 import styles from "./featured-project-card.module.css"
 
 interface FeaturedProjectCardProps {
@@ -15,12 +16,16 @@ interface FeaturedProjectCardProps {
 export default function FeaturedProjectCard({ project }: FeaturedProjectCardProps) {
   // Grab the first outcome metric as the showcase highlight
   const mainOutcome = project.outcome[0]
+  const setActiveProject = useAppStore((state) => state.setActiveProject)
 
   return (
     <motion.div 
       className={styles.cardWrapper}
       whileHover="hover"
       initial="initial"
+      onViewportEnter={() => setActiveProject(project.slug)}
+      onViewportLeave={() => setActiveProject(null)}
+      viewport={{ margin: "-200px 0px -200px 0px" }}
     >
       <div className={styles.cardContainer}>
         {/* Left Column: Metadata & Narrative */}
@@ -29,7 +34,11 @@ export default function FeaturedProjectCard({ project }: FeaturedProjectCardProp
             <span className={styles.categoryBadge}>{project.category}</span>
             <span className={styles.statusChip}>
               <span className={styles.pulseDot} />
-              {project.status.includes("/") ? project.status.split("/")[0].trim() : project.status}
+              {project.status ? (
+                project.status.includes("/") ? project.status.split("/")[0] : project.status
+              ) : (
+                `Active // ${project.year}`
+              )}
             </span>
           </div>
 
@@ -54,7 +63,7 @@ export default function FeaturedProjectCard({ project }: FeaturedProjectCardProp
           <div className={styles.stackContainer}>
             <span className={styles.stackLabel}>Engineered with</span>
             <div className={styles.tagGrid}>
-              {project.stack.map((tech) => (
+              {project.techStack?.map((tech) => (
                 <span key={tech} className={styles.techTag}>
                   {tech}
                 </span>

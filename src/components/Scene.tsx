@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useRef } from 'react'
+import React from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import IsometricBoard from './IsometricBoard'
@@ -46,12 +46,16 @@ function CameraController() {
       targetRotX = THREE.MathUtils.lerp(-Math.PI / 8, -Math.PI / 2, localP) // Looking straight down
     }
 
-    camera.position.x = THREE.MathUtils.lerp(camera.position.x, targetX, 0.05)
-    camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetY, 0.05)
-    camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 0.05)
-    
-    // Lerp rotation manually or lookAt
-    camera.rotation.x = THREE.MathUtils.lerp(camera.rotation.x, targetRotX, 0.05)
+    camera.position.set(
+      THREE.MathUtils.lerp(camera.position.x, targetX, 0.03),
+      THREE.MathUtils.lerp(camera.position.y, targetY, 0.03),
+      THREE.MathUtils.lerp(camera.position.z, targetZ, 0.03)
+    )
+    camera.rotation.set(
+      THREE.MathUtils.lerp(camera.rotation.x, targetRotX, 0.03),
+      camera.rotation.y,
+      camera.rotation.z
+    )
   })
 
   return null
@@ -66,7 +70,7 @@ export default function Scene() {
         <directionalLight position={[10, 20, 5]} intensity={1.5} color="#c9a96e" />
         <CameraController />
         <IsometricBoard />
-        <fog attach="fog" args={["#0a0908", 15, 40]} />
+        <fog attach="fog" args={["#0a0908", 10, 25]} />
       </Canvas>
     </div>
   )

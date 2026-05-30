@@ -3,15 +3,23 @@
 import React, { useRef, useMemo } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
+import { useAppStore } from '@/lib/store'
 
 const GRID_SIZE = 40
 const SPACING = 1.2
+
+const seededHeight = (x: number, z: number) => {
+  const value = Math.sin(x * 12.9898 + z * 78.233) * 43758.5453
+  const normalized = value - Math.floor(value)
+  return normalized > 0.8 ? normalized * 0.5 : 0
+}
 
 export default function IsometricBoard() {
   const meshRef = useRef<THREE.InstancedMesh>(null)
   
   // Create an invisible plane to raycast against for mouse tracking
   const planeRef = useRef<THREE.Mesh>(null)
+  const isAuditMode = useAppStore((state) => state.isAuditMode)
   
   const { camera, raycaster } = useThree()
   const mouse = useRef(new THREE.Vector2(-10, -10)) // start off-screen
@@ -31,8 +39,8 @@ export default function IsometricBoard() {
     const pos = new Float32Array(GRID_SIZE * GRID_SIZE)
     for (let i = 0; i < GRID_SIZE; i++) {
       for (let j = 0; j < GRID_SIZE; j++) {
-        // Some nodes are naturally higher/lower like a city/motherboard
-        pos[i * GRID_SIZE + j] = Math.random() > 0.8 ? Math.random() * 0.5 : 0
+        // Deterministic variation keeps the board stable across renders.
+        pos[i * GRID_SIZE + j] = seededHeight(i, j)
       }
     }
     return pos
@@ -41,11 +49,16 @@ export default function IsometricBoard() {
   // Initialize the instanced mesh
   const dummy = useMemo(() => new THREE.Object3D(), [])
   const color = useMemo(() => new THREE.Color(), [])
+  const activeColor = useMemo(() => new THREE.Color(), [])
   
   const targetPoint = useRef(new THREE.Vector3(0, 0, 0))
 
   useFrame((state) => {
     if (!meshRef.current || !planeRef.current) return
+
+    // Get the global state without triggering a re-render every frame
+    const activeProject = useAppStore.getState().activeProject
+    const isAuditMode = useAppStore.getState().isAuditMode
 
     // Raycast to find mouse position on the invisible plane
     raycaster.setFromCamera(mouse.current, camera)
@@ -62,7 +75,7 @@ export default function IsometricBoard() {
       for (let z = 0; z < GRID_SIZE; z++) {
         const posX = (x - GRID_SIZE / 2) * SPACING
         const posZ = (z - GRID_SIZE / 2) * SPACING
-        
+
         // Calculate distance from mouse
         const distToMouse = Math.sqrt(
           Math.pow(posX - targetPoint.current.x, 2) + 
@@ -70,26 +83,72 @@ export default function IsometricBoard() {
         )
 
         // The wave effect from mouse proximity
-        const wave = Math.max(0, 3 - distToMouse) * 0.5
-        
-        // Base elevation + slow ambient wave + mouse wave
-        const ambientWave = Math.sin(posX * 0.5 + time) * Math.cos(posZ * 0.5 + time) * 0.2
+        const wave = Math.max(0, 3 - distToMouse) * 0.3 // reduced mouse wave height
+
+        let ambientWave = Math.sin(posX * 0.5 + time) * Math.cos(posZ * 0.5 + time) * 0.2
+        let highlight = false
+        let projectScale = 1
+        let highlightColor = '#c9a96e'
+
+        // Narrative Project Reactions
+        if (activeProject === 'opsflow') {
+          // A central operational lane with signals branching into side workflows.
+          const isCoreLane = Math.abs(posX) < 1.8
+          const isBranch = Math.abs(posZ % 7) < 0.8 && Math.abs(posX) < 8
+          if (isCoreLane || isBranch) {
+            ambientWave += Math.sin(posZ * 0.8 - time * 2.6) * 0.45 + 0.22
+            projectScale = isCoreLane ? 1.32 : 1.12
+            highlight = true
+          }
+        } else if (activeProject === 'mina-games') {
+          // An arena ring with pulsing match sessions around the perimeter.
+          const distToCenter = Math.sqrt(posX * posX + posZ * posZ)
+          const isArenaRing = Math.abs(distToCenter - 6.5) < 1.1
+          const isSessionNode = Math.sin(posX * 1.45) * Math.cos(posZ * 1.45) > 0.72
+          if (isArenaRing || isSessionNode) {
+            ambientWave += Math.sin(distToCenter * 2.4 - time * 3.2) * 0.38 + 0.32
+            projectScale = isArenaRing ? 1.3 : 1.18
+            highlightColor = '#6ee7b7'
+            highlight = true
+          }
+        } else if (activeProject === 'reactor') {
+          // A diagonal compilation path moving through framework stages.
+          const distanceToCompilePath = Math.abs(posZ - posX * 0.48)
+          const isCompilePath = distanceToCompilePath < 1.35
+          const isStageNode = isCompilePath && Math.abs(posX % 5) < 1
+          if (isCompilePath) {
+            ambientWave += Math.sin(posX * 1.2 - time * 3) * 0.42 + 0.24
+            projectScale = isStageNode ? 1.45 : 1.16
+            highlightColor = '#d4b896'
+            highlight = true
+          }
+        }
+
         const posY = basePositions[i] + ambientWave + wave
 
         dummy.position.set(posX, posY, posZ)
         
-        // If close to mouse, make it scale up slightly
-        const scale = 1 + wave * 0.5
+        // Scale logic
+        const scale = (1 + wave * 0.2) * projectScale
         dummy.scale.set(scale, scale, scale)
         dummy.updateMatrix()
         
         meshRef.current.setMatrixAt(i, dummy.matrix)
 
-        // Color interpolation based on mouse proximity
-        if (distToMouse < 4) {
-          color.set('#c9a96e') // Highlight color (amber/gold)
+        // Color interpolation
+        if (isAuditMode) {
+          // Pure wireframe color
+          color.set('#ffffff')
+        } else if (highlight) {
+          // Lerp towards active system color
+          activeColor.set(highlightColor).lerp(color.set('#ffffff'), (Math.sin(time * 5) + 1) * 0.1)
+          color.set(activeColor)
+        } else if (distToMouse < 4) {
+          // Subtle mouse highlight
+          color.set('#524430')
         } else {
-          color.set('#2a2825') // Base dark color
+          // Muted base color
+          color.set('#1a1917')
         }
         meshRef.current.setColorAt(i, color)
 
@@ -120,8 +179,9 @@ export default function IsometricBoard() {
         {/* We use MeshStandardMaterial so it reacts to ambient/point lights */}
         <meshStandardMaterial 
           toneMapped={false} 
-          roughness={0.2}
-          metalness={0.8}
+          roughness={0.8}
+          metalness={0.2}
+          wireframe={isAuditMode}
         />
       </instancedMesh>
     </group>

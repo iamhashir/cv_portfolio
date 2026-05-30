@@ -1,16 +1,15 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowRight, Mail, Linkedin, Github } from "lucide-react"
-import React, { useRef } from "react"
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion"
+import { ArrowRight } from "lucide-react"
+import React from "react"
+import { motion, type Variants, useReducedMotion } from "framer-motion"
 import { projects } from "@/data/projects"
 import ProjectCard from "@/components/ProjectCard"
 
 // Redesign Component Imports
 import ScrollReveal from "@/components/ScrollReveal"
 
-import Marquee from "@/components/Marquee"
 import FeaturedProjectCard from "@/components/FeaturedProjectCard"
 import Timeline from "@/components/Timeline"
 import SectionHeader from "@/components/SectionHeader"
@@ -22,27 +21,8 @@ export default function Home() {
   const secondaryProjects = projects.filter((project) => !project.featured)
   const shouldReduceMotion = useReducedMotion()
 
-  const heroRef = useRef<HTMLElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"]
-  })
-
-  const particlesOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0])
-  const gridOpacity = useTransform(scrollYProgress, [0, 0.6], [0.1, 0.8])
-
-  // Trust items for the ticker
-  const trustItems = [
-    "3+ Years Freelance",
-    "CRM & Workflows",
-    "Abu Dhabi, UAE",
-    "React & TypeScript",
-    "API Integrations",
-    "AI Parsing Systems"
-  ]
-
   // Framer Motion Orchestrations
-  const heroContainerVariants: any = {
+  const heroContainerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -53,7 +33,7 @@ export default function Home() {
     }
   }
 
-  const heroItemVariants: any = {
+  const heroItemVariants: Variants = {
     hidden: { opacity: 0, y: 24 },
     visible: {
       opacity: 1,
@@ -65,21 +45,10 @@ export default function Home() {
     }
   }
 
-  const heroFadeVariants: any = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: 1,
-        ease: "easeOut"
-      }
-    }
-  }
-
   return (
     <div className={styles.homeWrapper}>
       {/* 1. Hero Section - Transparent for WebGL Background */}
-      <section ref={heroRef} className={styles.heroSection}>
+      <section className={styles.heroSection}>
 
         
         <div className={`container ${styles.heroContainer}`}>
@@ -99,20 +68,20 @@ export default function Home() {
               </motion.div>
               
               <motion.h1 className={styles.heroTitle} variants={heroItemVariants}>
-                Translating manual workflows into <span className={styles.titleItalic}>scalable software architecture.</span>
+                I engineer <span className={styles.titleItalic}>operational chaos</span> into scalable software.
               </motion.h1>
               
               <motion.p className={styles.heroSubtitle} variants={heroItemVariants}>
-                Full-stack developer engineering order from operational chaos. Building tailored CRM and automation systems.
+                With a foundation in sales and event operations, I don&apos;t just write code. I audit business workflows and build the bespoke technical infrastructure needed to scale them.
               </motion.p>
               
               <motion.div className={styles.heroActions} variants={heroItemVariants}>
-                <Link href="/work" className="btn-primary">
-                  <span>View systems built</span>
+                <Link href="#featured-work" className="btn-primary">
+                  <span>View System Architecture</span>
                   <ArrowRight size={16} />
                 </Link>
                 <Link href="/contact" className="btn-secondary">
-                  <span>Talk operations</span>
+                  <span>Talk Operations</span>
                 </Link>
               </motion.div>
             </motion.div>
@@ -125,30 +94,38 @@ export default function Home() {
                 </div>
               </div>
               <h1 className={styles.heroTitle}>
-                Translating manual workflows into <span className={styles.titleItalic}>scalable software architecture.</span>
+                I engineer <span className={styles.titleItalic}>operational chaos</span> into scalable software.
               </h1>
               <p className={styles.heroSubtitle}>
-                Full-stack developer engineering order from operational chaos. Building tailored CRM and automation systems.
+                With a foundation in sales and event operations, I don&apos;t just write code. I audit business workflows and build the bespoke technical infrastructure needed to scale them.
               </p>
               <div className={styles.heroActions}>
-                <Link href="/work" className="btn-primary">
-                  <span>View systems built</span>
+                <Link href="#featured-work" className="btn-primary">
+                  <span>View System Architecture</span>
                   <ArrowRight size={16} />
                 </Link>
                 <Link href="/contact" className="btn-secondary">
-                  <span>Talk operations</span>
+                  <span>Talk Operations</span>
                 </Link>
               </div>
             </div>
           )}
-          
-          {/* Monolith removed to focus on strictly structural presentation */}
         </div>
       </section>
 
-      {/* 2. Trust Rail / Subtle Marquee Ticker */}
-      <section className={styles.marqueeSection}>
-        <Marquee items={trustItems} speed={40} />
+      {/* 2. The Blueprint (Vertical timeline block) */}
+      <section className={styles.sectionSecondary}>
+        <div className="container">
+          <SectionHeader
+            label="Execution Plan"
+            title="Methodical Development"
+            description="How I take systems from messy paper checklists to automated operations code."
+          />
+
+          <ScrollReveal direction="up">
+            <Timeline />
+          </ScrollReveal>
+        </div>
       </section>
 
       {/* 3. Featured Systems */}
@@ -177,8 +154,8 @@ export default function Home() {
       <section className={styles.sectionSecondary}>
         <div className="container">
           <SectionHeader
-            label="Secondary Work"
-            title="Additional Projects & Tools"
+            label="The Arsenal"
+            title="Additional Infrastructure"
             description="Selected client setups, utility structures, and standalone software products."
           />
           
@@ -189,32 +166,10 @@ export default function Home() {
               </ScrollReveal>
             ))}
           </div>
-          
-          <div className={styles.projectsFooter}>
-            <Link href="/work" className="btn-secondary">
-              <span>View all projects</span>
-              <ArrowRight size={16} />
-            </Link>
-          </div>
         </div>
       </section>
 
-      {/* 5. Process (Vertical timeline block) */}
-      <section className={styles.section}>
-        <div className="container">
-          <SectionHeader
-            label="Execution Plan"
-            title="Methodical Development"
-            description="How I take systems from messy paper checklists to automated operations code."
-          />
-          
-          <ScrollReveal direction="up">
-            <Timeline />
-          </ScrollReveal>
-        </div>
-      </section>
-
-      {/* 6. Closing CTA - Terminal Style */}
+      {/* 5. Closing CTA - Terminal Style */}
       <section className={styles.ctaSection}>
         <div className={`container ${styles.ctaContainer}`}>
           <div className={styles.terminalCta}>
@@ -227,10 +182,10 @@ export default function Home() {
             <div className={styles.terminalBody}>
               <p className={styles.terminalLine}>
                 <span className={styles.terminalPrompt}>~ </span> 
-                <span className={styles.terminalCommand}>echo "Let's build something worth shipping."</span>
+                <span className={styles.terminalCommand}>echo &quot;Let&apos;s build something worth shipping.&quot;</span>
               </p>
               <p className={styles.terminalOutput}>
-                Open to custom operations dashboard integrations, CRM extensions, workflow optimizations, and contract contracts.
+                Open to custom operations dashboard integrations, CRM extensions, workflow optimizations, and contract projects.
               </p>
               <p className={styles.terminalLine}>
                 <span className={styles.terminalPrompt}>~ </span>

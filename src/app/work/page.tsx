@@ -1,18 +1,18 @@
 "use client"
 
 import { useState } from "react"
-import { projects } from "@/data/projects"
+import { projects, projectCategoryGroups } from "@/data/projects"
 import ProjectCard from "@/components/ProjectCard"
 import styles from "./work.module.css"
 
-const CATEGORIES = ["All", "CRM / Ops", "AI", "Realtime", "Framework / Systems"]
+const CATEGORIES = ["All", ...projectCategoryGroups]
 
 export default function Work() {
   const [activeCategory, setActiveCategory] = useState("All")
 
   const filteredProjects = projects.filter((project) => {
     if (activeCategory === "All") return true
-    return project.category === activeCategory
+    return project.categoryGroup === activeCategory
   })
 
   return (

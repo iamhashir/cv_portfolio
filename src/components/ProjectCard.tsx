@@ -23,20 +23,24 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         </div>
         <div className={styles.metaItem}>
           <span className={styles.metaLabel}>Status</span>
-          <span className={styles.metaVal} title={project.status}>
-            {project.status.includes("/") ? project.status.split("/")[0].trim() : project.status}
+          <span className={styles.metaVal} title={project.status || "Active"}>
+            {project.status ? (
+              project.status.includes("/") ? project.status.split("/")[0].trim() : project.status
+            ) : (
+              `Active // ${project.year}`
+            )}
           </span>
         </div>
       </div>
 
       <ul className={styles.stackList}>
-        {project.stack.slice(0, 4).map((tech) => (
+        {project.techStack?.slice(0, 4).map((tech) => (
           <li key={tech} className={styles.stackItem}>
             {tech}
           </li>
         ))}
-        {project.stack.length > 4 && (
-          <li className={styles.stackItem}>+{project.stack.length - 4}</li>
+        {project.techStack?.length > 4 && (
+          <li className={styles.stackItem}>+{project.techStack.length - 4}</li>
         )}
       </ul>
 

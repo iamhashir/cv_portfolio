@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ArrowLeft, Server, Cpu, Database, Link2, Key, Info, HelpCircle } from "lucide-react"
+import { ArrowLeft, Server, Cpu, Database, Link2, Key, HelpCircle } from "lucide-react"
 import { projects } from "@/data/projects"
 import { ArchitectureDiagram } from "@/lib/architectureDiagrams"
 import styles from "./project-detail.module.css"
@@ -57,6 +57,10 @@ export default async function ProjectPage({ params }: Props) {
                 <span style={{ color: "var(--text-muted)", display: "inline-flex", alignItems: "center", gap: "4px" }}>
                   <Key size={14} /> Private Project
                 </span>
+              ) : project.githubUrl ? (
+                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className={styles.metaLink}>
+                  <Link2 size={14} /> View Repository
+                </a>
               ) : (
                 <span className={styles.metaLink}>
                   <Link2 size={14} /> Case Study Only
@@ -78,15 +82,12 @@ export default async function ProjectPage({ params }: Props) {
           <div className={styles.snapshotItem}>
             <span className={styles.snapshotLabel}>Target Users</span>
             <span className={styles.snapshotVal}>
-              {slug === "opsflow" && "Operations staff, supply coordinators, and executive management."}
-              {slug === "financesmith" && "Accounting personnel, operational supervisors, and ledger auditors."}
-              {slug === "ui-analyzer" && "UI/UX designers, accessibility evaluators, and frontend developers."}
-              {!["opsflow", "financesmith", "ui-analyzer"].includes(slug) && "Commercial operators and development engineers."}
+              {project.targetUsers}
             </span>
           </div>
           <div className={styles.snapshotItem}>
             <span className={styles.snapshotLabel}>Core Stack</span>
-            <span className={styles.snapshotVal}>{project.stack.join(", ")}</span>
+            <span className={styles.snapshotVal}>{project.techStack.join(", ")}</span>
           </div>
           <div className={styles.snapshotItem}>
             <span className={styles.snapshotLabel}>Deliverables</span>
@@ -189,14 +190,7 @@ export default async function ProjectPage({ params }: Props) {
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>Technical Decisions</h2>
         <p className={styles.sectionText}>
-          {slug === "opsflow" &&
-            "Opting for Firebase allowed fast real-time status syncing across concurrent warehouse operators. However, because client operations require strict sales reconciliation, we linked Firebase data endpoints to an relational PostgreSQL database running Prisma ORM to keep invoicing fully compliant."}
-          {slug === "financesmith" &&
-            "We selected Fastify to ensure high request throughput during ledger uploads. Standardizing schema checks using JSON models at the API gateway layer prevents incomplete records from reaching the double-entry bookkeeping ledger."}
-          {slug === "ui-analyzer" &&
-            "A separate FastAPI python engine was structured to run visual heuristical parsing libraries asynchronously, preventing high computer vision latencies from blocking the Node.js API server or client UI loads."}
-          {!["opsflow", "financesmith", "ui-analyzer"].includes(slug) &&
-            "The architecture was designed with modular components to isolate heavy CPU calculations from UI threads, selecting databases optimized for specific data structures (e.g. key-value caching vs relational indexing)."}
+          {project.technicalDecisions}
         </p>
       </section>
 

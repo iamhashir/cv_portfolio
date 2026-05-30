@@ -1,8 +1,8 @@
 .cardWrapper {
   width: 100%;
   position: relative;
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-muted);
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 16px;
   overflow: hidden;
   transition: border-color var(--transition-normal);
@@ -17,6 +17,8 @@
   grid-template-columns: 1.1fr 0.9fr;
   gap: 32px;
   min-height: 480px;
+  background-color: rgba(14, 13, 11, 0.4);
+  backdrop-filter: blur(12px);
 }
 
 .infoColumn {

@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useRef } from "react"
-import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion"
+import { motion, useScroll, useSpring, useReducedMotion } from "framer-motion"
 import styles from "./timeline.module.css"
 
 const steps = [
@@ -98,7 +98,7 @@ function ScrollRevealNode({ children, index }: ScrollRevealNodeProps) {
   if (shouldReduceMotion) {
     return (
       <div className={`${styles.timelineNode} ${styles.timelineNodeActive}`}>
-        <div className={`${styles.timelineDot} ${styles.timelineDotActive}`} />
+        {children}
       </div>
     )
   }
@@ -115,13 +115,7 @@ function ScrollRevealNode({ children, index }: ScrollRevealNodeProps) {
       viewport={{ once: true, margin: "0px 0px -150px 0px" }}
       transition={{ duration: 0.5, delay: index * 0.15 }}
     >
-      <motion.div 
-        className={styles.timelineDot}
-        initial={{ backgroundColor: "var(--border-muted)" }}
-        whileInView={{ backgroundColor: "var(--accent-color)" }}
-        viewport={{ once: true, margin: "0px 0px -150px 0px" }}
-        transition={{ duration: 0.3, delay: index * 0.15 + 0.2 }}
-      />
+      {children}
     </motion.div>
   )
 }

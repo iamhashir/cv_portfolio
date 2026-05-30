@@ -1,22 +1,40 @@
+export const projectCategoryGroups = [
+  "CRM / Ops",
+  "AI",
+  "Realtime",
+  "Framework / Systems",
+] as const
+
+export type ProjectCategoryGroup = (typeof projectCategoryGroups)[number]
+
+type ProjectArchitecture = {
+  frontend: string
+  backend: string
+  database: string
+  integrations?: string[]
+  deployment?: string
+}
+
 export type Project = {
-  title: string
+  id: string
   slug: string
+  title: string
+  category: string
+  categoryGroup: ProjectCategoryGroup
   summary: string
   role: string
   status: string
-  category: string
+  techStack: string[]
+  liveUrl?: string
+  githubUrl?: string
   featured: boolean
-  stack: string[]
+  year: string
+  targetUsers: string
   problem: string
   solution: string
   features: string[]
-  architecture: {
-    frontend: string
-    backend: string
-    database: string
-    integrations?: string[]
-    deployment?: string
-  }
+  architecture: ProjectArchitecture
+  technicalDecisions: string
   challenges: string[]
   outcome: string[]
   reflection: string[]
@@ -24,243 +42,276 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    title: "OpsFlow",
-    slug: "opsflow",
-    summary: "Business operations automation platform replacing manual spreadsheet-based tracking with custom CRM workflows and unified reporting.",
-    role: "Lead Full-Stack Developer",
-    status: "Private deployment / Case study available on request",
-    category: "CRM / Ops",
-    featured: true,
-    stack: ["React", "Firebase", "Node.js", "Express", "Prisma", "TypeScript"],
-    problem: "A growing operations business was managing orders, supplier purchases, and customer accounts manually across fragmented spreadsheets and chat groups. This resulted in lost orders, delayed customer status updates, mismatching balances, and zero visibility into historical analytics or cash flow trends.",
-    solution: "Designed and engineered an integrated business operations automation platform. Built custom modules for order tracking, supplier purchase logging, balance sheet calculations, and an automated customer notification system to unify operational workflows.",
-    features: [
-      "Real-time order lifecycle tracking and custom status pipelines",
-      "Supplier purchase logging and automated inventory ledger integration",
-      "Dynamic customer balance sheets reflecting transactions and payments",
-      "Automated communication templates utilizing WhatsApp Business API",
-      "Role-based administrative dashboards for executives and warehouse operators"
-    ],
-    architecture: {
-      frontend: "React SPA with React Router, context-based state management, and custom UI components",
-      backend: "Node.js API powered by Express and structured routes",
-      database: "Firebase Firestore for real-time synchronization with Prisma client running on relational secondary nodes",
-      integrations: ["WhatsApp Business API (Twilio)", "PDF/Excel export utility engines", "Stripe payment checkpoints"],
-      deployment: "Vercel (Frontend) and Google Cloud Run (Backend services)"
-    },
-    challenges: [
-      "Handling frequently changing client operations mid-development. Solved by implementing a schema-less key-value attributes extension on the core order model, enabling operations staff to create custom fields dynamically.",
-      "Ensuring sub-second search latency over thousands of historical text entries. Developed a localized index mirroring script that caches text records inside a search indexing utility, keeping UI search quick and fluid."
-    ],
-    outcome: [
-      "Reduced manual administrative overhead by approximately 60% within the first month",
-      "Completely eliminated order misplacement and duplicate purchase records",
-      "Centralized legacy audit files into an instantly searchable transaction record library",
-      "Enabled real-time cash flow visibility, helping stakeholders make faster purchasing decisions"
-    ],
-    reflection: [
-      "Underlining modularity early in development saved significant refactoring time when custom reporting was requested.",
-      "Real-time syncing layers require defensive error-handling to prevent race conditions during concurrent edits.",
-      "Deep understanding of how operators work in warehouses is key to creating intuitive layout interfaces."
-    ]
-  },
-  {
-    title: "FinanceSmith",
-    slug: "financesmith",
-    summary: "Finance workflow platform enabling automated payment approvals, cost tracking, and real-time ledger auditing for operations teams.",
-    role: "Full-Stack Engineer",
-    status: "Private Case Study",
-    category: "Framework / Systems",
-    featured: true,
-    stack: ["React", "TypeScript", "Node.js", "PostgreSQL", "Prisma", "Fastify"],
-    problem: "An operations team struggled with fragmented, manual expense requests. Multi-step approval workflows were conducted entirely over email, and tracking department-wise budgets required manual reconciliation into disconnected spreadsheets, resulting in audit delays and budget leakage.",
-    solution: "Engineered a centralized finance workflow platform featuring automated hierarchical approval routing, real-time cost-to-budget tracking, and a double-entry ledger engine that provides an immutable audit trail.",
-    features: [
-      "Custom hierarchical approval routes based on expense limit thresholds",
-      "Interactive budget tracking charts reporting division-wise expenditures",
-      "Double-entry bookkeeping engine ensuring ledger compliance",
-      "Asynchronous document parsing queues extracting text from invoices",
-      "Comprehensive CSV/Excel export tools for Direct Bank Reconciliation"
-    ],
-    architecture: {
-      frontend: "Next.js UI utilizing TypeScript interfaces and styled React wrappers",
-      backend: "Fastify microservices optimizing high-frequency transactional routes",
-      database: "PostgreSQL database running with Prisma ORM for type-safe query compilation",
-      integrations: ["OCR Document Analysis API", "Secure AWS S3 Bucket storage", "Slack App Webhooks"],
-      deployment: "AWS ECS Fargate running Dockerized containers"
-    },
-    challenges: [
-      "Preventing double-charge race conditions during concurrent payment runs. Mitigated by implementing database-level row locks and database transactions, guaranteeing operations are executed atomically.",
-      "High latency during OCR invoice ingestion. Designed a background worker queue using a Redis backing store, decoupling file upload from document analysis to keep the main thread responsive."
-    ],
-    outcome: [
-      "Reduced the invoice-to-ledger cycle from 5 operational days to under 4 hours",
-      "Provided 100% auditable invoice logs for managers, completely stopping unauthorized expense requests",
-      "Saved the bookkeeping team hours of manual data alignment and entry work"
-    ],
-    reflection: [
-      "Immutable databases simplify audit log engineering, though they require strict error checking during creation.",
-      "Offloading complex tasks to background processes is essential to maintaining high UI performance.",
-      "Standardizing validation on both client and server prevents bad data from corrupting ledger logs."
-    ]
-  },
-  {
-    title: "UI Analyzer",
-    slug: "ui-analyzer",
-    summary: "An AI-powered design auditing tool that scans interfaces for accessibility, heuristics, and consistency issues using computer vision.",
-    role: "AI & Full-Stack Developer",
-    status: "Public beta / Live demo available",
-    category: "AI",
-    featured: true,
-    stack: ["Next.js", "Python", "FastAPI", "OpenAI Vision API", "Supabase", "TypeScript"],
-    problem: "Design reviews are slow, inconsistent, and highly subjective. Product and development teams struggle to identify layout misalignments, text scaling violations, and accessibility failures (WCAG) before shipping, leading to design debt.",
-    solution: "Created a visual AI-assisted auditing web app that accepts screenshot uploads or target URLs, executes heuristic layout checks, and displays design violations on an interactive overlay.",
-    features: [
-      "AI-powered screenshot scanner powered by OpenAI Vision LLMs",
-      "Automated WCAG AA/AAA color contrast audit calculator",
-      "Interactive pixel-level canvas grid indicating alignment issues",
-      "Shareable report generator compiling heuristical feedback with PDF options",
-      "Custom REST endpoint for automated CI/CD pipeline UI checks"
-    ],
-    architecture: {
-      frontend: "Next.js App Router with canvas drawing overlays and visual coordinates",
-      backend: "FastAPI server running Python processing scripts and computer vision utilities",
-      database: "Supabase PostgreSQL database and Storage buckets for uploaded assets",
-      integrations: ["OpenAI Vision API API", "Puppeteer headless browser for remote page screenshot extraction", "GitHub REST API"],
-      deployment: "Vercel (Frontend) and Railway (Python server)"
-    },
-    challenges: [
-      "Scaling coordinates accurately across different viewport aspect ratios. Resolved by normalizing absolute coordinates into relative percentages, rendering bounding highlights correctly on all devices.",
-      "Mitigating the 8+ second latency of OpenAI Vision models. Created a real-time progress update screen using Server-Sent Events (SSE) that feeds users immediate analytical feedback as it evaluates."
-    ],
-    outcome: [
-      "Allowed QA teams to capture 85% of standard visual alignment issues before manual reviews",
-      "Replaced manual audit documents with single, shareable web dashboard links",
-      "Accelerated front-end design system conformance validation cycles"
-    ],
-    reflection: [
-      "Using Server-Sent Events is highly effective for keeping users engaged during slow AI model runs.",
-      "Normalizing visual data is critical when building interactive web overlays.",
-      "Keeping python microservices separate from the frontend allows scaling CPU-heavy image processing independently."
-    ]
-  },
-  {
-    title: "Traverse",
-    slug: "traverse",
-    summary: "A real-time travel recommendation and analytics platform that matches travelers with local experiences using collaborative filtering.",
-    role: "Backend & Data Architect",
-    status: "Private deployment",
-    category: "Realtime",
-    featured: false,
-    stack: ["Next.js", "TypeScript", "Node.js", "MongoDB", "Redis", "Python"],
-    problem: "Travel coordinators were manually tailoring trip plans, which was slow and lacked personalization based on real-time feedback. Booking systems lacked user data analysis, resulting in lower conversion on local excursion upsells.",
-    solution: "Developed an analytical recommendation engine leveraging a collaborative filtering model, caching structures, and a mapping interface to deliver responsive trip suggestions.",
-    features: [
-      "Real-time travel itinerary generation utilizing preference tags",
-      "Collaborative filtering model matching users with highly rated activities",
-      "Low-latency analytics dashboard tracking experience bookings",
-      "Dynamic trip mapper featuring path optimization coordinates"
-    ],
-    architecture: {
-      frontend: "Next.js UI with custom mapping integrations",
-      backend: "Node.js API + Python Flask analytics engine",
-      database: "MongoDB document storage with Redis caching layers",
-      integrations: ["Google Places API", "Mapbox Routing API", "Mixpanel Events Tracking"],
-      deployment: "Vercel and AWS DocumentDB"
-    },
-    challenges: [
-      "High query latency when executing travel recommendation calculations. Solved by caching core itinerary fragments in Redis, reducing query response times by over 80%.",
-      "Formatting complex geographical coordinate maps. Implemented MongoDB geospatial index queries, allowing sub-second distance and radius lookups."
-    ],
-    outcome: [
-      "Increased excursions and local experience booking rates by 45%",
-      "Reduced itinerary design cycles from hours to seconds for operators",
-      "Provided operators with real-time dashboards mapping popular travel zones"
-    ],
-    reflection: [
-      "Caching static dataset sections in memory dramatically lowers database pressure.",
-      "Geospatial databases make working with coordinates significantly easier than custom mathematical formulas.",
-      "Interactive maps improve visitor session durations when planning workflows."
-    ]
-  },
-  {
-    title: "Reactor",
+    id: "reactor",
     slug: "reactor",
-    summary: "A visual state machine builder and generator for complex frontends, compiling nodes into type-safe code controllers.",
-    role: "Lead Systems Architect",
-    status: "Open Source / Public Repo",
-    category: "Framework / Systems",
-    featured: false,
-    stack: ["React", "TypeScript", "Web Audio API", "Rust", "WebAssembly", "CSS Modules"],
-    problem: "Debugging complex application state in large frontends is slow and error-prone. Asynchronous event loops and multiple page variables frequently trigger race conditions and unexpected layout glitches.",
-    solution: "Created an interactive node-based canvas designer that visually maps frontend transitions, analyzes them for logic deadlocks, and outputs fully typed React hook controllers.",
+    title: "Reactor Framework",
+    category: "Architecture & Frameworks",
+    categoryGroup: "Framework / Systems",
+    summary: "A lightweight frontend framework and rendering engine built from first principles, with a custom JSX runtime, hooks system, and file-based routing.",
+    role: "Framework Engineer",
+    status: "Public repository // 2024",
+    techStack: ["TypeScript", "JSX Runtime", "Hooks", "File-based Routing", "Rendering Engine"],
+    githubUrl: "https://github.com/ihashirr/reactor",
+    featured: true,
+    year: "2024",
+    targetUsers: "Frontend engineers exploring framework internals and lightweight application runtimes.",
+    problem: "Modern frontend libraries hide much of the rendering lifecycle behind abstractions. Reactor explores how a compact framework can provide familiar application primitives while keeping routing, state, and rendering behavior understandable.",
+    solution: "Built a lightweight frontend framework from first principles, including a JSX runtime, component rendering pipeline, hooks system, and file-based router.",
     features: [
-      "Drag-and-drop node state machine designer",
-      "TypeScript code generator producing clean state hooks",
-      "Time-travel debugger tracking state changes in a timeline",
-      "Rust-powered cycle checker identifying deadlock nodes in graphs",
-      "Graph layout auto-organizer utilizing WebAssembly graph-sorting scripts"
+      "Custom JSX runtime for translating component syntax into renderable nodes",
+      "Hooks system for component-level state and lifecycle behavior",
+      "File-based routing with dynamic route support",
+      "Route-scoped state isolation",
+      "Rendering pipeline implemented without a third-party UI framework",
     ],
     architecture: {
-      frontend: "React canvas client with specialized drag-and-drop engines and context state managers",
-      backend: "Wasm compiler compiling native Rust functions for layout sorting",
-      database: "File-system export schema / local browser storage database",
-      integrations: ["GitHub Gist API", "NPM Registry linking hooks"],
-      deployment: "Vercel / GitHub Pages hosting"
+      frontend: "Custom TypeScript component runtime responsible for JSX evaluation, hooks, and view updates.",
+      backend: "No application backend is required for the framework core; routing and rendering behavior run in the client runtime.",
+      database: "No persistent database is required by the core framework.",
+      integrations: ["TypeScript compiler", "Browser DOM APIs"],
+      deployment: "Static web hosting or integration inside a frontend project",
     },
+    technicalDecisions: "The framework keeps its core intentionally small so the rendering lifecycle remains inspectable. Implementing JSX evaluation, hooks, and routing directly makes the trade-offs visible instead of delegating them to a larger dependency.",
     challenges: [
-      "UI lag when panning layouts containing hundreds of nodes. Resolved by offloading node rendering to custom HTML5 canvases, bypassing React DOM updates during movement.",
-      "Structuring a clean, human-readable TypeScript output schema. Engineered an AST (Abstract Syntax Tree) compiler in Rust that parses graphic nodes into structured code loops."
+      "Predictable rendering lifecycle. Component updates and hook execution need a stable order so local state changes do not produce inconsistent UI output.",
+      "Route-scoped state isolation. Navigation behavior must avoid leaking state between route trees while still keeping dynamic routes practical.",
     ],
     outcome: [
-      "Adopted by several teams to design complex checkout and chat flow interfaces",
-      "Reduced frontend state debugging durations by mapping out state transitions beforehand",
-      "Provided an open-source tool for frontend developers managing complex web variables"
+      "Built a complete rendering pipeline without third-party UI libraries.",
+      "Engineered route-scoped state isolation and dynamic routing.",
+      "Created a compact framework for studying predictable rendering behavior.",
     ],
     reflection: [
-      "Offloading complex calculations to Rust and WebAssembly makes web apps feel like native software.",
-      "Canvas renders outperform standard React rendering loop frameworks for highly populated node graphs.",
-      "Compiling graphical models to clean code bridges the gap between design and code."
-    ]
+      "Framework code benefits from a narrow core with explicit lifecycle rules.",
+      "Routing and state ownership should be designed together.",
+      "Small runtime experiments are useful for understanding the abstractions used by larger libraries.",
+    ],
   },
   {
-    title: "MINA GAMES",
+    id: "mina-games",
     slug: "mina-games",
-    summary: "A real-time multiplayer gaming hub that handles match coordination, live leaderboards, and instant messaging overlays.",
-    role: "Lead Developer",
-    status: "Active MVP / Live Demo",
-    category: "Realtime",
-    featured: false,
-    stack: ["Next.js", "Node.js", "Socket.io", "Redis", "SQLite", "Firebase"],
-    problem: "Many browser-based multiplayer games experience high connection latency, rendering issues, and server lag. Syncing game loops and handling sudden player disconnections without database crashes is highly complex.",
-    solution: "Developed a real-time gaming hub using persistent web socket channels, Redis message pub/sub, and localized SQLite nodes to achieve low match latency and resilient user sessions.",
+    title: "MINA GAMES",
+    category: "Real-time Multiplayer Platform",
+    categoryGroup: "Realtime",
+    summary: "A real-time multiplayer platform with matchmaking, tournaments, and WebSocket-based gameplay, built as a collaborative full-stack product.",
+    role: "Product Owner & Full-Stack Engineer",
+    status: "Public repository // 2024",
+    techStack: ["Fastify", "WebSockets", "Prisma", "Docker", "NGINX", "TypeScript"],
+    githubUrl: "https://github.com/ihashirr/mina-games",
+    featured: true,
+    year: "2024",
+    targetUsers: "Players joining real-time matches, tournaments, and multiplayer sessions.",
+    problem: "A multiplayer platform has to coordinate user sessions, match state, and tournament flows while keeping interactions responsive across multiple connected clients.",
+    solution: "Built a full-stack multiplayer platform with WebSocket-based gameplay, matchmaking, tournaments, and a custom frontend architecture.",
     features: [
-      "Low-latency matchmaking queue using player ratings",
-      "Socket.io communication sync engine syncing game state",
-      "Dynamic leaderboards recalculating scores instantly",
-      "Integrated live chat channels with online indicators",
-      "Optimized mobile-responsive client interfaces supporting gestures"
+      "Real-time multiplayer gameplay over persistent WebSocket connections",
+      "Matchmaking and tournament flows",
+      "Player session and application data managed through a typed backend",
+      "Containerized runtime behind NGINX",
+      "Custom JSX-based frontend architecture",
     ],
     architecture: {
-      frontend: "React client rendering optimized game layouts",
-      backend: "Node.js server cluster managing WebSockets",
-      database: "SQLite database for profiles and Redis cache storing matchmaking queues",
-      integrations: ["Firebase Authentication", "Discord status webhooks"],
-      deployment: "DigitalOcean Droplets with Cloudflare security routing"
+      frontend: "TypeScript client using a custom JSX runtime for interactive multiplayer screens.",
+      backend: "Fastify services coordinate HTTP requests and persistent WebSocket sessions.",
+      database: "Prisma provides typed access to persistent application data.",
+      integrations: ["WebSockets", "Docker", "NGINX"],
+      deployment: "Containerized application runtime",
     },
+    technicalDecisions: "Persistent WebSocket connections are central to the platform because match interactions require continuous two-way communication. Fastify, Prisma, Docker, and NGINX provide a typed and deployable service foundation around that real-time core.",
     challenges: [
-      "Handling connection dropouts without losing player match states. Solved by storing active session variables in Redis, enabling reconnection reconnects within a 60-second window.",
-      "Maintaining physics rendering synchronization at 60 frames per second. Implemented client-side input prediction and server reconciliation patterns to eliminate perceived latency."
+      "Coordinating real-time state. Gameplay events need to stay synchronized across active clients without turning the UI into the source of truth.",
+      "Managing product scope across a collaborative build. Matchmaking, tournaments, gameplay, and infrastructure have to remain coherent as separate contributors ship features.",
     ],
     outcome: [
-      "Achieved sub-50ms sync latencies across regional multiplayer sessions",
-      "Successfully scaled to manage concurrent players on single core virtual server nodes",
-      "Boosted average gameplay session durations by providing instant match lobbies"
+      "Implemented real-time state synchronization for multiplayer sessions.",
+      "Developed frontend architecture using a custom JSX runtime.",
+      "Coordinated a cross-functional team across the product lifecycle.",
     ],
     reflection: [
-      "Client-side prediction is essential for creating real-time experiences over sockets.",
-      "Redis is an exceptional, fast-access tool for managing short-lived sessions and state queues.",
-      "Keeping connection logs separate from profile data prevents database performance bottlenecks."
-    ]
-  }
+      "Real-time features need clear server and client ownership boundaries.",
+      "A multiplayer product benefits from treating infrastructure as part of the user experience.",
+      "Shared interfaces reduce coordination cost across a collaborative build.",
+    ],
+  },
+  {
+    id: "opsflow",
+    slug: "opsflow",
+    title: "OpsFlow",
+    category: "Operations Automation",
+    categoryGroup: "CRM / Ops",
+    summary: "Custom CRM and ERM workflows for order tracking, purchases, balance sheets, sales reporting, and customer communication.",
+    role: "Full-Stack Developer",
+    status: "Public repository // 2023",
+    techStack: ["React", "JavaScript", "Firebase", "WhatsApp Automation"],
+    githubUrl: "https://github.com/ihashirr/opsflow",
+    featured: true,
+    year: "2023",
+    targetUsers: "Operations staff, sales teams, and managers replacing spreadsheet-based workflows.",
+    problem: "Manual spreadsheets make operational work difficult to track consistently. Orders, supplier purchases, balances, and sales reporting become fragmented as activity grows.",
+    solution: "Built custom CRM and ERM workflows that centralize operational records, automate repeatable processes, and support customer communication.",
+    features: [
+      "Order tracking workflow",
+      "Supplier purchase records",
+      "Customer balance sheets",
+      "Sales reporting",
+      "Automated WhatsApp customer broadcasting",
+    ],
+    architecture: {
+      frontend: "React interface for operational workflows and reporting.",
+      backend: "Application logic coordinates CRM and ERM workflows.",
+      database: "Firebase stores shared operational records.",
+      integrations: ["WhatsApp automation"],
+      deployment: "Web application",
+    },
+    technicalDecisions: "The project prioritizes a small set of connected operational workflows over generic SaaS breadth. Firebase supports shared records while the interface reflects the team's existing operational language.",
+    challenges: [
+      "Translating manual processes. Spreadsheet habits and stakeholder terminology have to become clear, reusable workflow states.",
+      "Keeping records connected. Orders, purchases, balances, and reporting need consistent data relationships to avoid duplicate manual entry.",
+    ],
+    outcome: [
+      "Replaced manual spreadsheets with structured digital workflows.",
+      "Implemented automated WhatsApp customer broadcasting.",
+      "Mapped stakeholder requirements into modular logic.",
+    ],
+    reflection: [
+      "Operational software works best when it mirrors how the team already thinks about its work.",
+      "Connected records create more value than isolated dashboards.",
+      "Automation should remove repetitive coordination without hiding important business state.",
+    ],
+  },
+  {
+    id: "financesmith",
+    slug: "financesmith",
+    title: "FinanceSmith",
+    category: "Financial Operations",
+    categoryGroup: "CRM / Ops",
+    summary: "A finance and operations management platform for educational institutions, centralizing invoices, records, reporting, and operational workflows.",
+    role: "Full-Stack Developer",
+    status: "Public repository // 2023",
+    techStack: ["React", "Node.js", "PDF Automation", "Excel Automation", "Reporting"],
+    githubUrl: "https://github.com/ihashirr/financesmith",
+    featured: false,
+    year: "2023",
+    targetUsers: "Finance and operations staff managing institutional records and reports.",
+    problem: "Financial and operational records become difficult to reconcile when invoices, reports, and day-to-day workflows are handled across disconnected manual processes.",
+    solution: "Developed a centralized platform for financial records, invoices, operational workflows, and generated reports.",
+    features: [
+      "Centralized invoice records",
+      "Financial record management",
+      "Operational workflow tracking",
+      "PDF report generation",
+      "Excel report generation",
+    ],
+    architecture: {
+      frontend: "React interface for finance and operations workflows.",
+      backend: "Node.js services handle application logic and report generation.",
+      database: "Persistent application storage centralizes financial records.",
+      integrations: ["PDF generation", "Excel generation"],
+      deployment: "Web application",
+    },
+    technicalDecisions: "The product centralizes records before adding reporting automation. Keeping document generation within the same workflow reduces manual reconciliation between operational data and exported reports.",
+    challenges: [
+      "Structuring financial records. Reports are only dependable when the underlying operational entries follow a consistent model.",
+      "Generating reusable exports. PDF and Excel output need to remain useful outside the application for existing administrative workflows.",
+    ],
+    outcome: [
+      "Digitized manual finance processes into structured workflows.",
+      "Automated PDF and Excel report generation.",
+    ],
+    reflection: [
+      "Reporting quality depends on record quality.",
+      "Exports remain important when software is introduced into an existing administrative process.",
+      "A finance interface should make record state easy to audit.",
+    ],
+  },
+  {
+    id: "traverse",
+    slug: "traverse",
+    title: "Traverse",
+    category: "AI Discovery Platform",
+    categoryGroup: "AI",
+    summary: "An AI-powered travel discovery platform for personalized destination and restaurant recommendations across the seven Emirates of the UAE.",
+    role: "Full-Stack Developer",
+    status: "Public repository // 2024",
+    techStack: ["TypeScript", "Node.js", "AI", "Behavioral Analytics"],
+    githubUrl: "https://github.com/ihashirr/traverse",
+    featured: false,
+    year: "2024",
+    targetUsers: "Travelers discovering destinations and restaurants across the UAE.",
+    problem: "Generic travel discovery does not adapt well to individual interests or local context, making it harder for users to find relevant experiences efficiently.",
+    solution: "Built a travel discovery platform that uses AI-assisted recommendations and behavioral analytics to personalize destination and restaurant suggestions.",
+    features: [
+      "Personalized destination recommendations",
+      "Restaurant discovery",
+      "Coverage across all seven Emirates",
+      "Behavioral analytics",
+      "AI-assisted recommendation logic",
+    ],
+    architecture: {
+      frontend: "Interactive discovery interface for browsing personalized recommendations.",
+      backend: "Node.js services coordinate recommendation requests and application logic.",
+      database: "Application storage supports recommendation and behavioral data.",
+      integrations: ["AI recommendation logic", "Behavioral analytics"],
+      deployment: "Web application",
+    },
+    technicalDecisions: "The product combines recommendation logic with behavioral signals so discovery can become more relevant over time while remaining focused on a clear regional scope.",
+    challenges: [
+      "Balancing personalization and clarity. Recommendations need enough context to feel useful without making discovery opaque.",
+      "Representing regional coverage. The product has to keep exploration practical across seven distinct Emirates.",
+    ],
+    outcome: [
+      "Built a behavioral analytics and recommendation engine.",
+      "Delivered personalized discovery across all seven Emirates of the UAE.",
+    ],
+    reflection: [
+      "Recommendation interfaces should explain enough context to earn user trust.",
+      "A focused geographic scope makes discovery content easier to structure.",
+      "Behavioral signals are most useful when they improve a concrete user decision.",
+    ],
+  },
+  {
+    id: "ui-analyzer",
+    slug: "ui-analyzer",
+    title: "UI Analyzer",
+    category: "Design Intelligence",
+    categoryGroup: "AI",
+    summary: "An AI-powered UI analysis platform that identifies interface components, detects usability weaknesses, and generates actionable recommendations.",
+    role: "AI & Automation Developer",
+    status: "Public repository // 2024",
+    techStack: ["Computer Vision", "Self-Hosted AI", "Automation"],
+    githubUrl: "https://github.com/ihashirr/ui-analyzer",
+    featured: false,
+    year: "2024",
+    targetUsers: "Designers and frontend developers reviewing interface quality.",
+    problem: "Interface reviews can be slow and inconsistent when teams have to inspect usability weaknesses manually across many screens.",
+    solution: "Built an automated UI analysis platform that identifies interface components and produces actionable recommendations using self-hosted AI models.",
+    features: [
+      "Interface component identification",
+      "Usability weakness detection",
+      "Actionable UI improvement recommendations",
+      "Automated analysis workflow",
+      "Self-hosted AI model integration",
+    ],
+    architecture: {
+      frontend: "Analysis interface for submitting and reviewing UI audit results.",
+      backend: "Automation pipeline coordinates interface analysis tasks.",
+      database: "Application storage retains analysis inputs and generated recommendations.",
+      integrations: ["Computer vision", "Self-hosted AI models"],
+      deployment: "Web application",
+    },
+    technicalDecisions: "The project uses self-hosted AI models to keep the analysis workflow under direct control and reduce dependency on third-party inference services.",
+    challenges: [
+      "Turning visual analysis into useful guidance. Detected interface elements need to map to recommendations that a developer can act on.",
+      "Coordinating automated analysis. The workflow has to keep model output structured enough for consistent presentation.",
+    ],
+    outcome: [
+      "Integrated self-hosted AI models without third-party inference dependencies.",
+      "Automated UI auditing to accelerate design reviews.",
+    ],
+    reflection: [
+      "AI output becomes valuable when it is translated into specific interface actions.",
+      "A controlled inference stack simplifies experimentation with analysis workflows.",
+      "Design review tools should support human judgment rather than replace it.",
+    ],
+  },
 ]
