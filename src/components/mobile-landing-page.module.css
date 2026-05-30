@@ -1,0 +1,373 @@
+.mobileLanding {
+  display: none;
+}
+
+@media (max-width: 768px), (pointer: coarse) {
+  .mobileLanding {
+    display: block;
+    overflow: hidden;
+    background: #090806;
+    color: var(--text-primary);
+  }
+
+  .hero {
+    position: relative;
+    display: flex;
+    min-height: 100svh;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    padding: 20px 24px 24px;
+    isolation: isolate;
+  }
+
+  .mesh {
+    position: absolute;
+    inset: -22%;
+    z-index: -1;
+    background:
+      radial-gradient(circle at 28% 26%, rgba(170, 122, 61, 0.3), transparent 25%),
+      radial-gradient(circle at 80% 72%, rgba(89, 64, 36, 0.28), transparent 34%),
+      radial-gradient(circle at 66% 20%, rgba(198, 162, 99, 0.1), transparent 24%),
+      #090806;
+    animation: meshBreathe 12s ease-in-out infinite alternate;
+    transform: scale(1.04);
+  }
+
+  .badge {
+    position: sticky;
+    top: 16px;
+    width: fit-content;
+    max-width: 100%;
+    padding: 8px 12px;
+    border: 1px solid rgba(210, 184, 141, 0.22);
+    border-radius: 999px;
+    background: rgba(9, 8, 6, 0.48);
+    color: var(--text-accent);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.35;
+    text-transform: uppercase;
+    backdrop-filter: blur(14px);
+  }
+
+  .heroBody {
+    max-width: 92%;
+    padding: 64px 0 32px;
+  }
+
+  .heroTitle {
+    color: var(--text-primary);
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    font-size: clamp(3.6rem, 15vw, 5.7rem);
+    font-weight: 600;
+    letter-spacing: -0.11em;
+    line-height: 0.88;
+  }
+
+  .heroTitle span {
+    color: var(--accent-color);
+  }
+
+  .heroCta,
+  .whatsappAction,
+  .emailAction {
+    display: flex;
+    min-height: 56px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    padding: 0 18px;
+    border-radius: 10px;
+    font-size: 0.94rem;
+    font-weight: 600;
+    transition: transform 160ms ease, background-color 160ms ease;
+  }
+
+  .heroCta {
+    background: var(--accent-color);
+    color: #15110b;
+  }
+
+  .heroCta:active,
+  .whatsappAction:active,
+  .emailAction:active {
+    transform: scale(0.98);
+  }
+
+  .projectsSection,
+  .skillsSection,
+  .contactSection {
+    padding: 80px 24px;
+  }
+
+  .projectsSection {
+    background: #100f0c;
+  }
+
+  .skillsSection {
+    background: #171510;
+  }
+
+  .contactSection {
+    min-height: 64svh;
+    background: #0c0b09;
+  }
+
+  .sectionIntro {
+    margin-bottom: 30px;
+  }
+
+  .sectionIntro span {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-accent);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  .sectionIntro h2 {
+    max-width: 12ch;
+    font-size: clamp(2.5rem, 12vw, 4.2rem);
+    font-weight: 600;
+    letter-spacing: -0.08em;
+    line-height: 0.94;
+  }
+
+  .projectStack {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .projectCard {
+    overflow: hidden;
+    border: 1px solid rgba(210, 184, 141, 0.13);
+    border-radius: 14px;
+    background: rgba(8, 8, 6, 0.5);
+    animation: cardEnter linear both;
+    animation-range: entry 8% cover 28%;
+    animation-timeline: view();
+  }
+
+  .projectToggle {
+    display: flex;
+    width: 100%;
+    min-height: 48px;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    text-align: left;
+  }
+
+  .projectCategory {
+    margin-bottom: 12px;
+    color: var(--text-accent);
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  .projectHeading {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .projectHeading strong {
+    font-size: 1.7rem;
+    font-weight: 600;
+    letter-spacing: -0.05em;
+    line-height: 1;
+  }
+
+  .projectHeading svg {
+    flex: 0 0 auto;
+    color: var(--text-accent);
+    transition: transform 240ms ease;
+  }
+
+  .projectCardExpanded .projectHeading svg {
+    transform: rotate(180deg);
+  }
+
+  .projectSummary {
+    display: -webkit-box;
+    margin-top: 12px;
+    overflow: hidden;
+    color: var(--text-secondary);
+    font-size: 0.94rem;
+    line-height: 1.7;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .techShelf,
+  .skillShelf {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 0 20px 18px;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .techShelf::-webkit-scrollbar,
+  .skillShelf::-webkit-scrollbar {
+    display: none;
+  }
+
+  .techShelf span,
+  .skillChip {
+    flex: 0 0 auto;
+    min-height: 34px;
+    padding: 7px 11px;
+    border: 1px solid rgba(210, 184, 141, 0.15);
+    border-radius: 999px;
+    background: rgba(210, 184, 141, 0.05);
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    line-height: 1.35;
+    white-space: nowrap;
+  }
+
+  .projectDetails {
+    display: grid;
+    grid-template-rows: 0fr;
+    padding: 0 20px;
+    opacity: 0;
+    transition: grid-template-rows 260ms ease, opacity 180ms ease, padding 260ms ease;
+  }
+
+  .projectDetails > * {
+    overflow: hidden;
+  }
+
+  .projectCardExpanded .projectDetails {
+    grid-template-rows: 1fr auto;
+    padding: 0 20px 20px;
+    opacity: 1;
+  }
+
+  .projectDetails p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  .projectLink {
+    display: inline-flex;
+    min-height: 48px;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    color: var(--text-accent);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .skillLanes {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    margin: 0 -24px;
+  }
+
+  .skillLane h3 {
+    margin: 0 24px 12px;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .skillShelf {
+    padding: 0 24px 4px;
+  }
+
+  .skillChip {
+    min-height: 42px;
+    cursor: pointer;
+    transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+  }
+
+  .skillChip:active {
+    border-color: rgba(210, 184, 141, 0.58);
+    box-shadow: 0 0 18px rgba(201, 169, 110, 0.16);
+    transform: scale(1.05);
+  }
+
+  .contactActions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 44px;
+  }
+
+  .whatsappAction {
+    background: #d1b078;
+    color: #15110b;
+  }
+
+  .emailAction {
+    border: 1px solid rgba(210, 184, 141, 0.24);
+    background: rgba(210, 184, 141, 0.06);
+    color: var(--text-primary);
+  }
+}
+
+@keyframes meshBreathe {
+  from {
+    transform: scale(1.04) translate3d(-2%, -1%, 0);
+  }
+  to {
+    transform: scale(1.14) translate3d(3%, 2%, 0);
+  }
+}
+
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mesh,
+  .projectCard {
+    animation: none;
+  }
+
+  .heroCta,
+  .whatsappAction,
+  .emailAction,
+  .projectHeading svg,
+  .projectDetails,
+  .skillChip {
+    transition: none;
+  }
+}

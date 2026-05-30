@@ -1,12 +1,13 @@
 "use client"
 
 import { useState } from "react"
-import { Mail, Linkedin, Github, Copy, Check, ExternalLink } from "lucide-react"
+import { Mail, Linkedin, Github, Copy, Check, ExternalLink, MessageCircle } from "lucide-react"
 import styles from "@/components/contact.module.css"
 
 export default function Contact() {
   const [copied, setCopied] = useState(false)
   const emailAddress = "malikhashir@example.com"
+  const whatsAppMessage = encodeURIComponent("Hi Malik, I would like to discuss a software project.")
 
   const handleCopy = async () => {
     try {
@@ -26,6 +27,17 @@ export default function Contact() {
           I am currently open to technical contracts, operations system consulting, and full-stack software development roles in Abu Dhabi and remote worldwide.
         </p>
       </header>
+
+      <div className={styles.mobileActions}>
+        <a href={`https://wa.me/?text=${whatsAppMessage}`} className={styles.mobilePrimaryAction}>
+          <MessageCircle size={19} />
+          <span>WhatsApp me directly</span>
+        </a>
+        <a href={`mailto:${emailAddress}`} className={styles.mobileSecondaryAction}>
+          <Mail size={19} />
+          <span>Send an email</span>
+        </a>
+      </div>
 
       {/* Connection Cards */}
       <div className={styles.grid}>

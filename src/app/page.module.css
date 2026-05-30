@@ -265,8 +265,10 @@
     left: 0;
     right: 0;
     width: 100%;
-    height: 57%;
+    height: 50%;
     padding: 0 26px;
+    clip-path: none;
+    transition: height 520ms cubic-bezier(0.16, 1, 0.3, 1), opacity 240ms ease, transform 160ms ease, background-color 240ms ease;
   }
 
   .hrDoor {
@@ -274,8 +276,8 @@
     bottom: auto;
     align-items: flex-end;
     justify-content: flex-start;
-    padding-bottom: 14vh;
-    clip-path: polygon(0 0, 100% 0, 100% 82%, 0 100%);
+    padding-bottom: 10vh;
+    border-bottom: 1px solid rgba(210, 184, 141, 0.2);
   }
 
   .clientDoor {
@@ -283,8 +285,7 @@
     bottom: 0;
     align-items: flex-start;
     justify-content: flex-end;
-    padding-top: 14vh;
-    clip-path: polygon(0 18%, 100% 0, 100% 100%, 0 100%);
+    padding-top: 10vh;
   }
 
   .gateway:has(.hrDoor:hover) .hrDoor,
@@ -292,16 +293,36 @@
   .gateway:has(.clientDoor:hover) .clientDoor,
   .gateway:has(.clientDoor:focus-visible) .clientDoor {
     width: 100%;
-    height: 63%;
+    height: 50%;
+  }
+
+  .door:active {
+    transform: scale(0.985);
+  }
+
+  .expanding .door:not(.selectedDoor) {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+
+  .expanding .selectedDoor {
+    top: 0;
+    bottom: 0;
+    z-index: 8;
+    height: 100%;
+    border-bottom-color: transparent;
+    transform: scale(1);
   }
 
   .doorText {
-    max-width: 8ch;
-    font-size: clamp(3.6rem, 15vw, 5.8rem);
+    width: 82vw;
+    max-width: none;
+    overflow-wrap: anywhere;
+    font-size: clamp(3.35rem, 14vw, 5.4rem);
   }
 
   .clientDoor .doorText {
-    max-width: 7ch;
+    width: 82vw;
   }
 
   .arrow {
@@ -313,12 +334,12 @@
 
   .hrDoor .arrow {
     right: 28px;
-    bottom: 16vh;
+    bottom: 11vh;
   }
 
   .clientDoor .arrow {
     left: 28px;
-    top: 16vh;
+    top: 11vh;
   }
 }
 

@@ -134,6 +134,10 @@ p {
   overflow: hidden;
 }
 
+.mobile-main-content {
+  min-height: 100svh;
+}
+
 /* Helper Elements */
 .badge-active {
   display: inline-flex;

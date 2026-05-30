@@ -19,6 +19,10 @@
   line-height: 1.6;
 }
 
+.mobileActions {
+  display: none;
+}
+
 /* Contact Grid */
 .grid {
   display: grid;
@@ -143,5 +147,66 @@
   .grid {
     grid-template-columns: 1fr;
     gap: 20px;
+  }
+}
+
+@media (max-width: 768px), (pointer: coarse) {
+  .contactPage {
+    padding: 48px 24px 80px;
+  }
+
+  .header {
+    margin-bottom: 32px;
+  }
+
+  .title {
+    font-size: 3rem;
+    letter-spacing: -0.07em;
+  }
+
+  .description {
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .mobileActions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .mobilePrimaryAction,
+  .mobileSecondaryAction {
+    display: flex;
+    min-height: 56px;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 0 18px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: transform 160ms ease;
+  }
+
+  .mobilePrimaryAction {
+    background: var(--accent-color);
+    color: var(--bg-primary);
+  }
+
+  .mobileSecondaryAction {
+    border: 1px solid var(--border-focus);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+
+  .mobilePrimaryAction:active,
+  .mobileSecondaryAction:active {
+    transform: scale(0.98);
+  }
+
+  .grid,
+  .copySection {
+    display: none;
   }
 }
