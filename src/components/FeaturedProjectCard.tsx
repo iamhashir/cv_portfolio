@@ -5,7 +5,7 @@ import Link from "next/link"
 import { ArrowRight, Activity } from "lucide-react"
 import { motion } from "framer-motion"
 import { Project } from "@/data/projects"
-import { ArchitectureDiagram } from "@/lib/architectureDiagrams"
+import ExplodedProjectView from "@/components/ExplodedProjectView"
 import styles from "./featured-project-card.module.css"
 
 interface FeaturedProjectCardProps {
@@ -79,22 +79,7 @@ export default function FeaturedProjectCard({ project }: FeaturedProjectCardProp
 
         {/* Right Column: Visual Architecture Blueprint */}
         <div className={styles.visualColumn}>
-          <motion.div 
-            className={styles.diagramContainer}
-            variants={{
-              hover: { 
-                scale: 1.02,
-                borderColor: "var(--border-focus)",
-                boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px var(--accent-glow-hover)"
-              }
-            }}
-            transition={{ type: "spring", stiffness: 300, damping: 25 }}
-          >
-            <div className={styles.blueprintGrid} />
-            <div className={styles.diagramWrapper}>
-              <ArchitectureDiagram slug={project.slug} className={styles.svgDiagram} />
-            </div>
-          </motion.div>
+          <ExplodedProjectView projectId={project.slug} className={styles.diagramContainer} />
         </div>
       </div>
     </motion.div>

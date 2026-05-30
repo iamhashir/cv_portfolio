@@ -2,7 +2,8 @@
 
 import Link from "next/link"
 import { ArrowRight, Mail, Linkedin, Github } from "lucide-react"
-import { motion, useReducedMotion } from "framer-motion"
+import React, { useRef } from "react"
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion"
 import { projects } from "@/data/projects"
 import ProjectCard from "@/components/ProjectCard"
 
@@ -12,8 +13,8 @@ import PerspectiveGrid from "@/components/PerspectiveGrid"
 import Marquee from "@/components/Marquee"
 import FeaturedProjectCard from "@/components/FeaturedProjectCard"
 import Timeline from "@/components/Timeline"
-import ContactCard from "@/components/ContactCard"
 import SectionHeader from "@/components/SectionHeader"
+import InteractiveParticles from "@/components/InteractiveParticles"
 
 import styles from "./page.module.css"
 
@@ -21,6 +22,15 @@ export default function Home() {
   const featuredProjects = projects.filter((project) => project.featured)
   const secondaryProjects = projects.filter((project) => !project.featured)
   const shouldReduceMotion = useReducedMotion()
+
+  const heroRef = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"]
+  })
+
+  const particlesOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0])
+  const gridOpacity = useTransform(scrollYProgress, [0, 0.6], [0.1, 0.8])
 
   // Trust items for the ticker
   const trustItems = [
@@ -70,9 +80,13 @@ export default function Home() {
   return (
     <div className={styles.homeWrapper}>
       {/* 1. Hero Section */}
-      <section className={styles.heroSection}>
-        <PerspectiveGrid />
-        <div className="ambient-glow" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 0 }} />
+      <section ref={heroRef} className={styles.heroSection}>
+        <motion.div style={{ position: "absolute", inset: 0, opacity: gridOpacity }}>
+          <PerspectiveGrid />
+        </motion.div>
+        <motion.div style={{ position: "absolute", inset: 0, opacity: particlesOpacity }}>
+          <InteractiveParticles />
+        </motion.div>
         
         <div className={`container ${styles.heroContainer}`}>
           {/* Left: Text Block */}
@@ -91,11 +105,11 @@ export default function Home() {
               </motion.div>
               
               <motion.h1 className={styles.heroTitle} variants={heroItemVariants}>
-                Building high-performance <span className={styles.titleItalic}>CRM, automation,</span> and operations systems.
+                Translating manual workflows into <span className={styles.titleItalic}>scalable software architecture.</span>
               </motion.h1>
               
               <motion.p className={styles.heroSubtitle} variants={heroItemVariants}>
-                Full-stack developer translating manual workflows and spreadsheet bottlenecks into tailored, operational database platforms.
+                Full-stack developer engineering order from operational chaos. Building tailored CRM and automation systems.
               </motion.p>
               
               <motion.div className={styles.heroActions} variants={heroItemVariants}>
@@ -117,10 +131,10 @@ export default function Home() {
                 </div>
               </div>
               <h1 className={styles.heroTitle}>
-                Building high-performance <span className={styles.titleItalic}>CRM, automation,</span> and operations systems.
+                Translating manual workflows into <span className={styles.titleItalic}>scalable software architecture.</span>
               </h1>
               <p className={styles.heroSubtitle}>
-                Full-stack developer translating manual workflows and spreadsheet bottlenecks into tailored, operational database platforms.
+                Full-stack developer engineering order from operational chaos. Building tailored CRM and automation systems.
               </p>
               <div className={styles.heroActions}>
                 <Link href="/work" className="btn-primary">
@@ -134,126 +148,7 @@ export default function Home() {
             </div>
           )}
           
-          {/* Right: Floating Sculptural Monolith */}
-          {!shouldReduceMotion ? (
-            <motion.div 
-              className={styles.heroVisualContainer}
-              variants={heroFadeVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              <motion.div 
-                className={styles.monolithContainer}
-                animate={{
-                  y: [0, -12, 0],
-                  rotateY: [0, 4, -4, 0],
-                  rotateX: [0, -2, 2, 0]
-                }}
-                whileHover={{
-                  scale: 1.03,
-                  boxShadow: "0 50px 100px rgba(201, 169, 110, 0.12)"
-                }}
-                transition={{
-                  y: { duration: 8, repeat: Infinity, ease: "easeInOut" },
-                  rotateY: { duration: 12, repeat: Infinity, ease: "easeInOut" },
-                  rotateX: { duration: 10, repeat: Infinity, ease: "easeInOut" },
-                  scale: { type: "spring", stiffness: 300, damping: 20 }
-                }}
-              >
-                <svg
-                  viewBox="0 0 340 480"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  style={{ width: "100%", height: "100%" }}
-                  aria-hidden="true"
-                >
-                  <defs>
-                    <linearGradient id="monolithBody" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%" stopColor="#2a2520" stopOpacity="0.95" />
-                      <stop offset="50%" stopColor="#1c1a17" stopOpacity="0.95" />
-                      <stop offset="100%" stopColor="#111009" stopOpacity="0.98" />
-                    </linearGradient>
-                    <radialGradient id="amberCore" cx="50%" cy="45%" r="40%">
-                      <stop offset="0%" stopColor="#c9a96e" stopOpacity="0.22" />
-                      <stop offset="60%" stopColor="#c9a96e" stopOpacity="0.05" />
-                      <stop offset="100%" stopColor="#c9a96e" stopOpacity="0" />
-                    </radialGradient>
-                    <linearGradient id="edgeLeft" x1="0" y1="0" x2="1" y2="0">
-                      <stop offset="0%" stopColor="#f0ebe2" stopOpacity="0.15" />
-                      <stop offset="100%" stopColor="#f0ebe2" stopOpacity="0" />
-                    </linearGradient>
-                    <linearGradient id="edgeRight" x1="1" y1="0" x2="0" y2="0">
-                      <stop offset="0%" stopColor="#f0ebe2" stopOpacity="0.08" />
-                      <stop offset="100%" stopColor="#f0ebe2" stopOpacity="0" />
-                    </linearGradient>
-                    <linearGradient id="edgeTop" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#d4b896" stopOpacity="0.25" />
-                      <stop offset="100%" stopColor="#d4b896" stopOpacity="0" />
-                    </linearGradient>
-                    <clipPath id="monolithClip">
-                      <rect x="60" y="20" width="220" height="440" rx="18" />
-                    </clipPath>
-                  </defs>
-
-                  <rect x="60" y="20" width="220" height="440" rx="18" fill="url(#monolithBody)" />
-                  <rect x="60" y="20" width="220" height="440" rx="18" fill="url(#amberCore)" />
-
-                  <g clipPath="url(#monolithClip)" opacity="0.6">
-                    {[80, 120, 160, 200, 240, 280, 320, 360, 400].map((y, i) => (
-                      <line
-                        key={i}
-                        x1="75"
-                        y1={y}
-                        x2="265"
-                        y2={y}
-                        stroke="#c9a96e"
-                        strokeWidth="0.5"
-                        strokeOpacity={i % 3 === 0 ? 0.45 : 0.15}
-                      />
-                    ))}
-
-                    <line x1="170" y1="40" x2="170" y2="440" stroke="#c9a96e" strokeWidth="0.5" strokeOpacity="0.25" />
-
-                    <circle cx="170" cy="160" r="3" fill="#c9a96e" fillOpacity="0.75" />
-                    <circle cx="170" cy="240" r="2" fill="#c9a96e" fillOpacity="0.5" />
-                    <circle cx="170" cy="320" r="3" fill="#c9a96e" fillOpacity="0.65" />
-
-                    <line x1="105" y1="160" x2="155" y2="160" stroke="#c9a96e" strokeWidth="1" strokeOpacity="0.6" />
-                    <line x1="185" y1="160" x2="235" y2="160" stroke="#c9a96e" strokeWidth="1" strokeOpacity="0.6" />
-                    <line x1="105" y1="320" x2="155" y2="320" stroke="#c9a96e" strokeWidth="1" strokeOpacity="0.5" />
-                    <line x1="185" y1="320" x2="235" y2="320" stroke="#c9a96e" strokeWidth="1" strokeOpacity="0.5" />
-
-                    <text x="82" y="155" fill="#c9a96e" fillOpacity="0.55" fontSize="7.5" fontFamily="monospace">CRM.OPS</text>
-                    <text x="82" y="235" fill="#c9a96e" fillOpacity="0.4" fontSize="7.5" fontFamily="monospace">WORKFLOW</text>
-                    <text x="82" y="315" fill="#c9a96e" fillOpacity="0.55" fontSize="7.5" fontFamily="monospace">LEDGER</text>
-                  </g>
-
-                  <rect x="60" y="20" width="8" height="440" rx="0" fill="url(#edgeLeft)" />
-                  <rect x="272" y="20" width="8" height="440" rx="0" fill="url(#edgeRight)" />
-                  <rect x="60" y="20" width="220" height="12" rx="12" fill="url(#edgeTop)" />
-
-                  <rect x="60" y="20" width="220" height="440" rx="18" stroke="#f0ebe2" strokeWidth="0.75" strokeOpacity="0.12" fill="none" />
-                  <ellipse cx="170" cy="478" rx="90" ry="6" fill="#c9a96e" fillOpacity="0.08" />
-                </svg>
-              </motion.div>
-            </motion.div>
-          ) : (
-            <div className={styles.heroVisualContainer}>
-              <div className={styles.monolithContainer}>
-                <svg
-                  viewBox="0 0 340 480"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  style={{ width: "100%", height: "100%" }}
-                  aria-hidden="true"
-                >
-                  <rect x="60" y="20" width="220" height="440" rx="18" fill="url(#monolithBody)" />
-                  <rect x="60" y="20" width="220" height="440" rx="18" fill="url(#amberCore)" />
-                  <rect x="60" y="20" width="220" height="440" rx="18" stroke="#f0ebe2" strokeWidth="0.75" strokeOpacity="0.1" fill="none" />
-                </svg>
-              </div>
-            </div>
-          )}
+          {/* Monolith removed to focus on strictly structural presentation */}
         </div>
       </section>
 
@@ -294,8 +189,8 @@ export default function Home() {
           />
           
           <div className="grid-2">
-            {secondaryProjects.map((project, idx) => (
-              <ScrollReveal key={project.slug} direction="up" delay={idx * 0.08}>
+            {secondaryProjects.map((project) => (
+              <ScrollReveal key={project.slug}>
                 <ProjectCard project={project} />
               </ScrollReveal>
             ))}
@@ -325,43 +220,41 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. Closing CTA */}
+      {/* 6. Closing CTA - Terminal Style */}
       <section className={styles.ctaSection}>
-        <div className={styles.ctaGridWrapper}>
-          <PerspectiveGrid />
-        </div>
-        <div className="ambient-glow" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 0, opacity: 0.5 }} />
-        
         <div className={`container ${styles.ctaContainer}`}>
-          <ScrollReveal direction="up">
-            <div className={styles.ctaContent}>
-              <h2 className={styles.ctaTitle}>Let&apos;s build something worth shipping.</h2>
-              <p className={styles.ctaText}>
+          <div className={styles.terminalCta}>
+            <div className={styles.terminalHeader}>
+              <span className={styles.terminalDot} style={{ background: "#ff5f56" }} />
+              <span className={styles.terminalDot} style={{ background: "#ffbd2e" }} />
+              <span className={styles.terminalDot} style={{ background: "#27c93f" }} />
+              <span className={styles.terminalTitle}>system_ready.sh</span>
+            </div>
+            <div className={styles.terminalBody}>
+              <p className={styles.terminalLine}>
+                <span className={styles.terminalPrompt}>~ </span> 
+                <span className={styles.terminalCommand}>echo "Let's build something worth shipping."</span>
+              </p>
+              <p className={styles.terminalOutput}>
                 Open to custom operations dashboard integrations, CRM extensions, workflow optimizations, and contract contracts.
               </p>
-              
-              <div className={styles.ctaCards}>
-                <ContactCard
-                  title="Direct Email"
-                  value="malikhashir@example.com"
-                  href="mailto:malikhashir@example.com"
-                  icon={<Mail size={22} />}
-                />
-                <ContactCard
-                  title="LinkedIn Connect"
-                  value="linkedin.com/in/malikhashir"
-                  href="https://linkedin.com/in/malikhashir"
-                  icon={<Linkedin size={22} />}
-                />
-                <ContactCard
-                  title="GitHub Source"
-                  value="github.com/iamhashir"
-                  href="https://github.com/iamhashir"
-                  icon={<Github size={22} />}
-                />
+              <p className={styles.terminalLine}>
+                <span className={styles.terminalPrompt}>~ </span>
+                <span className={styles.terminalCommand}>./connect --options</span>
+              </p>
+              <div className={styles.terminalOutput}>
+                <ul className={styles.terminalLinks}>
+                  <li>[01] <a href="mailto:malikhashir@example.com">malikhashir@example.com</a></li>
+                  <li>[02] <a href="https://linkedin.com/in/malikhashir">linkedin.com/in/malikhashir</a></li>
+                  <li>[03] <a href="https://github.com/iamhashir">github.com/iamhashir</a></li>
+                </ul>
               </div>
+              <p className={styles.terminalLine}>
+                <span className={styles.terminalPrompt}>~ </span>
+                <span className={styles.blinkingCursor}>_</span>
+              </p>
             </div>
-          </ScrollReveal>
+          </div>
         </div>
       </section>
     </div>

@@ -16,18 +16,21 @@
 }
 
 .heroContainer {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  text-align: center;
   position: relative;
   z-index: 10;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .heroContent {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .heroBadgeWrapper {
@@ -35,7 +38,7 @@
 }
 
 .heroTitle {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: clamp(2.5rem, 5vw, 4.5rem);
   font-weight: 600;
   line-height: 1.1;
@@ -60,6 +63,7 @@
   display: flex;
   gap: 16px;
   align-items: center;
+  justify-content: center;
   flex-wrap: wrap;
 }
 
@@ -146,59 +150,103 @@
   margin-top: 56px;
 }
 
-/* 6. Closing CTA Section */
+/* 6. Closing CTA Section - Terminal Style */
 .ctaSection {
-  position: relative;
-  padding: 140px 0;
-  overflow: hidden;
+  padding: 120px 0;
   background-color: var(--bg-primary);
   border-top: 1px solid var(--border-muted);
 }
 
-.ctaGridWrapper {
-  position: absolute;
-  inset: 0;
-  transform: rotate(180deg); /* Reflected ground effect */
-  opacity: 0.8;
-  pointer-events: none;
-}
-
 .ctaContainer {
-  position: relative;
-  z-index: 10;
   display: flex;
   justify-content: center;
-  text-align: center;
 }
 
-.ctaContent {
-  max-width: 800px;
+.terminalCta {
+  width: 100%;
+  max-width: 720px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-muted);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.terminalHeader {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background-color: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-muted);
 }
 
-.ctaTitle {
-  font-family: var(--font-serif);
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  line-height: 1.1;
-  color: var(--text-primary);
-  margin-bottom: 20px;
+.terminalDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
 }
 
-.ctaText {
-  font-size: clamp(1.05rem, 2vw, 1.2rem);
-  color: var(--text-secondary);
-  max-width: 580px;
-  margin-bottom: 48px;
+.terminalTitle {
+  margin-left: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.terminalBody {
+  padding: 32px;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
   line-height: 1.6;
 }
 
-.ctaCards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  width: 100%;
+.terminalLine {
+  margin-bottom: 8px;
+}
+
+.terminalPrompt {
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+.terminalCommand {
+  color: var(--text-primary);
+}
+
+.terminalOutput {
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  padding-left: 16px;
+  border-left: 1px dashed var(--border-muted);
+}
+
+.terminalLinks {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.terminalLinks a {
+  color: var(--status-active);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+}
+
+.terminalLinks a:hover {
+  text-decoration-color: var(--status-active);
+}
+
+.blinkingCursor {
+  display: inline-block;
+  width: 10px;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 /* Responsive adjustments */
@@ -216,10 +264,7 @@
     max-width: 220px;
     aspect-ratio: 3 / 4;
   }
-  .ctaCards {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
+
   .sectionCounter {
     left: 0;
     top: -24px;

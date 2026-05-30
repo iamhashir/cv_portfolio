@@ -32,7 +32,6 @@
 
   /* Font Families */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-serif: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
 
   /* Layout */
@@ -93,13 +92,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 3.5rem;
   letter-spacing: -0.02em;
 }
 
 h2 {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 2.25rem;
   letter-spacing: -0.01em;
 }
