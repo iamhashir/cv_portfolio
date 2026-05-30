@@ -62,7 +62,6 @@ export default function Home() {
             >
               <motion.div className={styles.heroBadgeWrapper} variants={heroItemVariants}>
                 <div className="badge-active">
-                  <span className="pulse-dot"></span>
                   <span>Available for contract projects</span>
                 </div>
               </motion.div>
@@ -89,7 +88,6 @@ export default function Home() {
             <div className={styles.heroContent}>
               <div className={styles.heroBadgeWrapper}>
                 <div className="badge-active">
-                  <span className="pulse-dot"></span>
                   <span>Available for contract projects</span>
                 </div>
               </div>
@@ -138,12 +136,9 @@ export default function Home() {
           />
           
           <div className={styles.featuredShowcase}>
-            {featuredProjects.map((project, index) => (
+            {featuredProjects.map((project) => (
               <ScrollReveal key={project.slug} delay={0.05}>
-                <div className={styles.showcaseItemWrapper}>
-                  <span className={styles.sectionCounter}>0{index + 1}</span>
-                  <FeaturedProjectCard project={project} />
-                </div>
+                <FeaturedProjectCard project={project} />
               </ScrollReveal>
             ))}
           </div>
@@ -169,39 +164,23 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. Closing CTA - Terminal Style */}
+      {/* 5. Closing CTA */}
       <section className={styles.ctaSection}>
         <div className={`container ${styles.ctaContainer}`}>
-          <div className={styles.terminalCta}>
-            <div className={styles.terminalHeader}>
-              <span className={styles.terminalDot} style={{ background: "#ff5f56" }} />
-              <span className={styles.terminalDot} style={{ background: "#ffbd2e" }} />
-              <span className={styles.terminalDot} style={{ background: "#27c93f" }} />
-              <span className={styles.terminalTitle}>system_ready.sh</span>
-            </div>
-            <div className={styles.terminalBody}>
-              <p className={styles.terminalLine}>
-                <span className={styles.terminalPrompt}>~ </span> 
-                <span className={styles.terminalCommand}>echo &quot;Let&apos;s build something worth shipping.&quot;</span>
-              </p>
-              <p className={styles.terminalOutput}>
-                Open to custom operations dashboard integrations, CRM extensions, workflow optimizations, and contract projects.
-              </p>
-              <p className={styles.terminalLine}>
-                <span className={styles.terminalPrompt}>~ </span>
-                <span className={styles.terminalCommand}>./connect --options</span>
-              </p>
-              <div className={styles.terminalOutput}>
-                <ul className={styles.terminalLinks}>
-                  <li>[01] <a href="mailto:malikhashir@example.com">malikhashir@example.com</a></li>
-                  <li>[02] <a href="https://linkedin.com/in/malikhashir">linkedin.com/in/malikhashir</a></li>
-                  <li>[03] <a href="https://github.com/iamhashir">github.com/iamhashir</a></li>
-                </ul>
-              </div>
-              <p className={styles.terminalLine}>
-                <span className={styles.terminalPrompt}>~ </span>
-                <span className={styles.blinkingCursor}>_</span>
-              </p>
+          <div className={styles.ctaCard}>
+            <span className={styles.ctaLabel}>Available for contract projects</span>
+            <h2 className={styles.ctaTitle}>Need an operational system that fits the way your team works?</h2>
+            <p className={styles.ctaDescription}>
+              I scope workflow bottlenecks, design the data model, and build the interface around the real process.
+            </p>
+            <div className={styles.ctaActions}>
+              <Link href="/contact" className="btn-primary">
+                <span>Discuss a system</span>
+                <ArrowRight size={16} />
+              </Link>
+              <a href="mailto:malikhashir@example.com" className="btn-secondary">
+                malikhashir@example.com
+              </a>
             </div>
           </div>
         </div>

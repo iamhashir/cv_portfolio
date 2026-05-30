@@ -2,13 +2,21 @@
 
 import React from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { useReducedMotion } from 'framer-motion'
 import * as THREE from 'three'
 import IsometricBoard from './IsometricBoard'
 
 function CameraController() {
   const { camera } = useThree()
+  const shouldReduceMotion = useReducedMotion()
   
   useFrame(() => {
+    if (shouldReduceMotion) {
+      camera.position.set(0, 15, 15)
+      camera.rotation.set(-Math.PI / 4, 0, 0)
+      return
+    }
+
     const scrollY = window.scrollY
     const maxScroll = Math.max(1, document.body.scrollHeight - window.innerHeight)
     const p = scrollY / maxScroll // progress 0 to 1

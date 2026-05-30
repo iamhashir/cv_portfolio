@@ -33,7 +33,6 @@ export default function FeaturedProjectCard({ project }: FeaturedProjectCardProp
           <div className={styles.headerRow}>
             <span className={styles.categoryBadge}>{project.category}</span>
             <span className={styles.statusChip}>
-              <span className={styles.pulseDot} />
               {project.status ? (
                 project.status.includes("/") ? project.status.split("/")[0] : project.status
               ) : (

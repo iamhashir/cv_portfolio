@@ -105,7 +105,7 @@ export default function ExplodedProjectView({ projectId, className = "" }: Explo
             layer={layer}
             layerIndex={index}
             visual={visual}
-            y={shouldReduceMotion ? undefined : index === 0 ? topY : index === 1 ? middleY : undefined}
+            y={shouldReduceMotion ? index * 46 - 92 : index === 0 ? topY : index === 1 ? middleY : undefined}
             opacity={shouldReduceMotion ? undefined : index === 0 ? topOpacity : index === 1 ? middleOpacity : undefined}
           />
         ))}
@@ -124,7 +124,7 @@ function ArchitectureLayer({
   layer: VisualLayer
   layerIndex: number
   visual: ProjectVisual
-  y?: MotionValue<number>
+  y?: MotionValue<number> | number
   opacity?: MotionValue<number>
 }) {
   const elevation = 30 - layerIndex * 10

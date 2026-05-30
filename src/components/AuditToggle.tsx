@@ -1,6 +1,6 @@
 "use client"
 
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import { Activity, ChevronRight, Code, X } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { projects } from "@/data/projects"
@@ -15,6 +15,7 @@ const boardBehaviors: Record<string, string> = {
 
 export default function AuditToggle() {
   const pathname = usePathname()
+  const shouldReduceMotion = useReducedMotion()
   const { activeProject, isAuditMode, toggleAuditMode } = useAppStore()
   const routeProjectSlug = pathname.startsWith("/work/") ? pathname.split("/")[2] : null
   const project = projects.find(({ slug }) => slug === activeProject) ?? projects.find(({ slug }) => slug === routeProjectSlug)
@@ -37,10 +38,10 @@ export default function AuditToggle() {
           <motion.aside
             id="system-audit-panel"
             className={styles.panel}
-            initial={{ opacity: 0, x: 24 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, x: 24 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 24 }}
-            transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+            exit={shouldReduceMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: 24 }}
+            transition={{ duration: shouldReduceMotion ? 0 : 0.24, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className={styles.panelHeader}>
               <div>

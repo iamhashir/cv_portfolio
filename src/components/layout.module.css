@@ -175,6 +175,37 @@
 }
 
 @media (max-width: 640px) {
+  .navbar {
+    height: var(--header-height);
+  }
+
+  .navContainer {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 8px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .brand {
+    justify-content: center;
+  }
+
+  .logo {
+    font-size: 1.05rem;
+  }
+
+  .navLinks {
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .navLink {
+    font-size: 0.78rem;
+  }
+
   .footerTop {
     flex-direction: column;
     gap: 32px;

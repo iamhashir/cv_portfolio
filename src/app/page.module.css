@@ -67,36 +67,6 @@
   flex-wrap: wrap;
 }
 
-.heroVisualContainer {
-  display: flex;
-  justify-content: flex-end;
-  position: relative;
-}
-
-.monolithContainer {
-  width: 100%;
-  max-width: 420px;
-  aspect-ratio: 3 / 4;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  filter: drop-shadow(0 40px 80px rgba(201, 169, 110, 0.07))
-          drop-shadow(0 8px 24px rgba(201, 169, 110, 0.04));
-  animation: monolithFloat 8s ease-in-out infinite;
-}
-
-@keyframes monolithFloat {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-10px); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .monolithContainer {
-    animation: none !important;
-  }
-}
-
 /* 2. Section Common Styles */
 .section {
   padding: 160px 0 120px 0;
@@ -117,32 +87,7 @@
   margin-top: 48px;
 }
 
-.showcaseItemWrapper {
-  position: relative;
-  width: 100%;
-}
-
-.sectionCounter {
-  position: absolute;
-  top: -30px;
-  left: -20px;
-  font-family: var(--font-mono);
-  font-size: clamp(3rem, 6vw, 6rem);
-  font-weight: 700;
-  color: var(--accent-color);
-  opacity: 0.03;
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Secondary Projects grid footer */
-.projectsFooter {
-  display: flex;
-  justify-content: center;
-  margin-top: 56px;
-}
-
-/* 6. Closing CTA Section - Terminal Style */
+/* Closing CTA */
 .ctaSection {
   padding: 120px 0;
   background-color: transparent;
@@ -154,91 +99,42 @@
   justify-content: center;
 }
 
-.terminalCta {
+.ctaCard {
   width: 100%;
   max-width: 720px;
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-muted);
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  padding: 40px;
 }
 
-.terminalHeader {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
-  background-color: var(--bg-tertiary);
-  border-bottom: 1px solid var(--border-muted);
-}
-
-.terminalDot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-}
-
-.terminalTitle {
-  margin-left: 12px;
+.ctaLabel {
+  display: block;
   font-family: var(--font-mono);
-  font-size: 0.85rem;
-  color: var(--text-muted);
+  color: var(--text-accent);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-.terminalBody {
-  padding: 32px;
-  font-family: var(--font-mono);
-  font-size: 0.95rem;
-  line-height: 1.6;
+.ctaTitle {
+  margin-top: 12px;
+  font-size: clamp(2rem, 4vw, 3rem);
 }
 
-.terminalLine {
-  margin-bottom: 8px;
-}
-
-.terminalPrompt {
-  color: var(--accent-color);
-  font-weight: bold;
-}
-
-.terminalCommand {
-  color: var(--text-primary);
-}
-
-.terminalOutput {
+.ctaDescription {
+  max-width: 590px;
+  margin-top: 16px;
   color: var(--text-secondary);
-  margin-bottom: 24px;
-  padding-left: 16px;
-  border-left: 1px dashed var(--border-muted);
+  font-size: 1rem;
 }
 
-.terminalLinks {
-  list-style: none;
+.ctaActions {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.terminalLinks a {
-  color: var(--status-active);
-  text-decoration: underline;
-  text-decoration-color: transparent;
-}
-
-.terminalLinks a:hover {
-  text-decoration-color: var(--status-active);
-}
-
-.blinkingCursor {
-  display: inline-block;
-  width: 10px;
-  animation: blink 1s step-end infinite;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
 }
 
 /* Responsive adjustments */
@@ -247,19 +143,6 @@
     grid-template-columns: 1fr;
     gap: 40px;
     text-align: left;
-  }
-  .heroVisualContainer {
-    justify-content: center;
-    order: -1; /* visual on top for tablet/mobile */
-  }
-  .monolithContainer {
-    max-width: 220px;
-    aspect-ratio: 3 / 4;
-  }
-
-  .sectionCounter {
-    left: 0;
-    top: -24px;
   }
 }
 

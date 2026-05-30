@@ -25,11 +25,6 @@
   --text-accent: #d4b896;      /* Soft amber text */
   --text-gold: #c9a96e;
 
-  /* Hero Glow & Ambient Gradients */
-  --gradient-hero: radial-gradient(ellipse at 60% 40%, rgba(201, 169, 110, 0.05) 0%, transparent 65%);
-  --grid-line: rgba(240, 235, 226, 0.025);
-  --grid-line-bright: rgba(201, 169, 110, 0.06);
-
   /* Font Families */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
@@ -41,7 +36,6 @@
   /* Animation / Transitions — slow, refined */
   --transition-fast: 0.18s ease;
   --transition-normal: 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-slow: 0.75s cubic-bezier(0.16, 1, 0.3, 1);
 }
 /* Base resets */
 *, *::before, *::after {
@@ -148,30 +142,6 @@ p {
   color: var(--text-primary);
 }
 
-.badge-active .pulse-dot {
-  width: 6px;
-  height: 6px;
-  background-color: var(--status-active);
-  border-radius: 50%;
-  box-shadow: 0 0 0 0 var(--status-active-glow);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
-  }
-  70% {
-    transform: scale(1);
-    box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
-  }
-  100% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
-  }
-}
-
 /* Common Interactive buttons */
 .btn-primary {
   display: inline-flex;
@@ -268,76 +238,6 @@ code {
   gap: 24px;
 }
 
-/* --- MOTION & REDESIGN UTILITIES --- */
-
-/* Hero load-in entrance keyframes */
-@keyframes fadeInUpHero {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInHero {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes ambientPulse {
-  0% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 0.75;
-  }
-  100% {
-    opacity: 0.4;
-  }
-}
-
-/* Staggered entrance helper classes for page loads */
-.animate-hero-fade {
-  animation: fadeInHero 0.8s var(--transition-normal) forwards;
-}
-
-.animate-hero-el {
-  opacity: 0;
-  animation: fadeInUpHero 0.6s var(--transition-normal) forwards;
-}
-
-.delay-1 { animation-delay: 150ms; }
-.delay-2 { animation-delay: 300ms; }
-.delay-3 { animation-delay: 450ms; }
-.delay-4 { animation-delay: 600ms; }
-
-/* Scroll-triggered reveal states (Opacity + Clip Path) */
-.reveal-source {
-  opacity: 0;
-  clip-path: inset(0 0 100% 0);
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-              clip-path 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.reveal-active {
-  opacity: 1;
-  clip-path: inset(0 0 0% 0);
-}
-
-/* Ambient glow utility */
-.ambient-glow {
-  pointer-events: none;
-  background: var(--gradient-hero);
-  animation: ambientPulse 8s ease-in-out infinite;
-}
-
 /* --- REDUCED MOTION FALLBACK --- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -350,24 +250,13 @@ code {
     transition-delay: 0s !important;
   }
 
-  .reveal-source {
-    opacity: 1 !important;
-    clip-path: none !important;
-  }
-
-  .animate-hero-el {
-    opacity: 1 !important;
-    transform: none !important;
-    animation: none !important;
-  }
-  
-  .ambient-glow {
-    animation: none !important;
-    opacity: 0.5 !important;
-  }
 }
 
 @media (max-width: 768px) {
+  :root {
+    --header-height: 112px;
+  }
+
   .grid-2, .grid-3 {
     grid-template-columns: 1fr;
   }
@@ -378,4 +267,3 @@ code {
     font-size: 1.85rem;
   }
 }
-
