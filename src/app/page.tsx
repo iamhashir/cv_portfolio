@@ -9,12 +9,11 @@ import ProjectCard from "@/components/ProjectCard"
 
 // Redesign Component Imports
 import ScrollReveal from "@/components/ScrollReveal"
-import PerspectiveGrid from "@/components/PerspectiveGrid"
+
 import Marquee from "@/components/Marquee"
 import FeaturedProjectCard from "@/components/FeaturedProjectCard"
 import Timeline from "@/components/Timeline"
 import SectionHeader from "@/components/SectionHeader"
-import InteractiveParticles from "@/components/InteractiveParticles"
 
 import styles from "./page.module.css"
 
@@ -79,14 +78,9 @@ export default function Home() {
 
   return (
     <div className={styles.homeWrapper}>
-      {/* 1. Hero Section */}
+      {/* 1. Hero Section - Transparent for WebGL Background */}
       <section ref={heroRef} className={styles.heroSection}>
-        <motion.div style={{ position: "absolute", inset: 0, opacity: gridOpacity }}>
-          <PerspectiveGrid />
-        </motion.div>
-        <motion.div style={{ position: "absolute", inset: 0, opacity: particlesOpacity }}>
-          <InteractiveParticles />
-        </motion.div>
+
         
         <div className={`container ${styles.heroContainer}`}>
           {/* Left: Text Block */}

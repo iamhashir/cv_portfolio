@@ -2,6 +2,9 @@ import type { Metadata } from "next"
 import { Inter, Outfit } from "next/font/google"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
+import SmoothScroller from "@/components/SmoothScroller"
+import Scene from "@/components/Scene"
+import CustomCursor from "@/components/CustomCursor"
 import "./globals.css"
 
 const inter = Inter({
@@ -37,9 +40,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${outfit.variable}`}>
       <body>
-        <Navbar />
-        <main className="main-content">{children}</main>
-        <Footer />
+        <CustomCursor />
+        <Scene />
+        <SmoothScroller>
+          <Navbar />
+          <main className="main-content">{children}</main>
+          <Footer />
+        </SmoothScroller>
       </body>
     </html>
   )
