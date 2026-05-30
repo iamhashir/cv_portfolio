@@ -4,7 +4,14 @@ import React, { useRef } from "react"
 import { motion, useScroll, useSpring, useReducedMotion } from "framer-motion"
 import styles from "./timeline.module.css"
 
-const steps = [
+export type TimelineStep = {
+  stepNumber: string
+  stepName: string
+  title: string
+  desc: string
+}
+
+const defaultSteps: TimelineStep[] = [
   {
     stepNumber: "01 / SCOPE",
     stepName: "Discovery & Scope",
@@ -25,7 +32,7 @@ const steps = [
   }
 ]
 
-export default function Timeline() {
+export default function Timeline({ steps = defaultSteps }: { steps?: TimelineStep[] }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const shouldReduceMotion = useReducedMotion()
 

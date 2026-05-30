@@ -1,9 +1,6 @@
 import type { Metadata } from "next"
 import { Inter, Outfit } from "next/font/google"
-import Navbar from "@/components/Navbar"
-import Footer from "@/components/Footer"
-import Scene from "@/components/Scene"
-import AuditToggle from "@/components/AuditToggle"
+import PortfolioShell from "@/components/PortfolioShell"
 import "./globals.css"
 
 const inter = Inter({
@@ -39,11 +36,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${outfit.variable}`}>
       <body>
-        <AuditToggle />
-        <Scene />
-        <Navbar />
-        <main className="main-content">{children}</main>
-        <Footer />
+        <PortfolioShell>{children}</PortfolioShell>
       </body>
     </html>
   )

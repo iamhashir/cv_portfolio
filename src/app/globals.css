@@ -128,6 +128,12 @@ p {
   flex-direction: column;
 }
 
+.gateway-content {
+  width: 100vw;
+  height: 100svh;
+  overflow: hidden;
+}
+
 /* Helper Elements */
 .badge-active {
   display: inline-flex;
