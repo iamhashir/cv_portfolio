@@ -1,0 +1,147 @@
+.contactPage {
+  padding: 64px 0 96px 0;
+}
+
+.header {
+  margin-bottom: 48px;
+  max-width: 600px;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 3.5rem;
+  margin-bottom: 12px;
+}
+
+.description {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Contact Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 64px;
+}
+
+.card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-muted);
+  border-radius: 12px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  transition: all var(--transition-fast);
+}
+
+.card:hover {
+  border-color: var(--border-focus);
+  transform: translateY(-2px);
+}
+
+.iconWrapper {
+  color: var(--text-accent);
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-muted);
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.cardDesc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.link {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.link:hover {
+  color: var(--text-primary);
+}
+
+/* Copy Button Section */
+.copySection {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-muted);
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.copyLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.emailDisplay {
+  font-family: var(--font-serif);
+  font-size: 2.25rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  word-break: break-all;
+}
+
+.copyBtn {
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-muted);
+  color: var(--text-primary);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all var(--transition-fast);
+}
+
+.copyBtn:hover {
+  background-color: var(--border-muted);
+  border-color: var(--border-focus);
+}
+
+.copiedState {
+  background-color: var(--status-active-glow);
+  border-color: var(--status-active);
+  color: var(--status-active);
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}

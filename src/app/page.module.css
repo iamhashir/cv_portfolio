@@ -1,0 +1,242 @@
+.homeWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* 1. Hero Section */
+.heroSection {
+  position: relative;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 120px 0 80px 0;
+  background-color: var(--bg-primary);
+}
+
+.heroContainer {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 48px;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.heroBadgeWrapper {
+  margin-bottom: 24px;
+}
+
+.heroTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+}
+
+.titleItalic {
+  color: var(--accent-color);
+}
+
+.heroSubtitle {
+  font-size: clamp(1.1rem, 2vw, 1.25rem);
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+.heroActions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.heroVisualContainer {
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.monolithContainer {
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 3 / 4;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 40px 80px rgba(201, 169, 110, 0.07))
+          drop-shadow(0 8px 24px rgba(201, 169, 110, 0.04));
+  animation: monolithFloat 8s ease-in-out infinite;
+}
+
+@keyframes monolithFloat {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .monolithContainer {
+    animation: none !important;
+  }
+}
+
+/* 2. Marquee Section */
+.marqueeSection {
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-muted);
+  border-bottom: 1px solid var(--border-muted);
+  padding: 16px 0;
+}
+
+/* 3. Section Common Styles */
+.section {
+  padding: 120px 0;
+}
+
+.sectionSecondary {
+  padding: 120px 0;
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-muted);
+  border-bottom: 1px solid var(--border-muted);
+}
+
+/* Featured Systems Showcase styling */
+.featuredShowcase {
+  display: flex;
+  flex-direction: column;
+  gap: 80px; /* Generous spacing between cards */
+  margin-top: 48px;
+}
+
+.showcaseItemWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.sectionCounter {
+  position: absolute;
+  top: -30px;
+  left: -20px;
+  font-family: var(--font-mono);
+  font-size: clamp(3rem, 6vw, 6rem);
+  font-weight: 700;
+  color: var(--accent-color);
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Secondary Projects grid footer */
+.projectsFooter {
+  display: flex;
+  justify-content: center;
+  margin-top: 56px;
+}
+
+/* 6. Closing CTA Section */
+.ctaSection {
+  position: relative;
+  padding: 140px 0;
+  overflow: hidden;
+  background-color: var(--bg-primary);
+  border-top: 1px solid var(--border-muted);
+}
+
+.ctaGridWrapper {
+  position: absolute;
+  inset: 0;
+  transform: rotate(180deg); /* Reflected ground effect */
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.ctaContainer {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.ctaContent {
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ctaTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 1.1;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+
+.ctaText {
+  font-size: clamp(1.05rem, 2vw, 1.2rem);
+  color: var(--text-secondary);
+  max-width: 580px;
+  margin-bottom: 48px;
+  line-height: 1.6;
+}
+
+.ctaCards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 968px) {
+  .heroContainer {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: left;
+  }
+  .heroVisualContainer {
+    justify-content: center;
+    order: -1; /* visual on top for tablet/mobile */
+  }
+  .monolithContainer {
+    max-width: 220px;
+    aspect-ratio: 3 / 4;
+  }
+  .ctaCards {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .sectionCounter {
+    left: 0;
+    top: -24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 80px 0;
+  }
+  .sectionSecondary {
+    padding: 80px 0;
+  }
+  .ctaSection {
+    padding: 100px 0;
+  }
+  .featuredShowcase {
+    gap: 56px;
+  }
+}

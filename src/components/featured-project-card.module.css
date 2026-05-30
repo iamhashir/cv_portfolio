@@ -1,0 +1,260 @@
+.cardWrapper {
+  width: 100%;
+  position: relative;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-muted);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color var(--transition-normal);
+}
+
+.cardWrapper:hover {
+  border-color: var(--border-focus);
+}
+
+.cardContainer {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 32px;
+  min-height: 480px;
+}
+
+.infoColumn {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 1px solid var(--border-muted);
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.categoryBadge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-accent);
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-muted);
+  padding: 4px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+}
+
+.statusChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.pulseDot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--accent-color);
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3vw, 2.75rem);
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+
+.summary {
+  font-size: 0.98rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+/* Outcome Metric Callout Box */
+.outcomeCallout {
+  display: flex;
+  gap: 16px;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-muted);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 28px;
+  align-items: flex-start;
+}
+
+.outcomeIcon {
+  color: var(--accent-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 3px;
+}
+
+.outcomeText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.outcomeLabel {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.outcomeValue {
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+/* Tech Stack Container */
+.stackContainer {
+  margin-bottom: 32px;
+}
+
+.stackLabel {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  letter-spacing: 0.05em;
+}
+
+.tagGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.techTag {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-muted);
+  color: var(--text-secondary);
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+/* CTA Link styling */
+.ctaLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-top: auto;
+  transition: color var(--transition-fast);
+}
+
+.ctaLink:hover {
+  color: var(--text-accent);
+}
+
+.arrowIcon {
+  display: flex;
+  align-items: center;
+}
+
+/* Right Column: Visual Blueprint */
+.visualColumn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background-color: #0b0a08; /* Slightly darker backing for visual contrast */
+  overflow: hidden;
+}
+
+.diagramContainer {
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  border: 1px solid var(--border-muted);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  background-color: #0f0e0c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Tech Blueprint Grid Backdrop */
+.blueprintGrid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(201, 169, 110, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(201, 169, 110, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.diagramWrapper {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.svgDiagram {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Responsive Overrides */
+@media (max-width: 1024px) {
+  .cardContainer {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .infoColumn {
+    border-right: none;
+    border-bottom: 1px solid var(--border-muted);
+    padding: 32px;
+  }
+
+  .visualColumn {
+    padding: 32px;
+  }
+}
+
+@media (max-width: 640px) {
+  .infoColumn {
+    padding: 24px;
+  }
+  .visualColumn {
+    padding: 24px;
+  }
+  .title {
+    font-size: 1.8rem;
+  }
+}
