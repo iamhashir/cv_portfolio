@@ -3,7 +3,7 @@
 import React from "react"
 import Link from "next/link"
 import { ArrowRight, Activity } from "lucide-react"
-import { motion } from "framer-motion"
+import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion"
 import { Project } from "@/data/projects"
 import ExplodedProjectView from "@/components/ExplodedProjectView"
 import { useAppStore } from "@/lib/store"
@@ -14,15 +14,35 @@ interface FeaturedProjectCardProps {
 }
 
 export default function FeaturedProjectCard({ project }: FeaturedProjectCardProps) {
-  // Grab the first outcome metric as the showcase highlight
   const mainOutcome = project.outcome[0]
   const setActiveProject = useAppStore((state) => state.setActiveProject)
+  const shouldReduceMotion = useReducedMotion()
+
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const rotateX = useSpring(useTransform(mouseY, [-1, 1], [5, -5]), { stiffness: 280, damping: 32 })
+  const rotateY = useSpring(useTransform(mouseX, [-1, 1], [-5, 5]), { stiffness: 280, damping: 32 })
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (shouldReduceMotion) return
+    const rect = e.currentTarget.getBoundingClientRect()
+    mouseX.set((e.clientX - rect.left) / rect.width * 2 - 1)
+    mouseY.set((e.clientY - rect.top) / rect.height * 2 - 1)
+  }
+
+  const handleMouseLeave = () => {
+    mouseX.set(0)
+    mouseY.set(0)
+  }
 
   return (
-    <motion.div 
+    <motion.div
       className={styles.cardWrapper}
+      style={shouldReduceMotion ? {} : { rotateX, rotateY, transformPerspective: 1100 }}
       whileHover="hover"
       initial="initial"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       onViewportEnter={() => setActiveProject(project.slug)}
       onViewportLeave={() => setActiveProject(null)}
       viewport={{ margin: "-200px 0px -200px 0px" }}

@@ -15,10 +15,23 @@
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
+  will-change: background;
   background:
     radial-gradient(circle at 70% 18%, color-mix(in srgb, var(--system-accent) 20%, transparent), transparent 18rem),
     linear-gradient(180deg, rgba(9, 8, 6, 0.34), rgba(9, 8, 6, 0.86));
-  transition: background 340ms ease;
+  transition: background 380ms ease;
+}
+
+.ambientGlow {
+  position: absolute;
+  inset: 0;
+  /* Tracks cursor in real time — intentionally no transition */
+  background: radial-gradient(
+    circle at var(--pointer-x, 50%) var(--pointer-y, 30%),
+    color-mix(in srgb, var(--system-accent) 16%, transparent),
+    transparent 20rem
+  );
+  pointer-events: none;
 }
 
 .backdrop::before,
@@ -29,12 +42,14 @@
 }
 
 .backdrop::before {
-  opacity: 0.26;
+  opacity: 0.22;
   background-image:
-    linear-gradient(color-mix(in srgb, var(--system-accent) 18%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--system-accent) 18%, transparent) 1px, transparent 1px);
-  background-size: 38px 38px;
-  transform: skewY(-10deg) translateY(-10%);
+    linear-gradient(color-mix(in srgb, var(--system-accent) 14%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--system-accent) 14%, transparent) 1px, transparent 1px);
+  /* 48px matches gateway's 54px grid more closely; -5deg is a softer skew */
+  background-size: 48px 48px;
+  transform: skewY(-5deg) translateY(-6%);
+  transition: opacity 380ms ease;
 }
 
 .backdrop::after {
@@ -123,8 +138,14 @@
   line-height: 0.98;
 }
 
-.heroTitle span {
+.heroTitle span,
+.heroHighlight {
   color: var(--accent-color);
+}
+
+.heroHighlight {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
 }
 
 .heroDescription {
@@ -208,6 +229,12 @@
   display: none;
 }
 
+/* ─── Minimap (desktop-only) ────────────────────────────────── */
+
+.minimapWrapper {
+  display: none;
+}
+
 /* ─── Process (desktop-only) ────────────────────────────────── */
 
 .processSection {
@@ -221,6 +248,8 @@
   z-index: 1;
   padding: 72px 24px;
   background: #100f0c;
+  content-visibility: auto;
+  contain-intrinsic-size: 0 800px;
 }
 
 .sectionIntro {
@@ -408,6 +437,8 @@
   z-index: 1;
   padding: 72px 24px;
   background: #171510;
+  content-visibility: auto;
+  contain-intrinsic-size: 0 400px;
 }
 
 .skillLanes {
@@ -471,6 +502,8 @@
   min-height: 64svh;
   padding: 72px 24px;
   background: #0c0b09;
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
 }
 
 .mobileContactActions {
@@ -542,6 +575,11 @@
 /* ─── Desktop (769px+) ──────────────────────────────────────── */
 
 @media (min-width: 769px) {
+  /* Minimap: let the component's own fixed positioning handle placement */
+  .minimapWrapper {
+    display: contents;
+  }
+
   /* Backdrop: shift gradient origin for wide layouts */
   .backdrop {
     background:

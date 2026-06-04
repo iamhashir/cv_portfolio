@@ -5,11 +5,13 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 8px;
   overflow: hidden;
-  transition: border-color var(--transition-normal);
+  transform-style: preserve-3d;
+  transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
 }
 
 .cardWrapper:hover {
   border-color: var(--border-focus);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.48), 0 0 0 1px rgba(201, 169, 110, 0.08);
 }
 
 .cardContainer {

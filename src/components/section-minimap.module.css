@@ -7,7 +7,7 @@
   display: none; /* hidden on mobile, shown via media query below */
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   .minimap {
     display: block;
   }

@@ -3,16 +3,26 @@
 import Link from "next/link"
 import { ArrowRight, ChevronDown, Mail, MessageCircle } from "lucide-react"
 import { motion, useReducedMotion } from "framer-motion"
-import { useState, type CSSProperties } from "react"
+import { useRef, useState, type CSSProperties, type PointerEvent } from "react"
+import ScrambleText from "@/components/ScrambleText"
 import FeaturedProjectCard from "@/components/FeaturedProjectCard"
 import ProjectCard from "@/components/ProjectCard"
 import ScrollReveal from "@/components/ScrollReveal"
 import SectionHeader from "@/components/SectionHeader"
+import SectionMinimap from "@/components/SectionMinimap"
 import SignalTicker from "@/components/SignalTicker"
 import Timeline, { type TimelineStep } from "@/components/Timeline"
 import { projectCategoryGroups, projects, type Project } from "@/data/projects"
 import { useAppStore } from "@/lib/store"
 import styles from "./landing-page.module.css"
+
+const minimapSections = [
+  { id: "landing-hero", label: "Intro" },
+  { id: "landing-process", label: "Process" },
+  { id: "landing-projects", label: "Work" },
+  { id: "landing-skills", label: "Stack" },
+  { id: "landing-contact", label: "Contact" },
+]
 
 const systemVisuals: Record<string, { label: string; accent: string }> = {
   reactor: { label: "JSX → hooks → render", accent: "#d4b896" },
@@ -58,6 +68,18 @@ export default function LandingPage({ content }: { content: LandingPageContent }
   const shouldReduceMotion = useReducedMotion()
   const activeProject = useAppStore((state) => state.activeProject)
   const activeVisual = systemVisuals[activeProject ?? "opsflow"] ?? systemVisuals.opsflow
+  const landingRef = useRef<HTMLDivElement>(null)
+  const pointerRafRef = useRef<number>(0)
+
+  const handlePointerMove = (e: PointerEvent<HTMLDivElement>) => {
+    cancelAnimationFrame(pointerRafRef.current)
+    pointerRafRef.current = requestAnimationFrame(() => {
+      const x = (e.clientX / window.innerWidth) * 100
+      const y = (e.clientY / window.innerHeight) * 100
+      landingRef.current?.style.setProperty("--pointer-x", `${x}%`)
+      landingRef.current?.style.setProperty("--pointer-y", `${y}%`)
+    })
+  }
 
   const heroMetrics = [
     { value: `${projects.length}`, label: "documented systems" },
@@ -67,14 +89,22 @@ export default function LandingPage({ content }: { content: LandingPageContent }
 
   return (
     <div
+      ref={landingRef}
       className={styles.landing}
-      style={{ "--system-accent": activeVisual.accent } as CSSProperties}
+      style={{ "--system-accent": activeVisual.accent, "--pointer-x": "50%", "--pointer-y": "30%" } as CSSProperties}
+      onPointerMove={handlePointerMove}
     >
       <div className={styles.backdrop} aria-hidden="true">
+        {/* Pointer glow: no transition, snaps to cursor in real time */}
+        <div className={styles.ambientGlow} />
         <span>{activeVisual.label}</span>
       </div>
 
-      <section className={styles.hero}>
+      <div className={styles.minimapWrapper} aria-hidden="true">
+        <SectionMinimap sections={minimapSections} />
+      </div>
+
+      <section id="landing-hero" className={styles.hero}>
         <div className={styles.mesh} aria-hidden="true" />
         <div className={styles.badge}>{content.badge}</div>
 
@@ -85,7 +115,13 @@ export default function LandingPage({ content }: { content: LandingPageContent }
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
           <h1 className={styles.heroTitle}>
-            {content.heroPrefix} <span>{content.heroHighlight}</span> {content.heroSuffix}
+            {content.heroPrefix}{" "}
+            <ScrambleText
+              text={content.heroHighlight}
+              className={styles.heroHighlight}
+              delay={320}
+            />{" "}
+            {content.heroSuffix}
           </h1>
           <p className={styles.heroDescription}>{content.heroDescription}</p>
           <div className={styles.heroMetrics} aria-label="Portfolio proof points">
@@ -99,7 +135,7 @@ export default function LandingPage({ content }: { content: LandingPageContent }
         </motion.div>
 
         <div className={styles.heroActions}>
-          <Link href="#projects" className={styles.primaryAction}>
+          <Link href="#landing-projects" className={styles.primaryAction}>
             <span>{content.primaryAction}</span>
             <ArrowRight size={18} />
           </Link>
@@ -113,7 +149,7 @@ export default function LandingPage({ content }: { content: LandingPageContent }
         </div>
       </section>
 
-      <section className={styles.processSection}>
+      <section id="landing-process" className={styles.processSection}>
         <div className="container">
           <SectionHeader {...content.process} />
           <ScrollReveal direction="up">
@@ -122,7 +158,7 @@ export default function LandingPage({ content }: { content: LandingPageContent }
         </div>
       </section>
 
-      <section id="projects" className={styles.projectsSection}>
+      <section id="landing-projects" className={styles.projectsSection}>
         <header className={styles.sectionIntro}>
           <span>{content.featured.label}</span>
           <h2>{content.featured.title}</h2>
@@ -153,7 +189,7 @@ export default function LandingPage({ content }: { content: LandingPageContent }
         </div>
       </section>
 
-      <section className={styles.skillsSection}>
+      <section id="landing-skills" className={styles.skillsSection}>
         <header className={styles.sectionIntro}>
           <span>Technical stack</span>
           <h2>Built across the stack</h2>
@@ -183,7 +219,7 @@ export default function LandingPage({ content }: { content: LandingPageContent }
         </div>
       </section>
 
-      <section className={styles.contactSection}>
+      <section id="landing-contact" className={styles.contactSection}>
         <header className={styles.sectionIntro}>
           <span>{content.ctaLabel}</span>
           <h2>{content.ctaTitle}</h2>
