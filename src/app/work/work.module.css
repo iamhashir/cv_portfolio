@@ -1,5 +1,5 @@
 .workPage {
-  padding: 64px 0 96px 0;
+  padding: 64px 0 96px;
 }
 
 .header {
@@ -11,6 +11,7 @@
   font-family: var(--font-sans);
   font-size: 3.5rem;
   margin-bottom: 12px;
+  letter-spacing: 0;
 }
 
 .description {
@@ -33,7 +34,7 @@
   border: 1px solid transparent;
   color: var(--text-secondary);
   padding: 8px 16px;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
@@ -66,11 +67,39 @@
 }
 
 @media (max-width: 768px) {
+  .workPage {
+    padding-top: 42px;
+    padding-bottom: 72px;
+  }
+
+  .header {
+    margin-bottom: 32px;
+  }
+
+  .filterContainer {
+    flex-wrap: nowrap;
+    margin-right: -20px;
+    margin-left: -20px;
+    overflow-x: auto;
+    padding-right: 20px;
+    padding-left: 20px;
+    scrollbar-width: none;
+  }
+
+  .filterContainer::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filterBtn {
+    flex: 0 0 auto;
+    min-height: 42px;
+  }
+
   .grid {
     grid-template-columns: 1fr;
     gap: 24px;
   }
   .title {
-    font-size: 2.75rem;
+    font-size: 2.35rem;
   }
 }

@@ -3,8 +3,10 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import { Activity, ChevronRight, Code, X } from "lucide-react"
 import { usePathname } from "next/navigation"
+import { useMemo } from "react"
 import { projects } from "@/data/projects"
 import { useAppStore } from "@/lib/store"
+import { systemMaps } from "@/lib/systemMaps"
 import styles from "./audit-toggle.module.css"
 
 const boardBehaviors: Record<string, string> = {
@@ -59,19 +61,102 @@ export default function AuditToggle() {
   )
 }
 
+function MiniSystemGraph({ slug, accent }: { slug: string; accent: string }) {
+  const map = systemMaps[slug] ?? systemMaps.idle
+  const nodeLookup = useMemo(() => new Map(map.nodes.map((n) => [n.id, n])), [map.nodes])
+  const shouldReduceMotion = useReducedMotion()
+
+  return (
+    <div className={styles.miniGraph} style={{ "--graph-accent": accent } as React.CSSProperties}>
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" className={styles.miniSvg}>
+        <defs>
+          <filter id="miniGlow">
+            <feGaussianBlur stdDeviation="1.2" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        {/* Grid */}
+        <g opacity="0.18">
+          {Array.from({ length: 9 }, (_, i) => (
+            <path key={`v${i}`} d={`M ${10 + i * 10} 5 V 95`} fill="none" stroke={accent} strokeWidth="0.3" />
+          ))}
+          {Array.from({ length: 8 }, (_, i) => (
+            <path key={`h${i}`} d={`M 5 ${10 + i * 10} H 95`} fill="none" stroke={accent} strokeWidth="0.3" />
+          ))}
+        </g>
+
+        {/* Links */}
+        {map.links.map((link, i) => {
+          const from = nodeLookup.get(link.from)
+          const to = nodeLookup.get(link.to)
+          if (!from || !to) return null
+          const midX = (from.x + to.x) / 2
+          const midY = (from.y + to.y) / 2 - (link.lane === "secondary" ? 10 : 4)
+          const path = `M ${from.x} ${from.y} Q ${midX} ${midY} ${to.x} ${to.y}`
+          return (
+            <g key={`${link.from}-${link.to}`}>
+              <path
+                d={path}
+                fill="none"
+                stroke={link.lane === "secondary" ? "rgba(240,235,226,0.2)" : accent}
+                strokeWidth={link.lane === "secondary" ? 0.6 : 1.0}
+                strokeDasharray={link.lane === "secondary" ? "3 3" : undefined}
+                strokeOpacity={link.lane === "secondary" ? 1 : 0.65}
+              />
+              {!shouldReduceMotion && (
+                <motion.circle
+                  r="0.8"
+                  fill={accent}
+                  filter="url(#miniGlow)"
+                  initial={false}
+                  animate={{ offsetDistance: ["0%", "100%"] }}
+                  transition={{ duration: 3 + i * 0.3, repeat: Infinity, ease: "linear", delay: i * 0.4 }}
+                  style={{ offsetPath: `path("${path}")` }}
+                />
+              )}
+            </g>
+          )
+        })}
+
+        {/* Nodes */}
+        {map.nodes.map((node) => (
+          <g key={node.id}>
+            <circle cx={node.x} cy={node.y} r="2.4" fill={accent} filter="url(#miniGlow)" />
+            <circle cx={node.x} cy={node.y} r="5.5" fill="rgba(10,9,8,0.4)" stroke={accent} strokeWidth="0.4" strokeOpacity="0.6" />
+            <text
+              x={node.x + 3.8}
+              y={node.y + 0.8}
+              fill="rgba(240,235,226,0.8)"
+              fontSize="2.4"
+              fontFamily="monospace"
+              fontWeight="600"
+            >
+              {node.label}
+            </text>
+          </g>
+        ))}
+      </svg>
+    </div>
+  )
+}
+
 function ProjectAudit({ project }: { project: (typeof projects)[number] }) {
+  const map = systemMaps[project.slug]
+  const accent = map?.accent ?? "#c9a96e"
+
   return (
     <div className={styles.panelBody}>
       <p className={styles.summary}>{project.summary}</p>
 
-      <AuditSection label="Board transformation">
-        <p>{boardBehaviors[project.slug] ?? "Architecture layer view for this case study."}</p>
-      </AuditSection>
-
-      <AuditSection label="System layers">
-        <AuditRow name="Interface" value={project.architecture.frontend} />
-        <AuditRow name="Services" value={project.architecture.backend} />
-        <AuditRow name="Records" value={project.architecture.database} />
+      <AuditSection label="Live architecture graph">
+        <MiniSystemGraph slug={project.slug} accent={accent} />
+        <p style={{ marginTop: 10, fontSize: "0.78rem", color: "var(--text-muted)", lineHeight: 1.5 }}>
+          {boardBehaviors[project.slug] ?? "Architecture layer view for this case study."}
+        </p>
       </AuditSection>
 
       <AuditSection label="Core signals">
@@ -88,6 +173,7 @@ function ProjectAudit({ project }: { project: (typeof projects)[number] }) {
     </div>
   )
 }
+
 
 function AtlasAudit() {
   return (

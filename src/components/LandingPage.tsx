@@ -8,8 +8,9 @@ import MobileLandingPage from "@/components/MobileLandingPage"
 import ProjectCard from "@/components/ProjectCard"
 import ScrollReveal from "@/components/ScrollReveal"
 import SectionHeader from "@/components/SectionHeader"
+import SignalTicker from "@/components/SignalTicker"
 import Timeline, { type TimelineStep } from "@/components/Timeline"
-import { projects } from "@/data/projects"
+import { projectCategoryGroups, projects } from "@/data/projects"
 import styles from "./landing-page.module.css"
 
 type SectionContent = {
@@ -42,6 +43,11 @@ export default function LandingPage({ content }: { content: LandingPageContent }
   const featuredProjects = projects.filter((project) => project.featured)
   const secondaryProjects = projects.filter((project) => !project.featured)
   const shouldReduceMotion = useReducedMotion()
+  const heroMetrics = [
+    { value: `${projects.length}`, label: "documented systems" },
+    { value: `${projectCategoryGroups.length}`, label: "delivery domains" },
+    { value: "UAE", label: "based, remote-ready" },
+  ]
 
   const hero = (
     <>
@@ -64,6 +70,15 @@ export default function LandingPage({ content }: { content: LandingPageContent }
           <span>{content.secondaryAction}</span>
         </Link>
       </div>
+      <div className={styles.heroMetrics} aria-label="Portfolio proof points">
+        {heroMetrics.map((metric) => (
+          <div key={metric.label} className={styles.heroMetric}>
+            <strong>{metric.value}</strong>
+            <span>{metric.label}</span>
+          </div>
+        ))}
+      </div>
+      <SignalTicker />
     </>
   )
 
@@ -142,7 +157,7 @@ export default function LandingPage({ content }: { content: LandingPageContent }
         </section>
       </div>
 
-      <MobileLandingPage content={content} />
+      <MobileLandingPage content={content} heroMetrics={heroMetrics} />
     </div>
   )
 }

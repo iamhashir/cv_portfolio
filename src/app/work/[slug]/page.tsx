@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import { ArrowLeft, Server, Cpu, Database, Link2, Key, HelpCircle } from "lucide-react"
 import { projects } from "@/data/projects"
 import { ArchitectureDiagram } from "@/lib/architectureDiagrams"
+import SectionMinimap from "@/components/SectionMinimap"
 import styles from "./project-detail.module.css"
 
 interface Props {
@@ -15,6 +16,19 @@ export async function generateStaticParams() {
   }))
 }
 
+const MINIMAP_SECTIONS = [
+  { id: "snapshot", label: "Snapshot" },
+  { id: "problem", label: "Problem" },
+  { id: "solution", label: "Solution" },
+  { id: "features", label: "Features" },
+  { id: "architecture", label: "Architecture" },
+  { id: "blueprint", label: "Blueprint" },
+  { id: "decisions", label: "Decisions" },
+  { id: "challenges", label: "Challenges" },
+  { id: "outcomes", label: "Outcomes" },
+  { id: "reflections", label: "Reflections" },
+]
+
 export default async function ProjectPage({ params }: Props) {
   const resolvedParams = await params
   const { slug } = resolvedParams
@@ -26,6 +40,8 @@ export default async function ProjectPage({ params }: Props) {
 
   return (
     <div className={`container ${styles.detailPage}`}>
+      <SectionMinimap sections={MINIMAP_SECTIONS} />
+
       {/* Back link */}
       <Link href="/work" className={styles.backLink}>
         <ArrowLeft size={16} />
@@ -72,7 +88,7 @@ export default async function ProjectPage({ params }: Props) {
       </header>
 
       {/* 2. Project Snapshot Box */}
-      <section className={styles.snapshotBox}>
+      <section id="snapshot" className={styles.snapshotBox}>
         <h3 className={styles.snapshotTitle}>Project Snapshot</h3>
         <div className={styles.snapshotGrid}>
           <div className={styles.snapshotItem}>
@@ -81,9 +97,7 @@ export default async function ProjectPage({ params }: Props) {
           </div>
           <div className={styles.snapshotItem}>
             <span className={styles.snapshotLabel}>Target Users</span>
-            <span className={styles.snapshotVal}>
-              {project.targetUsers}
-            </span>
+            <span className={styles.snapshotVal}>{project.targetUsers}</span>
           </div>
           <div className={styles.snapshotItem}>
             <span className={styles.snapshotLabel}>Core Stack</span>
@@ -97,7 +111,7 @@ export default async function ProjectPage({ params }: Props) {
       </section>
 
       {/* 3. Problem Section */}
-      <section className={styles.section}>
+      <section id="problem" className={styles.section}>
         <h2 className={styles.sectionTitle}>
           <HelpCircle className={styles.archIcon} size={24} />
           <span>The Problem</span>
@@ -106,7 +120,7 @@ export default async function ProjectPage({ params }: Props) {
       </section>
 
       {/* 4. Solution Section */}
-      <section className={styles.section}>
+      <section id="solution" className={styles.section}>
         <h2 className={styles.sectionTitle}>
           <Cpu className={styles.archIcon} size={24} />
           <span>The Solution</span>
@@ -115,19 +129,17 @@ export default async function ProjectPage({ params }: Props) {
       </section>
 
       {/* 5. Features Section */}
-      <section className={styles.section}>
+      <section id="features" className={styles.section}>
         <h2 className={styles.sectionTitle}>Key Features</h2>
         <ul className={styles.bulletList}>
           {project.features.map((feature, i) => (
-            <li key={i} className={styles.bulletItem}>
-              {feature}
-            </li>
+            <li key={i} className={styles.bulletItem}>{feature}</li>
           ))}
         </ul>
       </section>
 
       {/* 6. Architecture Section */}
-      <section className={styles.section}>
+      <section id="architecture" className={styles.section}>
         <h2 className={styles.sectionTitle}>
           <Server className={styles.archIcon} size={24} />
           <span>System Architecture</span>
@@ -135,7 +147,6 @@ export default async function ProjectPage({ params }: Props) {
         <p className={styles.sectionText}>
           How the application layers communicate to ensure stability, fast response, and data consistency:
         </p>
-
         <div className={styles.architectureGrid}>
           <div className={styles.archCard}>
             <div className={styles.archHeader}>
@@ -144,7 +155,6 @@ export default async function ProjectPage({ params }: Props) {
             </div>
             <div className={styles.archContent}>{project.architecture.frontend}</div>
           </div>
-
           <div className={styles.archCard}>
             <div className={styles.archHeader}>
               <Server size={18} className={styles.archIcon} />
@@ -152,7 +162,6 @@ export default async function ProjectPage({ params }: Props) {
             </div>
             <div className={styles.archContent}>{project.architecture.backend}</div>
           </div>
-
           <div className={styles.archCard}>
             <div className={styles.archHeader}>
               <Database size={18} className={styles.archIcon} />
@@ -160,7 +169,6 @@ export default async function ProjectPage({ params }: Props) {
             </div>
             <div className={styles.archContent}>{project.architecture.database}</div>
           </div>
-
           <div className={styles.archCard}>
             <div className={styles.archHeader}>
               <Link2 size={18} className={styles.archIcon} />
@@ -174,8 +182,8 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </section>
 
-      {/* 10. Blueprint Diagram / Gallery mock */}
-      <section className={styles.section}>
+      {/* 7. Blueprint Diagram */}
+      <section id="blueprint" className={styles.section}>
         <h2 className={styles.sectionTitle}>System Blueprint &amp; Data Flows</h2>
         <div className={styles.diagramBox}>
           <span className={styles.diagramTitle}>Architecture Topology</span>
@@ -186,16 +194,14 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </section>
 
-      {/* 7. Technical Decisions */}
-      <section className={styles.section}>
+      {/* 8. Technical Decisions */}
+      <section id="decisions" className={styles.section}>
         <h2 className={styles.sectionTitle}>Technical Decisions</h2>
-        <p className={styles.sectionText}>
-          {project.technicalDecisions}
-        </p>
+        <p className={styles.sectionText}>{project.technicalDecisions}</p>
       </section>
 
-      {/* 8. Challenges Section */}
-      <section className={styles.section}>
+      {/* 9. Challenges Section */}
+      <section id="challenges" className={styles.section}>
         <h2 className={styles.sectionTitle}>Engineering Challenges</h2>
         <div>
           {project.challenges.map((challenge, i) => {
@@ -210,20 +216,18 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </section>
 
-      {/* 9. Outcome Section */}
-      <section className={styles.section}>
+      {/* 10. Outcome Section */}
+      <section id="outcomes" className={styles.section}>
         <h2 className={styles.sectionTitle}>Business Outcomes</h2>
         <ul className={styles.bulletList}>
           {project.outcome.map((result, i) => (
-            <li key={i} className={styles.bulletItem}>
-              {result}
-            </li>
+            <li key={i} className={styles.bulletItem}>{result}</li>
           ))}
         </ul>
       </section>
 
       {/* 11. Reflection Section */}
-      <section className={styles.section}>
+      <section id="reflections" className={styles.section}>
         <h2 className={styles.sectionTitle}>Case Reflections</h2>
         <div className={styles.reflectionBox}>
           <ul className={styles.reflectionList}>

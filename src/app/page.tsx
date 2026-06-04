@@ -34,7 +34,7 @@ export default function Home() {
   }
 
   const handleDoorClick = (event: MouseEvent<HTMLAnchorElement>, door: Exclude<Door, null>, href: string) => {
-    const isTouchCanvas = window.matchMedia("(max-width: 720px), (pointer: coarse)").matches
+    const isTouchCanvas = window.matchMedia("(max-width: 720px)").matches
 
     if (!isTouchCanvas || shouldReduceMotion) return
 

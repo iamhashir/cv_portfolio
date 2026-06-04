@@ -1,5 +1,5 @@
 .aboutPage {
-  padding: 64px 0 96px 0;
+  padding: 64px 0 96px;
 }
 
 /* Intro Section */
@@ -41,7 +41,7 @@
 .strategicBox {
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-muted);
-  border-radius: 16px;
+  border-radius: 8px;
   padding: 32px;
   display: flex;
   flex-direction: column;
@@ -84,7 +84,7 @@
 .strengthCard {
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-muted);
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 28px;
 }
 
@@ -111,7 +111,7 @@
 .stackCard {
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-muted);
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 24px;
 }
 
@@ -160,6 +160,11 @@
 }
 
 @media (max-width: 640px) {
+  .aboutPage {
+    padding-top: 42px;
+    padding-bottom: 72px;
+  }
+
   .strengthsGrid {
     grid-template-columns: 1fr;
   }
@@ -167,6 +172,20 @@
     grid-template-columns: 1fr;
   }
   .title {
-    font-size: 2.75rem;
+    font-size: 2.35rem;
+  }
+
+  .subtitle {
+    font-size: 1.08rem;
+  }
+
+  .bioParagraph {
+    font-size: 0.98rem;
+  }
+
+  .strategicBox,
+  .strengthCard,
+  .stackCard {
+    padding: 22px;
   }
 }

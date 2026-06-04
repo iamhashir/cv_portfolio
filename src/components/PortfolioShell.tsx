@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import AuditToggle from "@/components/AuditToggle"
 import Footer from "@/components/Footer"
 import Navbar from "@/components/Navbar"
+import PageTransition from "@/components/PageTransition"
 import { useMobileExperience } from "@/lib/useMobileExperience"
 
 export default function PortfolioShell({ children }: { children: React.ReactNode }) {
@@ -28,11 +29,11 @@ export default function PortfolioShell({ children }: { children: React.ReactNode
   }, [isMobile])
 
   if (pathname === "/") {
-    return <main className="gateway-content">{children}</main>
+    return <main className="gateway-content"><PageTransition>{children}</PageTransition></main>
   }
 
   if (isAudienceLanding && isMobile !== false) {
-    return <main className="mobile-main-content">{children}</main>
+    return <main className="mobile-main-content"><PageTransition>{children}</PageTransition></main>
   }
 
   return (
@@ -40,7 +41,9 @@ export default function PortfolioShell({ children }: { children: React.ReactNode
       {isMobile === false && <AuditToggle />}
       {DesktopScene && <DesktopScene />}
       <Navbar />
-      <main className="main-content">{children}</main>
+      <main className="main-content">
+        <PageTransition>{children}</PageTransition>
+      </main>
       <Footer />
     </>
   )

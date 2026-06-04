@@ -1,10 +1,13 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useReducedMotion } from 'framer-motion'
 import * as THREE from 'three'
 import IsometricBoard from './IsometricBoard'
+
+// Shared mouse state outside React to avoid re-renders
+const mouse = { x: 0, y: 0 }
 
 function CameraController() {
   const { camera } = useThree()
@@ -54,9 +57,13 @@ function CameraController() {
       targetRotX = THREE.MathUtils.lerp(-Math.PI / 8, -Math.PI / 2, localP) // Looking straight down
     }
 
+    // Mouse parallax: subtle ±4° tilt tracking cursor
+    const parallaxX = mouse.x * 0.07  // horizontal mouse → slight Y-axis camera shift
+    const parallaxY = mouse.y * 0.04  // vertical mouse → slight X-axis tilt
+
     camera.position.set(
-      THREE.MathUtils.lerp(camera.position.x, targetX, 0.03),
-      THREE.MathUtils.lerp(camera.position.y, targetY, 0.03),
+      THREE.MathUtils.lerp(camera.position.x, targetX + parallaxX, 0.025),
+      THREE.MathUtils.lerp(camera.position.y, targetY + parallaxY, 0.025),
       THREE.MathUtils.lerp(camera.position.z, targetZ, 0.03)
     )
     camera.rotation.set(
@@ -70,8 +77,18 @@ function CameraController() {
 }
 
 export default function Scene() {
+  useEffect(() => {
+    const onMouseMove = (e: MouseEvent) => {
+      // Normalize to -1..1 range centered at viewport center
+      mouse.x = (e.clientX / window.innerWidth - 0.5) * 2
+      mouse.y = -(e.clientY / window.innerHeight - 0.5) * 2
+    }
+    window.addEventListener("mousemove", onMouseMove, { passive: true })
+    return () => window.removeEventListener("mousemove", onMouseMove)
+  }, [])
+
   return (
-    <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", zIndex: -1, pointerEvents: "none" }}>
+    <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", zIndex: 0, pointerEvents: "none" }}>
       <Canvas camera={{ position: [0, 15, 15], rotation: [-Math.PI / 4, 0, 0], fov: 45 }}>
         <color attach="background" args={["#0a0908"]} />
         <ambientLight intensity={0.8} />

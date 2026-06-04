@@ -154,6 +154,21 @@
   font-size: 0.82rem;
 }
 
+.miniGraph {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--border-muted);
+  background: rgba(8, 8, 6, 0.72);
+  overflow: hidden;
+  padding: 4px;
+}
+
+.miniSvg {
+  width: 100%;
+  height: 160px;
+  display: block;
+}
+
 @media (max-width: 640px) {
   .toggle {
     right: 16px;
