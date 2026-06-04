@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { ArrowRight, ChevronDown, Mail, MessageCircle } from "lucide-react"
 import { motion, useReducedMotion } from "framer-motion"
-import { useRef, useState, type CSSProperties, type PointerEvent } from "react"
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent } from "react"
 import ScrambleText from "@/components/ScrambleText"
 import FeaturedProjectCard from "@/components/FeaturedProjectCard"
 import ProjectCard from "@/components/ProjectCard"
@@ -70,6 +70,8 @@ export default function LandingPage({ content }: { content: LandingPageContent }
   const activeVisual = systemVisuals[activeProject ?? "opsflow"] ?? systemVisuals.opsflow
   const landingRef = useRef<HTMLDivElement>(null)
   const pointerRafRef = useRef<number>(0)
+  const gyroRafRef = useRef<number>(0)
+  const availability = useMemo(getAvailability, [])
 
   const handlePointerMove = (e: PointerEvent<HTMLDivElement>) => {
     cancelAnimationFrame(pointerRafRef.current)
@@ -81,6 +83,34 @@ export default function LandingPage({ content }: { content: LandingPageContent }
     })
   }
 
+  // Gyroscope: on mobile, device tilt drives the ambient glow + grid parallax
+  useEffect(() => {
+    if (!("DeviceOrientationEvent" in window)) return
+
+    const handleOrientation = (e: DeviceOrientationEvent) => {
+      if (e.gamma === null || e.beta === null) return
+      cancelAnimationFrame(gyroRafRef.current)
+      gyroRafRef.current = requestAnimationFrame(() => {
+        // gamma: left/right tilt (−90° to 90°) → pointer-x (25% to 75%)
+        // beta: front/back tilt (0°–180°, natural hold ≈45°) → pointer-y (32% to 68%)
+        const x = 50 + (e.gamma! / 45) * 25
+        const y = 50 + ((e.beta! - 45) / 40) * 18
+        const gx = (e.gamma! / 45).toFixed(3)   // −1 to 1 for grid parallax
+        const gy = ((e.beta! - 45) / 40).toFixed(3)
+        landingRef.current?.style.setProperty("--pointer-x", `${x.toFixed(1)}%`)
+        landingRef.current?.style.setProperty("--pointer-y", `${y.toFixed(1)}%`)
+        landingRef.current?.style.setProperty("--gyro-x", gx)
+        landingRef.current?.style.setProperty("--gyro-y", gy)
+      })
+    }
+
+    window.addEventListener("deviceorientation", handleOrientation, { passive: true })
+    return () => {
+      window.removeEventListener("deviceorientation", handleOrientation)
+      cancelAnimationFrame(gyroRafRef.current)
+    }
+  }, [])
+
   const heroMetrics = [
     { value: `${projects.length}`, label: "documented systems" },
     { value: `${projectCategoryGroups.length}`, label: "delivery domains" },
@@ -91,7 +121,7 @@ export default function LandingPage({ content }: { content: LandingPageContent }
     <div
       ref={landingRef}
       className={styles.landing}
-      style={{ "--system-accent": activeVisual.accent, "--pointer-x": "50%", "--pointer-y": "30%" } as CSSProperties}
+      style={{ "--system-accent": activeVisual.accent, "--pointer-x": "50%", "--pointer-y": "30%", "--gyro-x": "0", "--gyro-y": "0" } as CSSProperties}
       onPointerMove={handlePointerMove}
     >
       <div className={styles.backdrop} aria-hidden="true">
@@ -127,10 +157,16 @@ export default function LandingPage({ content }: { content: LandingPageContent }
           <div className={styles.heroMetrics} aria-label="Portfolio proof points">
             {heroMetrics.map((metric) => (
               <div key={metric.label} className={styles.heroMetric}>
-                <strong>{metric.value}</strong>
+                <CountUp value={metric.value} />
                 <span>{metric.label}</span>
               </div>
             ))}
+          </div>
+          <div className={styles.availabilityBadge} aria-live="polite">
+            <span
+              className={`${styles.availabilityDot} ${availability.active ? styles.availabilityDotActive : ""}`}
+            />
+            <span>{availability.label}</span>
           </div>
         </motion.div>
 
@@ -251,6 +287,66 @@ export default function LandingPage({ content }: { content: LandingPageContent }
   )
 }
 
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function getAvailability() {
+  const uae = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Dubai" }))
+  const h = uae.getHours()
+  const d = uae.getDay() // 0=Sun … 6=Sat; UAE work week is Sun–Thu (0–4)
+
+  if (d <= 4 && h >= 9 && h < 18) return { active: true, label: "Available now · GST" }
+
+  // Compute hours until next 9am work day
+  const next = new Date(uae)
+  next.setSeconds(0, 0)
+  next.setMinutes(0)
+  if (h < 9 && d <= 4) {
+    next.setHours(9)
+  } else {
+    next.setHours(9)
+    next.setDate(next.getDate() + 1)
+    while (next.getDay() === 5 || next.getDay() === 6) next.setDate(next.getDate() + 1)
+  }
+  const hrs = Math.max(1, Math.round((next.getTime() - uae.getTime()) / 3_600_000))
+  return { active: false, label: `Responds in ~${hrs}h · GST` }
+}
+
+function CountUp({ value, duration = 1100 }: { value: string; duration?: number }) {
+  const num = parseInt(value, 10)
+  const [count, setCount] = useState(0)
+  const elRef = useRef<HTMLElement>(null)
+  const started = useRef(false)
+
+  useEffect(() => {
+    if (isNaN(num)) return
+    const el = elRef.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting || started.current) return
+        started.current = true
+        observer.disconnect()
+        const t0 = performance.now()
+        const tick = (now: number) => {
+          const t = Math.min((now - t0) / duration, 1)
+          setCount(Math.round((1 - (1 - t) ** 3) * num))
+          if (t < 1) requestAnimationFrame(tick)
+        }
+        requestAnimationFrame(tick)
+      },
+      { threshold: 0.3 },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [num, duration])
+
+  if (isNaN(num)) return <strong>{value}</strong>
+  return <strong ref={elRef}>{count}</strong>
+}
+
+// ─── Project accordion card ───────────────────────────────────────────────────
+
 function ProjectAccordionCard({ project }: { project: Project }) {
   const [isExpanded, setIsExpanded] = useState(false)
   const setActiveProject = useAppStore((state) => state.setActiveProject)
@@ -258,6 +354,7 @@ function ProjectAccordionCard({ project }: { project: Project }) {
   const isActive = activeProject === project.slug
 
   const handleToggle = () => {
+    if ("vibrate" in navigator) navigator.vibrate(8)
     const expanding = !isExpanded
     setIsExpanded(expanding)
     setActiveProject(expanding ? project.slug : null)
