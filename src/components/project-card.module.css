@@ -39,9 +39,19 @@
 .summary {
   font-size: 0.95rem;
   color: var(--text-secondary);
-  margin-bottom: 24px;
+  margin-bottom: 14px;
   line-height: 1.5;
   flex-grow: 1;
+}
+
+.outcomeCallout {
+  font-size: 0.82rem;
+  color: var(--text-accent);
+  border-left: 2px solid color-mix(in srgb, var(--text-accent) 38%, transparent);
+  padding-left: 10px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+  flex-shrink: 0;
 }
 
 .metadataGrid {

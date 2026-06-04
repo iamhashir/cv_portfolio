@@ -777,6 +777,14 @@
     padding: 0 24px;
   }
 
+  .techFilterBar {
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow-x: visible;
+    padding-bottom: 0;
+    margin-bottom: 48px;
+  }
+
   .featuredShowcase {
     display: flex;
     flex-direction: column;
@@ -879,6 +887,106 @@
   }
 }
 
+/* ─── Tech filter bar ──────────────────────────────────────────── */
+
+.techFilterBar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  flex-shrink: 0;
+}
+
+.techFilterBar::-webkit-scrollbar {
+  display: none;
+}
+
+.techFilterChip {
+  flex: 0 0 auto;
+  min-height: 30px;
+  padding: 4px 12px;
+  border: 1px solid rgba(210, 184, 141, 0.18);
+  border-radius: 999px;
+  background: rgba(210, 184, 141, 0.03);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.63rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 150ms ease, background 150ms ease, color 150ms ease;
+}
+
+.techFilterChip:hover {
+  border-color: rgba(210, 184, 141, 0.34);
+  color: var(--text-secondary);
+}
+
+.techFilterChipActive {
+  border-color: var(--accent-color);
+  background: color-mix(in srgb, var(--accent-color) 13%, transparent);
+  color: var(--accent-color);
+}
+
+/* Accordion tech chip (interactive button replacing static span) */
+
+.techChip {
+  flex: 0 0 auto;
+  min-height: 34px;
+  padding: 7px 11px;
+  border: 1px solid rgba(210, 184, 141, 0.15);
+  border-radius: 999px;
+  background: rgba(210, 184, 141, 0.05);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  line-height: 1.35;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: border-color 140ms ease, background 140ms ease, color 140ms ease;
+}
+
+.techChip:hover {
+  border-color: rgba(210, 184, 141, 0.32);
+  color: var(--text-primary);
+}
+
+.techChipActive {
+  border-color: var(--accent-color);
+  background: color-mix(in srgb, var(--accent-color) 12%, transparent);
+  color: var(--accent-color);
+}
+
+/* Metric callout — visible in collapsed accordion state */
+
+.projectMetric {
+  padding: 8px 20px 14px;
+  color: var(--text-accent);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  line-height: 1.5;
+  border-top: 1px solid rgba(210, 184, 141, 0.07);
+}
+
+/* Empty filter state */
+
+.filterEmpty {
+  padding: 40px 0;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
 /* ─── Keyframes ─────────────────────────────────────────────── */
 
 @keyframes meshBreathe {
@@ -932,7 +1040,9 @@
   .projectHeading svg,
   .projectDetails,
   .skillChip,
-  .projectCard {
+  .projectCard,
+  .techFilterChip,
+  .techChip {
     transition: none;
   }
 }

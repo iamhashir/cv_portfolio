@@ -37,6 +37,7 @@ export type Project = {
   technicalDecisions: string
   challenges: string[]
   outcome: string[]
+  metric?: string
   reflection: string[]
 }
 
@@ -81,6 +82,7 @@ export const projects: Project[] = [
       "Engineered route-scoped state isolation and dynamic routing.",
       "Created a compact framework for studying predictable rendering behavior.",
     ],
+    metric: "Zero-dependency rendering engine · custom JSX + hooks from scratch",
     reflection: [
       "Framework code benefits from a narrow core with explicit lifecycle rules.",
       "Routing and state ownership should be designed together.",
@@ -127,6 +129,7 @@ export const projects: Project[] = [
       "Developed frontend architecture using a custom JSX runtime.",
       "Coordinated a cross-functional team across the product lifecycle.",
     ],
+    metric: "Real-time sync across connected clients · WebSocket backbone",
     reflection: [
       "Real-time features need clear server and client ownership boundaries.",
       "A multiplayer product benefits from treating infrastructure as part of the user experience.",
@@ -173,6 +176,7 @@ export const projects: Project[] = [
       "Implemented automated WhatsApp customer broadcasting.",
       "Mapped stakeholder requirements into modular logic.",
     ],
+    metric: "Replaced 3 spreadsheet workflows · WhatsApp broadcasting automated",
     reflection: [
       "Operational software works best when it mirrors how the team already thinks about its work.",
       "Connected records create more value than isolated dashboards.",
@@ -218,6 +222,7 @@ export const projects: Project[] = [
       "Digitized manual finance processes into structured workflows.",
       "Automated PDF and Excel report generation.",
     ],
+    metric: "PDF & Excel auto-generated · zero manual export steps",
     reflection: [
       "Reporting quality depends on record quality.",
       "Exports remain important when software is introduced into an existing administrative process.",
@@ -263,6 +268,7 @@ export const projects: Project[] = [
       "Built a behavioral analytics and recommendation engine.",
       "Delivered personalized discovery across all seven Emirates of the UAE.",
     ],
+    metric: "All 7 Emirates covered · AI-personalized discovery per user",
     reflection: [
       "Recommendation interfaces should explain enough context to earn user trust.",
       "A focused geographic scope makes discovery content easier to structure.",
@@ -308,6 +314,7 @@ export const projects: Project[] = [
       "Integrated self-hosted AI models without third-party inference dependencies.",
       "Automated UI auditing to accelerate design reviews.",
     ],
+    metric: "Self-hosted AI · interface audits automated end-to-end",
     reflection: [
       "AI output becomes valuable when it is translated into specific interface actions.",
       "A controlled inference stack simplifies experimentation with analysis workflows.",
