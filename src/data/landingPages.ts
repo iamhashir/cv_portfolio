@@ -51,6 +51,9 @@ export const hrLandingContent: LandingPageContent = {
     "I bring full-stack execution, product judgment, and practical operating context to software teams building tools that need to work in the real world.",
   ctaAction: "Start a Conversation",
   ctaHref: "/contact",
+  showProcess: false,
+  showTechFilter: false,
+  availability: { label: "Open to new roles · GST", active: true },
 }
 
 export const clientLandingContent: LandingPageContent = {

@@ -16,13 +16,6 @@ import { projectCategoryGroups, projects, type Project } from "@/data/projects"
 import { useAppStore } from "@/lib/store"
 import styles from "./landing-page.module.css"
 
-const minimapSections = [
-  { id: "landing-hero", label: "Intro" },
-  { id: "landing-process", label: "Process" },
-  { id: "landing-projects", label: "Work" },
-  { id: "landing-skills", label: "Stack" },
-  { id: "landing-contact", label: "Contact" },
-]
 
 const systemVisuals: Record<string, { label: string; accent: string }> = {
   reactor: { label: "JSX → hooks → render", accent: "#d4b896" },
@@ -60,6 +53,9 @@ export type LandingPageContent = {
   ctaDescription: string
   ctaAction: string
   ctaHref: string
+  showProcess?: boolean
+  showTechFilter?: boolean
+  availability?: { label: string; active: boolean }
 }
 
 export default function LandingPage({ content }: { content: LandingPageContent }) {
@@ -69,7 +65,15 @@ export default function LandingPage({ content }: { content: LandingPageContent }
   const landingRef = useRef<HTMLDivElement>(null)
   const pointerRafRef = useRef<number>(0)
   const gyroRafRef = useRef<number>(0)
-  const availability = useMemo(getAvailability, [])
+  const computedAvailability = useMemo(getAvailability, [])
+  const activeAvailability = content.availability ?? computedAvailability
+  const minimapSections = useMemo(() => [
+    { id: "landing-hero", label: "Intro" },
+    ...(content.showProcess !== false ? [{ id: "landing-process", label: "Process" }] : []),
+    { id: "landing-projects", label: "Work" },
+    { id: "landing-skills", label: "Stack" },
+    { id: "landing-contact", label: "Contact" },
+  ], [content.showProcess])
   const [filterTech, setFilterTech] = useState<string | null>(null)
 
   const allTechs = useMemo(
@@ -194,9 +198,9 @@ export default function LandingPage({ content }: { content: LandingPageContent }
           </div>
           <div className={styles.availabilityBadge} aria-live="polite">
             <span
-              className={`${styles.availabilityDot} ${availability.active ? styles.availabilityDotActive : ""}`}
+              className={`${styles.availabilityDot} ${activeAvailability.active ? styles.availabilityDotActive : ""}`}
             />
-            <span>{availability.label}</span>
+            <span>{activeAvailability.label}</span>
           </div>
         </motion.div>
 
@@ -215,14 +219,16 @@ export default function LandingPage({ content }: { content: LandingPageContent }
         </div>
       </section>
 
-      <section id="landing-process" className={styles.processSection}>
-        <div className="container">
-          <SectionHeader {...content.process} />
-          <ScrollReveal direction="up">
-            <Timeline steps={content.timeline} />
-          </ScrollReveal>
-        </div>
-      </section>
+      {content.showProcess !== false && (
+        <section id="landing-process" className={styles.processSection}>
+          <div className="container">
+            <SectionHeader {...content.process} />
+            <ScrollReveal direction="up">
+              <Timeline steps={content.timeline} />
+            </ScrollReveal>
+          </div>
+        </section>
+      )}
 
       <section id="landing-projects" className={styles.projectsSection}>
         <header className={styles.sectionIntro}>
@@ -231,14 +237,14 @@ export default function LandingPage({ content }: { content: LandingPageContent }
         </header>
 
         <div className={styles.mobileProjectStack}>
-          {filterBar}
+          {content.showTechFilter !== false && filterBar}
           {filteredProjects.length > 0 ? (
             filteredProjects.map((project) => (
               <ProjectAccordionCard
                 key={project.slug}
                 project={project}
-                activeTech={filterTech}
-                onTechClick={handleTechClick}
+                activeTech={content.showTechFilter !== false ? filterTech : null}
+                onTechClick={content.showTechFilter !== false ? handleTechClick : undefined}
               />
             ))
           ) : (
@@ -247,7 +253,7 @@ export default function LandingPage({ content }: { content: LandingPageContent }
         </div>
 
         <div className={styles.desktopProjectStack}>
-          {filterBar}
+          {content.showTechFilter !== false && filterBar}
           {featuredProjects.length > 0 && (
             <div className={styles.featuredShowcase}>
               {featuredProjects.map((project) => (
@@ -399,12 +405,12 @@ function CountUp({ value, duration = 1100 }: { value: string; duration?: number 
 
 function ProjectAccordionCard({
   project,
-  activeTech,
+  activeTech = null,
   onTechClick,
 }: {
   project: Project
-  activeTech: string | null
-  onTechClick: (tech: string) => void
+  activeTech?: string | null
+  onTechClick?: (tech: string) => void
 }) {
   const [isExpanded, setIsExpanded] = useState(false)
   const setActiveProject = useAppStore((state) => state.setActiveProject)
@@ -441,8 +447,8 @@ function ProjectAccordionCard({
             key={tech}
             type="button"
             className={`${styles.techChip} ${activeTech === tech ? styles.techChipActive : ""}`}
-            onClick={() => onTechClick(tech)}
-            aria-pressed={activeTech === tech}
+            onClick={onTechClick ? () => onTechClick(tech) : undefined}
+            aria-pressed={onTechClick ? activeTech === tech : undefined}
           >
             {tech}
           </button>

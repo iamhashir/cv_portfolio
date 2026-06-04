@@ -280,8 +280,6 @@
   z-index: 1;
   padding: 72px 24px;
   background: #100f0c;
-  content-visibility: auto;
-  contain-intrinsic-size: 0 800px;
 }
 
 .sectionIntro {
@@ -475,8 +473,6 @@
   z-index: 1;
   padding: 72px 24px;
   background: #171510;
-  content-visibility: auto;
-  contain-intrinsic-size: 0 400px;
 }
 
 .skillLanes {
@@ -540,8 +536,6 @@
   min-height: 64svh;
   padding: 72px 24px;
   background: #0c0b09;
-  content-visibility: auto;
-  contain-intrinsic-size: 0 500px;
 }
 
 .mobileContactActions {
