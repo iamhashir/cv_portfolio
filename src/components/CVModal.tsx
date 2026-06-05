@@ -1,24 +1,13 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { X, Download } from "lucide-react"
 import styles from "./cv-modal.module.css"
 
 const PDF_PATH = "/Malik_Hashir_CV.pdf"
 
-function getViewerSrc(origin: string) {
-  const full = `${origin}${PDF_PATH}`
-  return `https://docs.google.com/gviewer?embedded=true&url=${encodeURIComponent(full)}`
-}
-
 export default function CVModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const [viewerSrc, setViewerSrc] = useState("")
-
-  useEffect(() => {
-    setViewerSrc(getViewerSrc(window.location.origin))
-  }, [])
-
   useEffect(() => {
     if (!isOpen) return
     const handler = (e: KeyboardEvent) => {
@@ -65,7 +54,7 @@ export default function CVModal({ isOpen, onClose }: { isOpen: boolean; onClose:
               <span className={styles.toolbarTitle}>Malik Hashir — CV</span>
               <div className={styles.toolbarActions}>
                 <a
-                  href="/Malik_Hashir_CV.pdf"
+                  href={PDF_PATH}
                   download
                   className={styles.downloadBtn}
                 >
@@ -83,14 +72,11 @@ export default function CVModal({ isOpen, onClose }: { isOpen: boolean; onClose:
               </div>
             </div>
             <div className={styles.frameWrapper}>
-              {viewerSrc && (
-                <iframe
-                  src={viewerSrc}
-                  className={styles.pdfFrame}
-                  title="Malik Hashir CV"
-                  allowFullScreen
-                />
-              )}
+              <iframe
+                src={PDF_PATH}
+                className={styles.pdfFrame}
+                title="Malik Hashir CV"
+              />
             </div>
           </motion.div>
         </motion.div>
