@@ -217,19 +217,17 @@
 
 /* Challenges Cards */
 .challengeCard {
-  background-color: rgba(99, 102, 241, 0.02);
-  border: 1px dashed var(--border-muted);
-  border-radius: 12px;
-  padding: 24px;
-  margin-bottom: 20px;
+  border-left: 2px solid rgba(180, 140, 68, 0.3);
+  padding: 4px 0 4px 20px;
+  margin-bottom: 28px;
   max-width: 800px;
 }
 
 .challengeTitle {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .challengeDesc {
@@ -300,5 +298,68 @@
 @media (max-width: 480px) {
   .headerMetaGrid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Project nav ────────────────────────────────────────────── */
+
+.projectNav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  border-top: 1px solid var(--border-muted);
+  padding-top: 48px;
+  margin-top: 32px;
+}
+
+.navLink {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 20px 24px;
+  border: 1px solid rgba(180, 140, 68, 0.12);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  transition: border-color 180ms ease, background 180ms ease;
+}
+
+.navLink:hover {
+  border-color: rgba(180, 140, 68, 0.3);
+  background: rgba(180, 140, 68, 0.05);
+}
+
+.navLinkRight {
+  text-align: right;
+  align-items: flex-end;
+}
+
+.navDir {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-accent);
+}
+
+.navTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.navSub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 560px) {
+  .projectNav {
+    grid-template-columns: 1fr;
+  }
+
+  .navLinkRight {
+    text-align: left;
+    align-items: flex-start;
   }
 }

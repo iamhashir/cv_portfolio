@@ -40,6 +40,10 @@ export default async function ProjectPage({ params }: Props) {
     notFound()
   }
 
+  const idx = projects.findIndex((p) => p.slug === slug)
+  const prevProject = idx > 0 ? projects[idx - 1] : null
+  const nextProject = idx < projects.length - 1 ? projects[idx + 1] : null
+
   return (
     <div className={`container ${styles.detailPage}`}>
       <SectionMinimap sections={MINIMAP_SECTIONS} />
@@ -251,6 +255,26 @@ export default async function ProjectPage({ params }: Props) {
           </ul>
         </div>
       </section>
+
+      {/* Project navigation */}
+      {(prevProject || nextProject) && (
+        <nav className={styles.projectNav}>
+          {prevProject ? (
+            <Link href={`/work/${prevProject.slug}`} className={styles.navLink}>
+              <span className={styles.navDir}>← Previous</span>
+              <span className={styles.navTitle}>{prevProject.title}</span>
+              <span className={styles.navSub}>{prevProject.category}</span>
+            </Link>
+          ) : <span />}
+          {nextProject ? (
+            <Link href={`/work/${nextProject.slug}`} className={`${styles.navLink} ${styles.navLinkRight}`}>
+              <span className={styles.navDir}>Next →</span>
+              <span className={styles.navTitle}>{nextProject.title}</span>
+              <span className={styles.navSub}>{nextProject.category}</span>
+            </Link>
+          ) : <span />}
+        </nav>
+      )}
     </div>
   )
 }
