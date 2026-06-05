@@ -234,11 +234,14 @@ export default async function ProjectPage({ params }: Props) {
       {/* 10. Outcome Section */}
       <section id="outcomes" className={styles.section}>
         <h2 className={styles.sectionTitle}>Business Outcomes</h2>
-        <ul className={styles.bulletList}>
+        <ol className={styles.outcomeList}>
           {project.outcome.map((result, i) => (
-            <li key={i} className={styles.bulletItem}>{result}</li>
+            <li key={i} className={styles.outcomeItem}>
+              <span className={styles.outcomeIdx}>{String(i + 1).padStart(2, "0")}</span>
+              <span className={styles.outcomeText}>{result}</span>
+            </li>
           ))}
-        </ul>
+        </ol>
       </section>
 
       {/* 11. Reflection Section */}

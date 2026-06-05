@@ -155,6 +155,43 @@
   max-width: 800px;
 }
 
+/* Outcome list */
+.outcomeList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  list-style: none;
+  max-width: 800px;
+}
+
+.outcomeItem {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(180, 140, 68, 0.08);
+}
+
+.outcomeItem:first-child {
+  border-top: 1px solid rgba(180, 140, 68, 0.08);
+}
+
+.outcomeIdx {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-accent);
+  opacity: 0.6;
+  flex-shrink: 0;
+  letter-spacing: 0.06em;
+}
+
+.outcomeText {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
 /* Lists */
 .bulletList {
   display: flex;
