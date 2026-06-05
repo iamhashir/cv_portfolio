@@ -7,6 +7,12 @@ export const projectCategoryGroups = [
 
 export type ProjectCategoryGroup = (typeof projectCategoryGroups)[number]
 
+export type WorkflowStep = {
+  title: string
+  detail: string
+  actor: "human" | "system" | "realtime"
+}
+
 type ProjectArchitecture = {
   frontend: string
   backend: string
@@ -39,6 +45,7 @@ export type Project = {
   outcome: string[]
   metric?: string
   reflection: string[]
+  workflow?: WorkflowStep[]
 }
 
 export const projects: Project[] = [
@@ -88,6 +95,13 @@ export const projects: Project[] = [
       "Routing and state ownership should be designed together.",
       "Small runtime experiments are useful for understanding the abstractions used by larger libraries.",
     ],
+    workflow: [
+      { title: "Author Component", detail: "Write JSX syntax — the custom Reactor runtime evaluates it, not React.", actor: "human" },
+      { title: "Runtime Resolves", detail: "Engine walks the component tree and calls hook functions in sequence.", actor: "system" },
+      { title: "Virtual DOM Built", detail: "A lightweight node tree describes what the UI should look like.", actor: "system" },
+      { title: "Diff & Patch", detail: "Only changed nodes are applied to the real DOM — no full re-render.", actor: "system" },
+      { title: "State Updates Fire", detail: "Hook state changes trigger targeted re-evaluations, not global reflows.", actor: "system" },
+    ],
   },
   {
     id: "mina-games",
@@ -134,6 +148,13 @@ export const projects: Project[] = [
       "Real-time features need clear server and client ownership boundaries.",
       "A multiplayer product benefits from treating infrastructure as part of the user experience.",
       "Shared interfaces reduce coordination cost across a collaborative build.",
+    ],
+    workflow: [
+      { title: "Player Signs In", detail: "JWT session opens; profile, stats, and friend list load from Prisma.", actor: "human" },
+      { title: "Joins Match Queue", detail: "Server pairs players by game type — casual match or tournament bracket.", actor: "system" },
+      { title: "WebSocket Opens", detail: "Persistent real-time channel connects both clients to the game server.", actor: "system" },
+      { title: "Game Runs Live", detail: "Server holds authoritative match state; both clients receive identical frame updates.", actor: "realtime" },
+      { title: "Result Recorded", detail: "Match outcome writes to the leaderboard and advances the tournament bracket.", actor: "system" },
     ],
   },
   {
@@ -182,6 +203,13 @@ export const projects: Project[] = [
       "Connected records create more value than isolated dashboards.",
       "Automation should remove repetitive coordination without hiding important business state.",
     ],
+    workflow: [
+      { title: "Customer Orders", detail: "Order placed by phone, message, or in person — staff logs it once.", actor: "human" },
+      { title: "Record Created", detail: "System links the order to the customer's balance and purchase history automatically.", actor: "system" },
+      { title: "Supplier Tracked", detail: "Purchase entry updates inventory and supplier records in the same workflow.", actor: "system" },
+      { title: "Customer Notified", detail: "Automated WhatsApp broadcast fires when order status changes — no manual message.", actor: "system" },
+      { title: "Report Live", detail: "Sales totals and balances update in real time. No end-of-week spreadsheet.", actor: "system" },
+    ],
   },
   {
     id: "financesmith",
@@ -227,6 +255,13 @@ export const projects: Project[] = [
       "Reporting quality depends on record quality.",
       "Exports remain important when software is introduced into an existing administrative process.",
       "A finance interface should make record state easy to audit.",
+    ],
+    workflow: [
+      { title: "Invoice Arrives", detail: "Finance team receives a supplier or vendor invoice.", actor: "human" },
+      { title: "Entered Once", detail: "Single data entry creates the record and links it to the correct ledger.", actor: "human" },
+      { title: "System Reconciles", detail: "Platform cross-references entries against existing records and flags discrepancies.", actor: "system" },
+      { title: "Generate PDF", detail: "One click produces a formatted report — no manual document assembly.", actor: "system" },
+      { title: "Export to Excel", detail: "Structured export ready for external tools and existing administrative processes.", actor: "system" },
     ],
   },
   {
@@ -274,6 +309,13 @@ export const projects: Project[] = [
       "A focused geographic scope makes discovery content easier to structure.",
       "Behavioral signals are most useful when they improve a concrete user decision.",
     ],
+    workflow: [
+      { title: "Open Discovery", detail: "User lands on the platform; Emirates destinations and restaurants load immediately.", actor: "human" },
+      { title: "Browse & Interact", detail: "Clicks, saves, and dwell time are recorded as behavioural signals.", actor: "human" },
+      { title: "AI Processes", detail: "Recommendation engine reweights results based on the user's interaction patterns.", actor: "system" },
+      { title: "Feed Personalises", detail: "Discovery updates to surface more relevant destinations for this specific user.", actor: "system" },
+      { title: "Builds Over Time", detail: "Saved preferences persist across sessions and grow more accurate with each visit.", actor: "system" },
+    ],
   },
   {
     id: "ui-analyzer",
@@ -319,6 +361,13 @@ export const projects: Project[] = [
       "AI output becomes valuable when it is translated into specific interface actions.",
       "A controlled inference stack simplifies experimentation with analysis workflows.",
       "Design review tools should support human judgment rather than replace it.",
+    ],
+    workflow: [
+      { title: "Submit URL", detail: "Paste any live URL into the analysis dashboard.", actor: "human" },
+      { title: "Screenshot Captured", detail: "Puppeteer loads and renders the page; image passed to the analysis pipeline.", actor: "system" },
+      { title: "Model Analyses", detail: "Self-hosted vision model identifies components, hierarchy, contrast, and layout issues.", actor: "system" },
+      { title: "Issues Flagged", detail: "Usability weaknesses listed with type, location, and severity.", actor: "system" },
+      { title: "Recommendations Out", detail: "Each issue gets a specific, actionable fix — precise enough to implement immediately.", actor: "system" },
     ],
   },
 ]

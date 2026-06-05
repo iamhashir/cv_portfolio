@@ -2,8 +2,8 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowLeft, Server, Cpu, Database, Link2, Key, HelpCircle } from "lucide-react"
 import { projects } from "@/data/projects"
-import { ArchitectureDiagram } from "@/lib/architectureDiagrams"
 import SectionMinimap from "@/components/SectionMinimap"
+import WorkflowDemo from "@/components/WorkflowDemo"
 import styles from "./project-detail.module.css"
 
 interface Props {
@@ -22,7 +22,7 @@ const MINIMAP_SECTIONS = [
   { id: "solution", label: "Solution" },
   { id: "features", label: "Features" },
   { id: "architecture", label: "Architecture" },
-  { id: "blueprint", label: "Blueprint" },
+  { id: "blueprint", label: "Workflow" },
   { id: "decisions", label: "Decisions" },
   { id: "challenges", label: "Challenges" },
   { id: "outcomes", label: "Outcomes" },
@@ -182,17 +182,13 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </section>
 
-      {/* 7. Blueprint Diagram */}
-      <section id="blueprint" className={styles.section}>
-        <h2 className={styles.sectionTitle}>System Blueprint &amp; Data Flows</h2>
-        <div className={styles.diagramBox}>
-          <span className={styles.diagramTitle}>Architecture Topology</span>
-          <ArchitectureDiagram slug={slug} className={styles.diagramSvg} />
-          <span className={styles.diagramCaption}>
-            Figure 1: Internal topology mapping request channels, backend microservices, database transactions, and integration gateways.
-          </span>
-        </div>
-      </section>
+      {/* 7. Workflow Demo */}
+      {project.workflow && (
+        <section id="blueprint" className={styles.section}>
+          <h2 className={styles.sectionTitle}>How It Works</h2>
+          <WorkflowDemo steps={project.workflow} />
+        </section>
+      )}
 
       {/* 8. Technical Decisions */}
       <section id="decisions" className={styles.section}>

@@ -227,41 +227,6 @@
   line-height: 1.6;
 }
 
-/* Diagram/Gallery Box */
-.diagramBox {
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-muted);
-  border-radius: 16px;
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: 32px;
-  position: relative;
-  overflow: hidden;
-}
-
-.diagramTitle {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text-accent);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 32px;
-}
-
-.diagramSvg {
-  max-width: 100%;
-  height: auto;
-}
-
-.diagramCaption {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  margin-top: 24px;
-  text-align: center;
-}
 
 /* Reflections */
 .reflectionBox {

@@ -1,0 +1,198 @@
+/* ─── Workflow Demo ───────────────────────────────────────────── */
+
+.demo {
+  width: 100%;
+}
+
+.track {
+  display: flex;
+  gap: 0;
+  align-items: stretch;
+}
+
+/* ─── Step card ──────────────────────────────────────────────── */
+
+.step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  padding: 18px 16px 16px;
+  position: relative;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid rgba(180, 140, 68, 0.1);
+  border-right: none;
+  transition:
+    background 200ms ease,
+    border-color 200ms ease;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.step:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.step:last-child {
+  border-right: 1px solid rgba(180, 140, 68, 0.1);
+  border-radius: 0 8px 8px 0;
+}
+
+.step:hover:not(.stepActive) {
+  background: rgba(180, 140, 68, 0.04);
+  border-color: rgba(180, 140, 68, 0.2);
+}
+
+.stepActive {
+  background: rgba(180, 140, 68, 0.07);
+  border-color: rgba(180, 140, 68, 0.35);
+  flex: 2;
+}
+
+.stepActive:last-child {
+  border-right-color: rgba(180, 140, 68, 0.35);
+}
+
+/* ─── Step number ────────────────────────────────────────────── */
+
+.stepNum {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+  display: block;
+  user-select: none;
+}
+
+.stepActive .stepNum {
+  color: var(--text-accent);
+}
+
+/* ─── Step title ─────────────────────────────────────────────── */
+
+.stepTitle {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  line-height: 1.25;
+  display: block;
+}
+
+.stepActive .stepTitle {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+/* ─── Step detail ────────────────────────────────────────────── */
+
+.stepDetail {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin: 10px 0 12px;
+  flex: 1;
+}
+
+/* ─── Actor badge ────────────────────────────────────────────── */
+
+.actorBadge {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 3px 7px;
+  border-radius: 3px;
+  user-select: none;
+  display: inline-block;
+}
+
+.badge_human {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.badge_system {
+  background: rgba(180, 140, 68, 0.12);
+  color: var(--text-accent);
+  border: 1px solid rgba(180, 140, 68, 0.22);
+}
+
+.badge_realtime {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+/* ─── Progress bar ───────────────────────────────────────────── */
+
+.progressBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background: var(--text-accent);
+  transform-origin: left center;
+  animation: drain 3s linear forwards;
+  opacity: 0.55;
+}
+
+@keyframes drain {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
+}
+
+/* ─── Mobile ─────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .track {
+    flex-direction: column;
+  }
+
+  .step {
+    border-right: 1px solid rgba(180, 140, 68, 0.1);
+    border-bottom: none;
+    border-radius: 0;
+    flex: unset;
+    padding: 14px 16px;
+  }
+
+  .step:first-child {
+    border-radius: 8px 8px 0 0;
+  }
+
+  .step:last-child {
+    border-bottom: 1px solid rgba(180, 140, 68, 0.1);
+    border-radius: 0 0 8px 8px;
+  }
+
+  .stepActive {
+    flex: unset;
+  }
+
+  .stepActive:last-child {
+    border-bottom-color: rgba(180, 140, 68, 0.35);
+    border-right-color: rgba(180, 140, 68, 0.35);
+  }
+
+  .progressBar {
+    width: 2px;
+    height: 100%;
+    top: 0;
+    left: unset;
+    right: 0;
+    transform-origin: top center;
+    animation: drainV 3s linear forwards;
+  }
+
+  @keyframes drainV {
+    from { transform: scaleY(1); }
+    to   { transform: scaleY(0); }
+  }
+}
