@@ -5,11 +5,15 @@ import { projects } from "@/data/projects"
 import SectionMinimap from "@/components/SectionMinimap"
 import WorkflowDemo from "@/components/WorkflowDemo"
 import CodePreview from "@/components/CodePreview"
+import ProjectConsole from "@/components/ProjectConsole"
 import styles from "./project-detail.module.css"
 
 interface Props {
   params: Promise<{ slug: string }>
 }
+
+/** Prototype: projects routed through the new Console layout. */
+const CONSOLE_PROTOTYPE = new Set(["mina-games"])
 
 export async function generateStaticParams() {
   return projects.map((project) => ({
@@ -38,6 +42,10 @@ export default async function ProjectPage({ params }: Props) {
 
   if (!project) {
     notFound()
+  }
+
+  if (CONSOLE_PROTOTYPE.has(slug)) {
+    return <ProjectConsole project={project} />
   }
 
   const idx = projects.findIndex((p) => p.slug === slug)
