@@ -4,6 +4,7 @@ import { ArrowLeft, Server, Cpu, Database, Link2, Key, HelpCircle } from "lucide
 import { projects } from "@/data/projects"
 import SectionMinimap from "@/components/SectionMinimap"
 import WorkflowDemo from "@/components/WorkflowDemo"
+import CodePreview from "@/components/CodePreview"
 import styles from "./project-detail.module.css"
 
 interface Props {
@@ -24,6 +25,7 @@ const MINIMAP_SECTIONS = [
   { id: "architecture", label: "Architecture" },
   { id: "blueprint", label: "Workflow" },
   { id: "decisions", label: "Decisions" },
+  { id: "practice", label: "Code" },
   { id: "challenges", label: "Challenges" },
   { id: "outcomes", label: "Outcomes" },
   { id: "reflections", label: "Reflections" },
@@ -196,7 +198,18 @@ export default async function ProjectPage({ params }: Props) {
         <p className={styles.sectionText}>{project.technicalDecisions}</p>
       </section>
 
-      {/* 9. Challenges Section */}
+      {/* 9. In Practice — code snippet */}
+      {project.demoSnippet && (
+        <section id="practice" className={styles.section}>
+          <h2 className={styles.sectionTitle}>In Practice</h2>
+          <p className={styles.sectionText}>
+            A representative excerpt from the codebase illustrating the key engineering decision above.
+          </p>
+          <CodePreview snippet={project.demoSnippet} />
+        </section>
+      )}
+
+      {/* 10. Challenges Section */}
       <section id="challenges" className={styles.section}>
         <h2 className={styles.sectionTitle}>Engineering Challenges</h2>
         <div>

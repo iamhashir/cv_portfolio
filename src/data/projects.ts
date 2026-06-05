@@ -13,6 +13,12 @@ export type WorkflowStep = {
   actor: "human" | "system" | "realtime"
 }
 
+export type DemoSnippet = {
+  label: string
+  language: string
+  code: string
+}
+
 type ProjectArchitecture = {
   frontend: string
   backend: string
@@ -46,6 +52,7 @@ export type Project = {
   metric?: string
   reflection: string[]
   workflow?: WorkflowStep[]
+  demoSnippet?: DemoSnippet
 }
 
 export const projects: Project[] = [
@@ -102,6 +109,37 @@ export const projects: Project[] = [
       { title: "Diff & Patch", detail: "Only changed nodes are applied to the real DOM — no full re-render.", actor: "system" },
       { title: "State Updates Fire", detail: "Hook state changes trigger targeted re-evaluations, not global reflows.", actor: "system" },
     ],
+    demoSnippet: {
+      label: "runtime/hooks.ts — custom useState",
+      language: "typescript",
+      code: `// reactor/src/runtime/hooks.ts
+let currentFiber: Fiber | null = null
+let hookIndex = 0
+
+export function useState<T>(initial: T): [T, (next: T) => void] {
+  const fiber = currentFiber!
+  const idx   = hookIndex++
+
+  if (fiber.hooks[idx] === undefined) {
+    fiber.hooks[idx] = { value: initial }
+  }
+
+  const setState = (next: T) => {
+    fiber.hooks[idx].value = next
+    scheduleUpdate(fiber)        // queues a re-render for this fiber only
+  }
+
+  return [fiber.hooks[idx].value as T, setState]
+}
+
+export function withFiber<T>(fiber: Fiber, fn: () => T): T {
+  currentFiber = fiber
+  hookIndex    = 0
+  const result = fn()
+  currentFiber = null
+  return result
+}`,
+    },
   },
   {
     id: "mina-games",
@@ -156,6 +194,36 @@ export const projects: Project[] = [
       { title: "Game Runs Live", detail: "Server holds authoritative match state; both clients receive identical frame updates.", actor: "realtime" },
       { title: "Result Recorded", detail: "Match outcome writes to the leaderboard and advances the tournament bracket.", actor: "system" },
     ],
+    demoSnippet: {
+      label: "game/matchManager.ts — server-authoritative loop",
+      language: "typescript",
+      code: `// server/src/game/matchManager.ts
+type GameState = {
+  ball:    { x: number; y: number; vx: number; vy: number }
+  paddles: Record<string, number>
+  score:   [number, number]
+}
+
+function broadcastState(matchId: string, state: GameState) {
+  const match = activeMatches.get(matchId)
+  if (!match) return
+
+  const payload = JSON.stringify({ type: 'GAME_STATE', ...state })
+  for (const client of match.clients) {
+    if (client.ws.readyState === WebSocket.OPEN) {
+      client.ws.send(payload)    // same bytes to every connected client
+    }
+  }
+}
+
+// Game loop — 60 fps, server-side authority
+setInterval(() => {
+  for (const [id, match] of activeMatches) {
+    match.tick()
+    broadcastState(id, match.getState())
+  }
+}, 1000 / 60)`,
+    },
   },
   {
     id: "opsflow",
@@ -210,6 +278,32 @@ export const projects: Project[] = [
       { title: "Customer Notified", detail: "Automated WhatsApp broadcast fires when order status changes — no manual message.", actor: "system" },
       { title: "Report Live", detail: "Sales totals and balances update in real time. No end-of-week spreadsheet.", actor: "system" },
     ],
+    demoSnippet: {
+      label: "notifications/whatsapp.js — order broadcast",
+      language: "javascript",
+      code: `// functions/src/notifications/whatsapp.js
+async function sendOrderUpdate(order) {
+  const lines = [
+    \`*Order Update — #\${order.id}*\`,
+    \`Status : \${order.status}\`,
+    \`Items  : \${order.items.map(i => i.name).join(', ')}\`,
+    \`Total  : AED \${order.total.toFixed(2)}\`,
+    order.status === 'ready'
+      ? '✅ Ready for collection.'
+      : \`⏳ Estimated: \${order.eta}\`,
+  ]
+
+  await whatsappClient.sendMessage(
+    \`\${order.customer.phone}@c.us\`,
+    lines.join('\\n'),
+  )
+
+  await db.collection('orders').doc(order.id).update({
+    notifiedAt: admin.firestore.Timestamp.now(),
+    notificationChannel: 'whatsapp',
+  })
+}`,
+    },
   },
   {
     id: "financesmith",
@@ -263,6 +357,36 @@ export const projects: Project[] = [
       { title: "Generate PDF", detail: "One click produces a formatted report — no manual document assembly.", actor: "system" },
       { title: "Export to Excel", detail: "Structured export ready for external tools and existing administrative processes.", actor: "system" },
     ],
+    demoSnippet: {
+      label: "reports/generatePDF.js — one-click report",
+      language: "javascript",
+      code: `// server/src/reports/generatePDF.js
+async function generateMonthlyReport(institutionId, month, year) {
+  const { rows } = await db.query(
+    \`SELECT vendor, amount, date FROM invoices
+     WHERE institution_id = $1
+       AND date_trunc('month', date) = make_date($2, $3, 1)
+     ORDER BY date\`,
+    [institutionId, year, month],
+  )
+
+  const doc = new PDFDocument({ margin: 50 })
+  doc.fontSize(18).font('Helvetica-Bold')
+    .text(\`Finance Report — \${month}/\${year}\`)
+  doc.moveDown().font('Helvetica').fontSize(11)
+
+  let total = 0
+  for (const row of rows) {
+    doc.text(\`\${row.vendor.padEnd(32)} AED \${row.amount.toFixed(2)}\`)
+    total += parseFloat(row.amount)
+  }
+
+  doc.moveDown().font('Helvetica-Bold')
+    .text(\`Total  AED \${total.toFixed(2)}\`)
+
+  return doc  // caller: doc.pipe(res) or upload to storage
+}`,
+    },
   },
   {
     id: "traverse",
@@ -316,6 +440,35 @@ export const projects: Project[] = [
       { title: "Feed Personalises", detail: "Discovery updates to surface more relevant destinations for this specific user.", actor: "system" },
       { title: "Builds Over Time", detail: "Saved preferences persist across sessions and grow more accurate with each visit.", actor: "system" },
     ],
+    demoSnippet: {
+      label: "engine/recommendations.ts — feed refresh",
+      language: "typescript",
+      code: `// src/engine/recommendations.ts
+const WEIGHTS: Record<UserEventType, number> = {
+  click: 1, save: 3, dwell_long: 2, dismiss: -2,
+}
+
+async function refreshFeed(userId: string, event: UserEvent) {
+  const [signals, places] = await Promise.all([
+    getUserSignals(userId),
+    getPlacesByEmirate(event.emirate),
+  ])
+
+  signals.push({
+    placeId:  event.placeId,
+    category: event.category,
+    weight:   WEIGHTS[event.type] ?? 0,
+    ts:       Date.now(),
+  })
+
+  const ranked = places
+    .map(p => ({ ...p, score: computeScore(p, signals) }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 20)
+
+  await redis.setex(\`feed:\${userId}\`, 3600, JSON.stringify(ranked))
+}`,
+    },
   },
   {
     id: "ui-analyzer",
@@ -369,5 +522,38 @@ export const projects: Project[] = [
       { title: "Issues Flagged", detail: "Usability weaknesses listed with type, location, and severity.", actor: "system" },
       { title: "Recommendations Out", detail: "Each issue gets a specific, actionable fix — precise enough to implement immediately.", actor: "system" },
     ],
+    demoSnippet: {
+      label: "analyzer/pipeline.py — audit pipeline",
+      language: "python",
+      code: `# analyzer/pipeline.py
+async def analyze_url(url: str) -> AuditReport:
+    # 1. Headless browser captures a full-page screenshot
+    screenshot = await capture_screenshot(url)
+
+    # 2. Self-hosted vision model runs — no third-party inference
+    raw = await vision_model.analyze(
+        image=screenshot,
+        prompt=AUDIT_SYSTEM_PROMPT,
+    )
+
+    # 3. Parse into structured Issue objects
+    issues = [
+        Issue(
+            type=item["type"],
+            severity=item["severity"],
+            element=item["selector"],
+            detail=item["description"],
+            fix=item["recommendation"],
+        )
+        for item in raw["findings"]
+    ]
+
+    return AuditReport(
+        url=url,
+        score=compute_score(issues),
+        issues=sorted(issues, key=lambda i: SEVERITY_ORDER[i.severity]),
+        captured_at=datetime.utcnow(),
+    )`,
+    },
   },
 ]
