@@ -6,7 +6,7 @@ export const hrLandingContent: LandingPageContent = {
   heroHighlight: "AI-powered automation",
   heroSuffix: "that scales real operations.",
   heroDescription:
-    "AI Automation Engineer & Full-Stack Developer — I design intelligent workflow systems, build LLM-integrated tooling, and ship production-grade web applications end to end.",
+    "I build operational CRM platforms, LLM-integrated automation, and full-stack web systems — the kind of software that replaces manual coordination and runs reliably in production.",
   primaryAction: "Review Engineering Work",
   secondaryAction: "View Contact Details",
   secondaryHref: "/contact",
@@ -70,7 +70,7 @@ export const clientLandingContent: LandingPageContent = {
   heroHighlight: "operational chaos",
   heroSuffix: "into scalable software.",
   heroDescription:
-    "With a foundation in sales and event operations, I audit business workflows and build the bespoke technical infrastructure needed to scale them.",
+    "I build CRM pipelines, order management systems, and workflow automation for operations-heavy businesses — the internal software that replaces spreadsheets and manual coordination.",
   primaryAction: "View System Architecture",
   secondaryAction: "Talk Operations",
   secondaryHref: "/contact",

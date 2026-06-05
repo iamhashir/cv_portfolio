@@ -57,12 +57,10 @@
 }
 
 .backdrop::after {
-  inset: 12% -20%;
-  opacity: 0.52;
-  background:
-    linear-gradient(115deg, transparent 0 31%, var(--system-accent) 31.2% 31.5%, transparent 31.7% 100%),
-    linear-gradient(68deg, transparent 0 52%, color-mix(in srgb, var(--system-accent) 48%, transparent) 52.2% 52.5%, transparent 52.7% 100%);
-  animation: circuitDrift 10s ease-in-out infinite alternate;
+  inset: 0;
+  opacity: 1;
+  background: linear-gradient(180deg, transparent 40%, rgba(9, 8, 6, 0.35) 100%);
+  animation: none;
 }
 
 .backdrop span {
@@ -136,10 +134,10 @@
   color: var(--text-primary);
   max-width: 100%;
   overflow-wrap: anywhere;
-  font-size: clamp(2.65rem, 11.5vw, 4rem);
+  font-size: clamp(2.2rem, 9.5vw, 3.4rem);
   font-weight: 600;
   letter-spacing: 0;
-  line-height: 0.98;
+  line-height: 1.05;
 }
 
 .heroTitle span,
@@ -238,6 +236,82 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+}
+
+/* ─── Hero proof strip ──────────────────────────────────────── */
+
+.heroProof {
+  margin-top: 20px;
+  width: 100%;
+  border: 1px solid rgba(210, 184, 141, 0.12);
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(9, 8, 6, 0.38);
+}
+
+.heroProofItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 16px;
+  border-bottom: 1px solid rgba(210, 184, 141, 0.07);
+  text-decoration: none;
+  color: inherit;
+  transition: background 150ms ease;
+}
+
+.heroProofItem:last-child {
+  border-bottom: 0;
+}
+
+.heroProofItem:hover {
+  background: rgba(210, 184, 141, 0.04);
+}
+
+.heroProofMain {
+  min-width: 0;
+  flex: 1;
+}
+
+.heroProofCategory {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.59rem;
+  color: var(--text-accent);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.heroProofTitle {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+
+.heroProofOutcome {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.73rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.heroProofArrow {
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: color 150ms ease, transform 150ms ease;
+}
+
+.heroProofItem:hover .heroProofArrow {
+  color: var(--text-accent);
+  transform: translateX(3px);
 }
 
 /* ─── Social links row ───────────────────────────────────────── */
@@ -854,7 +928,7 @@
   }
 
   .heroTitle {
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-size: clamp(2.2rem, 4.5vw, 3.8rem);
     line-height: 1.1;
     overflow-wrap: normal;
   }
@@ -924,28 +998,39 @@
     display: inline-flex;
     align-items: center;
     min-height: 44px;
-    padding: 0 22px;
-    border: 1px solid rgba(210, 184, 141, 0.28);
-    border-radius: 6px;
+    padding: 0 6px;
+    border: none;
+    border-radius: 0;
     background: transparent;
-    color: var(--text-primary);
-    font-size: 0.9rem;
-    font-weight: 600;
-    transition: border-color 160ms ease, background-color 160ms ease;
+    color: var(--text-muted);
+    font-size: 0.84rem;
+    font-weight: 400;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(210, 184, 141, 0.25);
+    transition: color 160ms ease, text-decoration-color 160ms ease;
   }
 
   .secondaryAction:hover {
-    border-color: rgba(210, 184, 141, 0.52);
-    background: rgba(210, 184, 141, 0.06);
+    border-color: transparent;
+    background: transparent;
+    color: var(--text-secondary);
+    text-decoration-color: rgba(210, 184, 141, 0.55);
   }
 
   .cvAction {
     display: inline-flex;
-    width: auto;
-    min-height: 44px;
-    padding: 0 22px;
+    width: 40px;
+    min-height: 40px;
+    padding: 0;
+    justify-content: center;
     border-radius: 6px;
     font-size: 0.9rem;
+    overflow: hidden;
+  }
+
+  .cvAction span {
+    display: none;
   }
 
   .socialLinks {
@@ -961,6 +1046,21 @@
 
   .currentFocus {
     text-align: center;
+  }
+
+  /* Proof strip: constrained + left-aligned text inside centered hero */
+  .heroProof {
+    max-width: 640px;
+    margin: 28px auto 0;
+    text-align: left;
+  }
+
+  .heroProofItem {
+    padding: 13px 20px;
+  }
+
+  .heroProofCategory {
+    margin-bottom: 0;
   }
 
   .tickerWrapper {
@@ -1361,7 +1461,7 @@
 
 @media (min-width: 1100px) {
   .heroTitle {
-    font-size: 4.5rem;
+    font-size: 3.8rem;
   }
 }
 
@@ -1506,7 +1606,6 @@
 @media (prefers-reduced-motion: reduce) {
   .mesh,
   .projectCard,
-  .backdrop::after,
   .availabilityDotActive {
     animation: none;
   }
@@ -1520,7 +1619,9 @@
   .skillChip,
   .projectCard,
   .techFilterChip,
-  .techChip {
+  .techChip,
+  .heroProofItem,
+  .heroProofArrow {
     transition: none;
   }
 }

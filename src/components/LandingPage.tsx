@@ -233,12 +233,27 @@ export default function LandingPage({ content }: { content: LandingPageContent }
           )}
         </motion.div>
 
+        {/* Evidence strip — case study previews above the fold */}
+        <div className={styles.heroProof} aria-label="Featured case study previews">
+          {projects.filter((p) => p.featured).slice(0, 3).map((project) => (
+            <Link key={project.slug} href={`/work/${project.slug}`} className={styles.heroProofItem}>
+              <div className={styles.heroProofMain}>
+                <span className={styles.heroProofCategory}>{project.category}</span>
+                <span className={styles.heroProofTitle}>{project.title}</span>
+                <span className={styles.heroProofOutcome}>{project.outcome[0]}</span>
+              </div>
+              <ArrowRight size={14} className={styles.heroProofArrow} aria-hidden="true" />
+            </Link>
+          ))}
+        </div>
+
         <div className={styles.heroActions}>
           {content.cvHref && (
             <button
               type="button"
               onClick={() => setCvOpen(true)}
               className={styles.cvAction}
+              aria-label="View CV"
             >
               <FileText size={18} />
               <span>View CV</span>
