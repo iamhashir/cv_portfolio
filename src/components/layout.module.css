@@ -92,6 +92,7 @@
   font-weight: 500;
   white-space: nowrap;
   text-decoration: none;
+  cursor: pointer;
   transition: background 160ms ease, border-color 160ms ease;
 }
 

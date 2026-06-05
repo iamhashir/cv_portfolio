@@ -60,15 +60,14 @@ export default function Navbar() {
           })}
           {pathname === "/hr" && (
             <li>
-              <a
-                href="/Malik_Hashir_CV.pdf"
-                target="_blank"
-                rel="noreferrer"
+              <button
+                type="button"
                 className={styles.cvLink}
+                onClick={() => window.dispatchEvent(new CustomEvent("open-cv-modal"))}
               >
                 <FileText size={13} />
                 <span>View CV</span>
-              </a>
+              </button>
             </li>
           )}
         </ul>

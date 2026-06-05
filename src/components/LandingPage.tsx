@@ -68,6 +68,12 @@ export default function LandingPage({ content }: { content: LandingPageContent }
   const pointerRafRef = useRef<number>(0)
   const [cvOpen, setCvOpen] = useState(false)
   const gyroRafRef = useRef<number>(0)
+
+  useEffect(() => {
+    const handler = () => setCvOpen(true)
+    window.addEventListener("open-cv-modal", handler)
+    return () => window.removeEventListener("open-cv-modal", handler)
+  }, [])
   const computedAvailability = useMemo(getAvailability, [])
   const activeAvailability = content.availability ?? computedAvailability
   const minimapSections = useMemo(() => [
