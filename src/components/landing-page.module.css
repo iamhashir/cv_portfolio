@@ -48,6 +48,10 @@
     linear-gradient(90deg, color-mix(in srgb, var(--system-accent) 14%, transparent) 1px, transparent 1px);
   /* 48px matches gateway's 54px grid more closely; -5deg is a softer skew */
   background-size: 48px 48px;
+  /* Gyroscope: grid shifts at a different rate than the glow → depth illusion */
+  background-position:
+    calc(var(--gyro-x, 0) * -10px)
+    calc(var(--gyro-y, 0) * -7px);
   transform: skewY(-5deg) translateY(-6%);
   transition: opacity 380ms ease;
 }
@@ -192,6 +196,34 @@
   line-height: 1.35;
 }
 
+/* ─── Availability badge ────────────────────────────────────── */
+
+.availabilityBadge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 14px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.availabilityDot {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--text-muted);
+}
+
+.availabilityDotActive {
+  background: var(--status-active);
+  animation: availPulse 2s ease-in-out infinite;
+}
+
 /* Mobile: primary CTA pushes to bottom of hero */
 .heroActions {
   margin-top: auto;
@@ -274,8 +306,6 @@
   z-index: 1;
   padding: 72px 24px;
   background: #100f0c;
-  content-visibility: auto;
-  contain-intrinsic-size: 0 800px;
 }
 
 .sectionIntro {
@@ -318,10 +348,16 @@
   border: 1px solid rgba(210, 184, 141, 0.13);
   border-radius: 8px;
   background: rgba(8, 8, 6, 0.5);
-  transition: border-color 200ms ease, box-shadow 200ms ease, background-color 200ms ease;
+  transition: border-color 200ms ease, box-shadow 200ms ease, background-color 200ms ease, transform 80ms ease;
   animation: cardEnter linear both;
   animation-range: entry 8% cover 28%;
   animation-timeline: view();
+}
+
+/* Press-depth: 3D press effect on tap (mobile only; desktop has hover) */
+.projectCard:active:not(.projectCardExpanded) {
+  transform: perspective(700px) scale(0.983) rotateX(1.8deg);
+  transition-duration: 60ms;
 }
 
 .projectCardActive {
@@ -463,8 +499,6 @@
   z-index: 1;
   padding: 72px 24px;
   background: #171510;
-  content-visibility: auto;
-  contain-intrinsic-size: 0 400px;
 }
 
 .skillLanes {
@@ -528,8 +562,6 @@
   min-height: 64svh;
   padding: 72px 24px;
   background: #0c0b09;
-  content-visibility: auto;
-  contain-intrinsic-size: 0 500px;
 }
 
 .mobileContactActions {
@@ -774,6 +806,14 @@
     padding: 0 24px;
   }
 
+  .techFilterBar {
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow-x: visible;
+    padding-bottom: 0;
+    margin-bottom: 48px;
+  }
+
   .featuredShowcase {
     display: flex;
     flex-direction: column;
@@ -876,6 +916,106 @@
   }
 }
 
+/* ─── Tech filter bar ──────────────────────────────────────────── */
+
+.techFilterBar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  flex-shrink: 0;
+}
+
+.techFilterBar::-webkit-scrollbar {
+  display: none;
+}
+
+.techFilterChip {
+  flex: 0 0 auto;
+  min-height: 30px;
+  padding: 4px 12px;
+  border: 1px solid rgba(210, 184, 141, 0.18);
+  border-radius: 999px;
+  background: rgba(210, 184, 141, 0.03);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.63rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 150ms ease, background 150ms ease, color 150ms ease;
+}
+
+.techFilterChip:hover {
+  border-color: rgba(210, 184, 141, 0.34);
+  color: var(--text-secondary);
+}
+
+.techFilterChipActive {
+  border-color: var(--accent-color);
+  background: color-mix(in srgb, var(--accent-color) 13%, transparent);
+  color: var(--accent-color);
+}
+
+/* Accordion tech chip (interactive button replacing static span) */
+
+.techChip {
+  flex: 0 0 auto;
+  min-height: 34px;
+  padding: 7px 11px;
+  border: 1px solid rgba(210, 184, 141, 0.15);
+  border-radius: 999px;
+  background: rgba(210, 184, 141, 0.05);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  line-height: 1.35;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: border-color 140ms ease, background 140ms ease, color 140ms ease;
+}
+
+.techChip:hover {
+  border-color: rgba(210, 184, 141, 0.32);
+  color: var(--text-primary);
+}
+
+.techChipActive {
+  border-color: var(--accent-color);
+  background: color-mix(in srgb, var(--accent-color) 12%, transparent);
+  color: var(--accent-color);
+}
+
+/* Metric callout — visible in collapsed accordion state */
+
+.projectMetric {
+  padding: 8px 20px 14px;
+  color: var(--text-accent);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  line-height: 1.5;
+  border-top: 1px solid rgba(210, 184, 141, 0.07);
+}
+
+/* Empty filter state */
+
+.filterEmpty {
+  padding: 40px 0;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
 /* ─── Keyframes ─────────────────────────────────────────────── */
 
 @keyframes meshBreathe {
@@ -907,12 +1047,18 @@
   }
 }
 
+@keyframes availPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.45; transform: scale(0.75); }
+}
+
 /* ─── Reduced motion ────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
   .mesh,
   .projectCard,
-  .backdrop::after {
+  .backdrop::after,
+  .availabilityDotActive {
     animation: none;
   }
 
@@ -922,7 +1068,10 @@
   .secondaryAction,
   .projectHeading svg,
   .projectDetails,
-  .skillChip {
+  .skillChip,
+  .projectCard,
+  .techFilterChip,
+  .techChip {
     transition: none;
   }
 }

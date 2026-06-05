@@ -1,9 +1,3 @@
-/* Only active on fine-pointer (mouse) devices */
-@media (pointer: fine) {
-  *, *::before, *::after {
-    cursor: none !important;
-  }
-}
 
 .dot {
   position: fixed;

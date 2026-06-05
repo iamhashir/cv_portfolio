@@ -14,6 +14,10 @@ export default function ProjectCard({ project }: ProjectCardProps) {
       <h3 className={styles.title}>{project.title}</h3>
       <p className={styles.summary}>{project.summary}</p>
 
+      {project.outcome?.[0] && (
+        <p className={styles.outcomeCallout}>{project.outcome[0]}</p>
+      )}
+
       <div className={styles.metadataGrid}>
         <div className={styles.metaItem}>
           <span className={styles.metaLabel}>Role</span>

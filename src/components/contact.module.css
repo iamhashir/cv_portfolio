@@ -1,5 +1,6 @@
 .contactPage {
-  padding: 64px 0 96px;
+  padding-top: 64px;
+  padding-bottom: 96px;
 }
 
 .header {
@@ -153,7 +154,8 @@
 
 @media (max-width: 768px) {
   .contactPage {
-    padding: 42px 0 72px;
+    padding-top: 42px;
+    padding-bottom: 72px;
   }
 
   .header {

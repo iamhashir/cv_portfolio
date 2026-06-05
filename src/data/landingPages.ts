@@ -52,6 +52,9 @@ export const hrLandingContent: LandingPageContent = {
   ctaAction: "Start a Conversation",
   ctaHref: "/contact",
   cvHref: "/Malik_Hashir_CV.pdf",
+  showProcess: false,
+  showTechFilter: false,
+  availability: { label: "Open to new roles · GST", active: true },
 }
 
 export const clientLandingContent: LandingPageContent = {
