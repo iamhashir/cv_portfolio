@@ -22,7 +22,7 @@ export default function CVModal({ isOpen, onClose }: { isOpen: boolean; onClose:
     const loadPdf = async () => {
       setLoading(true)
       try {
-        const pdf = await pdfjsLib.getDocument("/Malik_Hashir_CV.pdf").promise
+        const pdf = await pdfjsLib.getDocument({ url: "/Malik_Hashir_CV.pdf" }).promise
         setPdf(pdf)
         setTotalPages(pdf.numPages)
         setCurrentPage(1)
@@ -46,7 +46,8 @@ export default function CVModal({ isOpen, onClose }: { isOpen: boolean; onClose:
 
       try {
         const page = await pdf.getPage(currentPage)
-        const scale = Math.min(window.innerWidth / page.getWidth(), 2)
+        const baseViewport = page.getViewport({ scale: 1 })
+        const scale = Math.min(window.innerWidth / baseViewport.width, 2)
         const canvas = document.createElement("canvas")
         const ctx = canvas.getContext("2d")!
         const viewport = page.getViewport({ scale })
@@ -54,7 +55,7 @@ export default function CVModal({ isOpen, onClose }: { isOpen: boolean; onClose:
         canvas.width = viewport.width
         canvas.height = viewport.height
 
-        await page.render({ canvasContext: ctx, viewport }).promise
+        await page.render({ canvasContext: ctx, viewport, canvas }).promise
         setPageImages((prev) => ({ ...prev, [currentPage]: canvas.toDataURL() }))
       } catch (error) {
         console.error("Error rendering page:", error)
