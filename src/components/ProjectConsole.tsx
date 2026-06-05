@@ -14,12 +14,14 @@ import {
   Boxes,
   Wrench,
   TrendingUp,
+  Code2,
 } from "lucide-react"
 import type { Project } from "@/data/projects"
 import WorkflowDemo from "@/components/WorkflowDemo"
+import CodePreview from "@/components/CodePreview"
 import styles from "./project-console.module.css"
 
-type ViewId = "overview" | "diff" | "stack" | "build" | "impact"
+type ViewId = "overview" | "diff" | "stack" | "build" | "impact" | "code"
 
 const VIEWS: { id: ViewId; label: string; icon: typeof Cpu }[] = [
   { id: "overview", label: "overview", icon: LayoutDashboard },
@@ -27,6 +29,7 @@ const VIEWS: { id: ViewId; label: string; icon: typeof Cpu }[] = [
   { id: "stack", label: "architecture", icon: Boxes },
   { id: "build", label: "engineering", icon: Wrench },
   { id: "impact", label: "outcomes", icon: TrendingUp },
+  { id: "code", label: "source.code", icon: Code2 },
 ]
 
 /** Split prose into clause-level lines (keeping punctuation) for the diff gutter. */
@@ -41,7 +44,7 @@ export default function ProjectConsole({ project }: { project: Project }) {
   const [view, setView] = useState<ViewId>("overview")
   const isPrivate = project.status.toLowerCase().includes("private")
 
-  // Keyboard navigation: ↑/↓ to move between views, 1–5 to jump.
+  // Keyboard navigation: ↑/↓ to move between views, 1–6 to jump.
   const onKey = useCallback((e: KeyboardEvent) => {
     if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
     const idx = VIEWS.findIndex((v) => v.id === view)
@@ -51,7 +54,7 @@ export default function ProjectConsole({ project }: { project: Project }) {
     } else if (e.key === "ArrowUp" || e.key === "k") {
       e.preventDefault()
       setView(VIEWS[(idx - 1 + VIEWS.length) % VIEWS.length].id)
-    } else if (/^[1-5]$/.test(e.key)) {
+    } else if (/^[1-6]$/.test(e.key)) {
       setView(VIEWS[Number(e.key) - 1].id)
     }
   }, [view])
@@ -98,7 +101,7 @@ export default function ProjectConsole({ project }: { project: Project }) {
               </button>
             )
           })}
-          <span className={styles.navKeys}>↑ ↓ / 1–5 to navigate</span>
+          <span className={styles.navKeys}>↑ ↓ / 1–6 to navigate</span>
         </nav>
 
         {/* Center — active panel */}
@@ -108,6 +111,7 @@ export default function ProjectConsole({ project }: { project: Project }) {
           {view === "stack" && <Stack project={project} />}
           {view === "build" && <Build project={project} />}
           {view === "impact" && <Impact project={project} />}
+          {view === "code" && project.demoSnippet && <CodePreview snippet={project.demoSnippet} />}
         </main>
 
         {/* Right rail — live readouts */}
