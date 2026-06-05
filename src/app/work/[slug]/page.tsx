@@ -91,23 +91,25 @@ export default async function ProjectPage({ params }: Props) {
 
       {/* 2. Project Snapshot Box */}
       <section id="snapshot" className={styles.snapshotBox}>
-        <h3 className={styles.snapshotTitle}>Project Snapshot</h3>
+        {project.metric && (
+          <p className={styles.snapshotMetric}>{project.metric}</p>
+        )}
         <div className={styles.snapshotGrid}>
           <div className={styles.snapshotItem}>
-            <span className={styles.snapshotLabel}>Problem</span>
-            <span className={styles.snapshotVal}>{project.problem.slice(0, 150)}...</span>
-          </div>
-          <div className={styles.snapshotItem}>
-            <span className={styles.snapshotLabel}>Target Users</span>
+            <span className={styles.snapshotLabel}>Built for</span>
             <span className={styles.snapshotVal}>{project.targetUsers}</span>
           </div>
           <div className={styles.snapshotItem}>
-            <span className={styles.snapshotLabel}>Core Stack</span>
+            <span className={styles.snapshotLabel}>Deliverable</span>
+            <span className={styles.snapshotVal}>{project.solution}</span>
+          </div>
+          <div className={styles.snapshotItem}>
+            <span className={styles.snapshotLabel}>Core stack</span>
             <span className={styles.snapshotVal}>{project.techStack.join(", ")}</span>
           </div>
           <div className={styles.snapshotItem}>
-            <span className={styles.snapshotLabel}>Deliverables</span>
-            <span className={styles.snapshotVal}>{project.solution}</span>
+            <span className={styles.snapshotLabel}>Outcomes</span>
+            <span className={styles.snapshotVal}>{project.outcome.length} documented results</span>
           </div>
         </div>
       </section>

@@ -96,6 +96,17 @@
   padding-bottom: 12px;
 }
 
+.snapshotMetric {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-accent);
+  border-bottom: 1px solid rgba(180, 140, 68, 0.15);
+  padding-bottom: 18px;
+  margin-bottom: 24px;
+  letter-spacing: 0.02em;
+}
+
 .snapshotGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
