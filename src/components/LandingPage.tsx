@@ -1,9 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowRight, ChevronDown, Mail, MessageCircle } from "lucide-react"
+import { ArrowRight, ChevronDown, FileText, Mail, MessageCircle } from "lucide-react"
 import { motion, useReducedMotion } from "framer-motion"
 import { useRef, useState, type CSSProperties, type PointerEvent } from "react"
+import CVModal from "@/components/CVModal"
 import ScrambleText from "@/components/ScrambleText"
 import FeaturedProjectCard from "@/components/FeaturedProjectCard"
 import ProjectCard from "@/components/ProjectCard"
@@ -51,6 +52,7 @@ export type LandingPageContent = {
   primaryAction: string
   secondaryAction: string
   secondaryHref: string
+  cvHref?: string
   process: SectionContent
   timeline: TimelineStep[]
   featured: SectionContent
@@ -70,6 +72,7 @@ export default function LandingPage({ content }: { content: LandingPageContent }
   const activeVisual = systemVisuals[activeProject ?? "opsflow"] ?? systemVisuals.opsflow
   const landingRef = useRef<HTMLDivElement>(null)
   const pointerRafRef = useRef<number>(0)
+  const [cvOpen, setCvOpen] = useState(false)
 
   const handlePointerMove = (e: PointerEvent<HTMLDivElement>) => {
     cancelAnimationFrame(pointerRafRef.current)
@@ -88,6 +91,10 @@ export default function LandingPage({ content }: { content: LandingPageContent }
   ]
 
   return (
+    <>
+    {content.cvHref && (
+      <CVModal isOpen={cvOpen} onClose={() => setCvOpen(false)} />
+    )}
     <div
       ref={landingRef}
       className={styles.landing}
@@ -135,6 +142,16 @@ export default function LandingPage({ content }: { content: LandingPageContent }
         </motion.div>
 
         <div className={styles.heroActions}>
+          {content.cvHref && (
+            <button
+              type="button"
+              onClick={() => setCvOpen(true)}
+              className={styles.cvAction}
+            >
+              <FileText size={18} />
+              <span>View CV</span>
+            </button>
+          )}
           <Link href="#landing-projects" className={styles.primaryAction}>
             <span>{content.primaryAction}</span>
             <ArrowRight size={18} />
@@ -248,6 +265,7 @@ export default function LandingPage({ content }: { content: LandingPageContent }
         </div>
       </section>
     </div>
+    </>
   )
 }
 

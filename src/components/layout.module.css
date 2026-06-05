@@ -78,6 +78,28 @@
   background-color: var(--accent-color);
 }
 
+/* CV link chip (Navbar, /hr route only) */
+.cvLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid rgba(201, 169, 110, 0.35);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--accent-color, #c9a96e);
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.cvLink:hover {
+  background: rgba(201, 169, 110, 0.08);
+  border-color: rgba(201, 169, 110, 0.6);
+}
+
 /* Footer Styles */
 .footer {
   position: relative;

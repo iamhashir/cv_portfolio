@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
+import { FileText } from "lucide-react"
 import styles from "./layout.module.css"
 
 export default function Navbar() {
@@ -57,6 +58,19 @@ export default function Navbar() {
               </li>
             )
           })}
+          {pathname === "/hr" && (
+            <li>
+              <a
+                href="/Malik_Hashir_CV.pdf"
+                target="_blank"
+                rel="noreferrer"
+                className={styles.cvLink}
+              >
+                <FileText size={13} />
+                <span>View CV</span>
+              </a>
+            </li>
+          )}
         </ul>
       </div>
     </nav>

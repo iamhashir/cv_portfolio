@@ -225,6 +225,32 @@
   display: none;
 }
 
+.cvAction {
+  display: flex;
+  min-height: 56px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 0 18px;
+  border-radius: 10px;
+  border: 1.5px solid var(--accent-color);
+  background: transparent;
+  color: var(--accent-color);
+  font-size: 0.94rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 160ms ease, transform 160ms ease;
+}
+
+.cvAction:hover {
+  background: rgba(201, 169, 110, 0.1);
+}
+
+.cvAction:active {
+  transform: scale(0.98);
+}
+
 .tickerWrapper {
   display: none;
 }
@@ -693,6 +719,15 @@
   .secondaryAction:hover {
     border-color: rgba(210, 184, 141, 0.52);
     background: rgba(210, 184, 141, 0.06);
+  }
+
+  .cvAction {
+    display: inline-flex;
+    width: auto;
+    min-height: 44px;
+    padding: 0 22px;
+    border-radius: 6px;
+    font-size: 0.9rem;
   }
 
   .tickerWrapper {

@@ -1,0 +1,152 @@
+/* ─── Backdrop ──────────────────────────────────────────────── */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(9, 8, 6, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* ─── Panel ─────────────────────────────────────────────────── */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 860px;
+  height: 90svh;
+  border: 1px solid rgba(201, 169, 110, 0.18);
+  border-radius: 14px;
+  background: #141310;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.6),
+    0 32px 64px rgba(0, 0, 0, 0.72),
+    0 0 80px rgba(201, 169, 110, 0.06);
+  overflow: hidden;
+}
+
+/* ─── Toolbar ───────────────────────────────────────────────── */
+
+.toolbar {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(201, 169, 110, 0.1);
+  background: rgba(20, 19, 16, 0.95);
+}
+
+.toolbarTitle {
+  color: var(--text-secondary, #a89f91);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toolbarActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* ─── Download button ───────────────────────────────────────── */
+
+.downloadBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid rgba(201, 169, 110, 0.38);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--accent-color, #c9a96e);
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease;
+  text-decoration: none;
+}
+
+.downloadBtn:hover {
+  background: rgba(201, 169, 110, 0.1);
+  border-color: rgba(201, 169, 110, 0.6);
+}
+
+.downloadBtn:active {
+  transform: scale(0.97);
+}
+
+/* ─── Close button ──────────────────────────────────────────── */
+
+.closeBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(201, 169, 110, 0.15);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary, #a89f91);
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+  flex-shrink: 0;
+}
+
+.closeBtn:hover {
+  background: rgba(201, 169, 110, 0.08);
+  border-color: rgba(201, 169, 110, 0.32);
+  color: var(--accent-color, #c9a96e);
+}
+
+.closeBtn:active {
+  transform: scale(0.95);
+}
+
+/* ─── PDF iframe ────────────────────────────────────────────── */
+
+.frameWrapper {
+  flex: 1;
+  overflow: hidden;
+  border-radius: 0 0 13px 13px;
+}
+
+.pdfFrame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #fff;
+}
+
+/* ─── Mobile adjustments ────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .backdrop {
+    padding: 8px;
+    align-items: flex-end;
+  }
+
+  .panel {
+    height: 92svh;
+    border-radius: 14px 14px 10px 10px;
+    max-width: 100%;
+  }
+
+  .toolbarTitle {
+    font-size: 0.76rem;
+  }
+}
