@@ -11,6 +11,10 @@ export default function Home() {
       {/* Identity */}
       <section className={styles.intro}>
         <div className="container">
+          <span className={styles.availability}>
+            <span className={styles.availDot} />
+            Available for work
+          </span>
           <p className={styles.name}>Malik Hashir</p>
           <h1 className={styles.role}>
             Full-stack engineer building operational software for businesses.
@@ -59,6 +63,9 @@ export default function Home() {
                 <div className={styles.projectInfo}>
                   <h3 className={styles.projectTitle}>{project.title}</h3>
                   <p className={styles.projectSummary}>{project.summary}</p>
+                  {project.metric && (
+                    <p className={styles.projectMetric}>{project.metric}</p>
+                  )}
                 </div>
                 <div className={styles.projectActions}>
                   {project.githubUrl &&
