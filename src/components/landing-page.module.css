@@ -536,37 +536,91 @@
   font-weight: 600;
 }
 
-/* ─── Skills ────────────────────────────────────────────────── */
+/* ─── Skills — Circuit Board Layout ─────────────────────────── */
 
 .skillsSection {
   position: relative;
   z-index: 1;
   padding: 72px 24px;
-  background: #171510;
+  /* PCB board dark surface */
+  background-color: #131109;
+  /* Faint PCB silkscreen grid */
+  background-image:
+    linear-gradient(rgba(201, 169, 110, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 169, 110, 0.04) 1px, transparent 1px);
+  background-size: 22px 22px;
 }
 
 .skillLanes {
   display: flex;
   flex-direction: column;
-  gap: 26px;
+  gap: 28px;
   margin: 0 -24px;
 }
 
+/* ─── PCB lane — one board "row" ─────────────────────────────── */
+
+.skillLane {
+  position: relative;
+}
+
+/* Trace backbone along the bottom of each lane */
+.skillLane::after {
+  content: '';
+  position: absolute;
+  bottom: -14px;
+  left: 24px;
+  right: 24px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(201, 169, 110, 0.14) 12%,
+    rgba(201, 169, 110, 0.14) 88%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+.skillLane:last-child::after {
+  display: none;
+}
+
+/* ─── Component designator label ─────────────────────────────── */
+
 .skillLane h3 {
-  margin: 0 24px 12px;
-  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 24px 10px;
+  color: var(--text-secondary);
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
+/* Via dot before the label — PCB via marker */
+.skillLane h3::before {
+  content: '';
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(201, 169, 110, 0.18);
+  border: 1px solid rgba(201, 169, 110, 0.38);
+  box-shadow: 0 0 6px rgba(201, 169, 110, 0.1);
+}
+
+/* ─── PCB trace shelf ─────────────────────────────────────────── */
+
 .skillShelf {
+  position: relative;
   display: flex;
   gap: 8px;
   overflow-x: auto;
-  padding: 0 24px 4px;
+  padding: 6px 24px 10px;
   scrollbar-width: none;
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
@@ -576,8 +630,29 @@
   display: none;
 }
 
+/* Horizontal copper trace running through the shelf */
+.skillShelf::before {
+  content: '';
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: 50%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(201, 169, 110, 0.16) 8%,
+    rgba(201, 169, 110, 0.16) 92%,
+    transparent
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
 .skillChip {
   flex: 0 0 auto;
+  position: relative;
+  z-index: 1;  /* sit on top of the PCB trace line */
   min-height: 38px;
   padding: 7px 14px;
   /* Keycap face: dark warm surface with top-lit gradient */
@@ -595,7 +670,7 @@
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.06) inset,       /* top sheen */
     0 -1px 0 rgba(0, 0, 0, 0.4) inset,             /* bottom inner shadow */
-    0 4px 0 #0e0c09,                                /* keycap side depth */
+    0 4px 0 #0b0a07,                                /* keycap side depth */
     0 5px 1px rgba(0, 0, 0, 0.5),                  /* drop shadow */
     0 0 0 1px rgba(0, 0, 0, 0.35);                 /* outer edge */
   color: var(--text-secondary);
@@ -914,12 +989,16 @@
     margin-bottom: 80px;
   }
 
-  /* Skills: horizontal layout, no negative margins */
+  /* Skills: horizontal layout, PCB board grid */
   .skillsSection {
     padding: 100px 0;
-    background: var(--bg-secondary);
-    border-top: 1px solid var(--border-muted);
-    border-bottom: 1px solid var(--border-muted);
+    background-color: #131109;
+    background-image:
+      linear-gradient(rgba(201, 169, 110, 0.038) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201, 169, 110, 0.038) 1px, transparent 1px);
+    background-size: 22px 22px;
+    border-top: 1px solid rgba(201, 169, 110, 0.1);
+    border-bottom: 1px solid rgba(201, 169, 110, 0.1);
   }
 
   .skillLanes {
@@ -936,14 +1015,27 @@
     flex: 1 1 200px;
   }
 
+  /* Trace backbone: bottom edge of each lane (not row-separator when wrapped) */
+  .skillLane::after {
+    bottom: -24px;
+    left: 0;
+    right: 0;
+  }
+
   .skillLane h3 {
-    margin: 0 0 14px;
+    margin: 0 0 12px;
   }
 
   .skillShelf {
-    padding: 0 0 4px;
+    padding: 6px 0 10px;
     flex-wrap: wrap;
     overflow-x: visible;
+  }
+
+  /* Desktop trace: full width */
+  .skillShelf::before {
+    left: 0;
+    right: 0;
   }
 
   .skillChip {
@@ -951,9 +1043,16 @@
   }
 
   .skillChip:hover {
-    border-color: rgba(210, 184, 141, 0.42);
-    box-shadow: 0 0 14px rgba(201, 169, 110, 0.12);
+    border-color: rgba(201, 169, 110, 0.35);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.08) inset,
+      0 -1px 0 rgba(0,0,0,0.4) inset,
+      0 4px 0 #0b0a07,
+      0 5px 1px rgba(0,0,0,0.5),
+      0 0 0 1px rgba(201, 169, 110, 0.18),
+      0 0 14px rgba(201, 169, 110, 0.1);
     transform: translateY(-1px);
+    color: var(--text-accent);
   }
 
   .skillChip:active {

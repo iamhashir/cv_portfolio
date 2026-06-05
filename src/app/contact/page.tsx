@@ -84,10 +84,22 @@ export default function Contact() {
         </div>
       </div>
 
-      {/* Copy-to-Clipboard block */}
+      {/* Business Card */}
       <section className={styles.copySection}>
-        <span className={styles.copyLabel}>Quick correspondence</span>
-        <div className={styles.emailDisplay}>{emailAddress}</div>
+        <div className={styles.cardFace}>
+          <div className={styles.cardName}>Malik Hashir</div>
+          <div className={styles.cardRole}>Full-Stack Engineer · Systems</div>
+          <div className={styles.cardDivider} aria-hidden="true" />
+          <div className={styles.emailDisplay}>{emailAddress}</div>
+          <a
+            href="https://linkedin.com/in/malikhashir"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.cardSocial}
+          >
+            linkedin.com/in/malikhashir
+          </a>
+        </div>
         <button
           onClick={handleCopy}
           className={`${styles.copyBtn} ${copied ? styles.copiedState : ""}`}
