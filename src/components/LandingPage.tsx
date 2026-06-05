@@ -1,13 +1,14 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowRight, ChevronDown, FileText, Github, Linkedin, Mail, MessageCircle } from "lucide-react"
+import { Activity, ArrowRight, ChevronDown, FileText, Github, Linkedin, Mail, MessageCircle } from "lucide-react"
 import { motion, useReducedMotion } from "framer-motion"
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent } from "react"
 import dynamic from "next/dynamic"
 const CVModal = dynamic(() => import("@/components/CVModal"), { ssr: false })
 import ScrambleText from "@/components/ScrambleText"
-import FeaturedProjectCard from "@/components/FeaturedProjectCard"
+import ExplodedProjectView from "@/components/ExplodedProjectView"
+import ProjectBriefCard from "@/components/ProjectBriefCard"
 import ProjectCard from "@/components/ProjectCard"
 import ScrollReveal from "@/components/ScrollReveal"
 import SectionHeader from "@/components/SectionHeader"
@@ -92,6 +93,7 @@ export default function LandingPage({ content }: { content: LandingPageContent }
     { id: "landing-contact", label: "Contact" },
   ], [content.showProcess])
   const [filterTech, setFilterTech] = useState<string | null>(null)
+  const [expandedSlug, setExpandedSlug] = useState<string | null>(null)
 
   const allTechs = useMemo(
     () => Array.from(new Set(projects.flatMap((p) => p.techStack))).sort(),
@@ -318,13 +320,87 @@ export default function LandingPage({ content }: { content: LandingPageContent }
         <div className={styles.desktopProjectStack}>
           {content.showTechFilter !== false && filterBar}
           {featuredProjects.length > 0 && (
-            <div className={styles.featuredShowcase}>
-              {featuredProjects.map((project) => (
-                <ScrollReveal key={project.slug} delay={0.05}>
-                  <FeaturedProjectCard project={project} />
-                </ScrollReveal>
-              ))}
-            </div>
+            <>
+              {/* Brief strip */}
+              <ScrollReveal>
+                <div className={styles.briefsRow}>
+                  {featuredProjects.map((project) => (
+                    <ProjectBriefCard
+                      key={project.slug}
+                      project={project}
+                      isExpanded={expandedSlug === project.slug}
+                      onToggle={() =>
+                        setExpandedSlug((prev) => (prev === project.slug ? null : project.slug))
+                      }
+                    />
+                  ))}
+                </div>
+              </ScrollReveal>
+
+              {/* Expand panel */}
+              {(() => {
+                const ep = expandedSlug
+                  ? featuredProjects.find((p) => p.slug === expandedSlug) ?? null
+                  : null
+                return (
+                  <div
+                    className={`${styles.briefPanelOuter} ${ep ? styles.briefPanelOpen : ""}`}
+                  >
+                    <div className={styles.briefPanelInner}>
+                      {ep && (
+                        <div className={styles.briefPanelContent}>
+                          {/* Info column */}
+                          <div className={styles.briefPanelInfo}>
+                            <div className={styles.bpHeaderRow}>
+                              <span className={styles.bpCategory}>{ep.category}</span>
+                              <span className={styles.bpStatus}>
+                                {ep.status
+                                  ? ep.status.includes("/")
+                                    ? ep.status.split("/")[0].trim()
+                                    : ep.status
+                                  : `Active // ${ep.year}`}
+                              </span>
+                            </div>
+                            <h3 className={styles.bpTitle}>{ep.title}</h3>
+                            <p className={styles.bpSummary}>{ep.summary}</p>
+                            {ep.outcome?.[0] && (
+                              <div className={styles.bpOutcome}>
+                                <span className={styles.bpOutcomeIcon}>
+                                  <Activity size={14} />
+                                </span>
+                                <div className={styles.bpOutcomeText}>
+                                  <span className={styles.bpOutcomeLabel}>Key Operational Impact</span>
+                                  <p className={styles.bpOutcomeValue}>{ep.outcome[0]}</p>
+                                </div>
+                              </div>
+                            )}
+                            <div className={styles.bpStackWrap}>
+                              <span className={styles.bpStackLabel}>Engineered with</span>
+                              <div className={styles.bpTagGrid}>
+                                {ep.techStack?.map((tech) => (
+                                  <span key={tech} className={styles.bpTag}>{tech}</span>
+                                ))}
+                              </div>
+                            </div>
+                            <Link href={`/work/${ep.slug}`} className={styles.bpCta}>
+                              <span>Analyze System Architecture</span>
+                              <ArrowRight size={15} />
+                            </Link>
+                          </div>
+                          {/* Visual column */}
+                          <div className={styles.briefPanelVisual}>
+                            <ExplodedProjectView
+                              projectId={ep.slug}
+                              className={styles.bpDiagram}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )
+              })()}
+            </>
           )}
           {secondaryProjects.length > 0 && (
             <>
