@@ -2,32 +2,81 @@
 
 import React, { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { X, Download } from "lucide-react"
+import { X, Download, ChevronUp, ChevronDown } from "lucide-react"
+import * as pdfjsLib from "pdfjs-dist"
 import styles from "./cv-modal.module.css"
 
-const PDF_PATH = "/Malik_Hashir_CV.pdf"
-
-function getViewerSrc(origin: string) {
-  const full = `${origin}${PDF_PATH}`
-  return `https://docs.google.com/gviewer?embedded=true&url=${encodeURIComponent(full)}`
-}
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`
 
 export default function CVModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const [viewerSrc, setViewerSrc] = useState("")
+  const [pdf, setPdf] = useState<pdfjsLib.PDFDocumentProxy | null>(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(0)
+  const [pageImages, setPageImages] = useState<Record<number, string>>({})
+  const [loading, setLoading] = useState(false)
 
+  // Load PDF when modal opens
   useEffect(() => {
-    setViewerSrc(getViewerSrc(window.location.origin))
-  }, [])
+    if (!isOpen) return
 
+    const loadPdf = async () => {
+      setLoading(true)
+      try {
+        const pdf = await pdfjsLib.getDocument("/Malik_Hashir_CV.pdf").promise
+        setPdf(pdf)
+        setTotalPages(pdf.numPages)
+        setCurrentPage(1)
+        setPageImages({})
+      } catch (error) {
+        console.error("Error loading PDF:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadPdf()
+  }, [isOpen])
+
+  // Render current page when it changes
+  useEffect(() => {
+    if (!pdf || !isOpen) return
+
+    const renderPage = async () => {
+      if (pageImages[currentPage]) return
+
+      try {
+        const page = await pdf.getPage(currentPage)
+        const scale = Math.min(window.innerWidth / page.getWidth(), 2)
+        const canvas = document.createElement("canvas")
+        const ctx = canvas.getContext("2d")!
+        const viewport = page.getViewport({ scale })
+
+        canvas.width = viewport.width
+        canvas.height = viewport.height
+
+        await page.render({ canvasContext: ctx, viewport }).promise
+        setPageImages((prev) => ({ ...prev, [currentPage]: canvas.toDataURL() }))
+      } catch (error) {
+        console.error("Error rendering page:", error)
+      }
+    }
+
+    renderPage()
+  }, [pdf, currentPage, isOpen, pageImages])
+
+  // Keyboard nav: arrow keys
   useEffect(() => {
     if (!isOpen) return
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose()
+      if (e.key === "ArrowDown" && currentPage < totalPages) setCurrentPage((p) => p + 1)
+      if (e.key === "ArrowUp" && currentPage > 1) setCurrentPage((p) => p - 1)
     }
     document.addEventListener("keydown", handler)
     return () => document.removeEventListener("keydown", handler)
-  }, [isOpen, onClose])
+  }, [isOpen, onClose, currentPage, totalPages])
 
+  // Prevent scroll on body
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden"
@@ -83,13 +132,42 @@ export default function CVModal({ isOpen, onClose }: { isOpen: boolean; onClose:
               </div>
             </div>
             <div className={styles.frameWrapper}>
-              {viewerSrc && (
-                <iframe
-                  src={viewerSrc}
-                  className={styles.pdfFrame}
-                  title="Malik Hashir CV"
-                  allowFullScreen
-                />
+              {loading && <div className={styles.loadingState}>Loading PDF...</div>}
+              {pdf && !loading && (
+                <>
+                  <div className={styles.pageContainer}>
+                    {pageImages[currentPage] && (
+                      <img
+                        src={pageImages[currentPage]}
+                        alt={`PDF Page ${currentPage}`}
+                        className={styles.pdfImage}
+                      />
+                    )}
+                  </div>
+                  <div className={styles.pageNav}>
+                    <button
+                      type="button"
+                      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                      disabled={currentPage <= 1}
+                      className={styles.navBtn}
+                      aria-label="Previous page"
+                    >
+                      <ChevronUp size={16} />
+                    </button>
+                    <span className={styles.pageCounter}>
+                      {currentPage} / {totalPages}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                      disabled={currentPage >= totalPages}
+                      className={styles.navBtn}
+                      aria-label="Next page"
+                    >
+                      <ChevronDown size={16} />
+                    </button>
+                  </div>
+                </>
               )}
             </div>
           </motion.div>
