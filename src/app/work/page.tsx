@@ -18,6 +18,7 @@ export default function Work() {
   return (
     <div className={`container ${styles.workPage}`}>
       <header className={styles.header}>
+        <p className={styles.eyebrow}>{projects.length} projects</p>
         <h1 className={styles.title}>Case Studies</h1>
         <p className={styles.description}>
           A detailed look at the software architectures, database schemas, and commercial outcomes of systems I have designed and deployed.

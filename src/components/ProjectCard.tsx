@@ -19,8 +19,15 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         <h3 className={styles.title}>{project.title}</h3>
         <p className={styles.summary}>{project.summary}</p>
 
-        {project.outcome?.[0] && (
-          <p className={styles.outcomeCallout}>{project.outcome[0]}</p>
+        {project.metric && (
+          <div className={styles.metricCallout}>
+            {project.metric.split(" · ").map((part, i, arr) => (
+              <span key={i}>
+                {part}
+                {i < arr.length - 1 && <span className={styles.metricDot}> · </span>}
+              </span>
+            ))}
+          </div>
         )}
 
         <div className={styles.metadataGrid}>
@@ -31,14 +38,8 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             </span>
           </div>
           <div className={styles.metaItem}>
-            <span className={styles.metaLabel}>Status</span>
-            <span className={styles.metaVal} title={project.status || "Active"}>
-              {project.status ? (
-                project.status.includes("/") ? project.status.split("/")[0].trim() : project.status
-              ) : (
-                `Active // ${project.year}`
-              )}
-            </span>
+            <span className={styles.metaLabel}>Year</span>
+            <span className={styles.metaVal}>{project.year}</span>
           </div>
         </div>
 

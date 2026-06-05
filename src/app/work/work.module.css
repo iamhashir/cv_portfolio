@@ -8,6 +8,16 @@
   max-width: 600px;
 }
 
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-accent);
+  margin-bottom: 10px;
+}
+
 .title {
   font-family: var(--font-sans);
   font-size: 3.5rem;
