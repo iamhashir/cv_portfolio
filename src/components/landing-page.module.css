@@ -534,24 +534,58 @@
 
 .skillChip {
   flex: 0 0 auto;
-  min-height: 42px;
+  min-height: 38px;
   padding: 7px 14px;
-  border: 1px solid rgba(210, 184, 141, 0.15);
-  border-radius: 8px;
-  background: rgba(210, 184, 141, 0.05);
+  /* Keycap face: dark warm surface with top-lit gradient */
+  background:
+    linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.07) 0%,
+      rgba(255, 255, 255, 0.02) 40%,
+      rgba(0, 0, 0, 0.06) 100%
+    ),
+    #1e1b16;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 7px 7px 6px 6px;
+  /* Depth: keycap sides + ambient glow */
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,       /* top sheen */
+    0 -1px 0 rgba(0, 0, 0, 0.4) inset,             /* bottom inner shadow */
+    0 4px 0 #0e0c09,                                /* keycap side depth */
+    0 5px 1px rgba(0, 0, 0, 0.5),                  /* drop shadow */
+    0 0 0 1px rgba(0, 0, 0, 0.35);                 /* outer edge */
   color: var(--text-secondary);
   font-family: var(--font-mono);
   font-size: 0.68rem;
   line-height: 1.35;
   white-space: nowrap;
   cursor: pointer;
-  transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+  user-select: none;
+  transition: box-shadow 80ms ease, transform 80ms ease, color 120ms ease;
 }
 
+.skillChip:hover {
+  color: var(--text-accent);
+  border-color: rgba(201, 169, 110, 0.22);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.08) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.4) inset,
+    0 4px 0 #0e0c09,
+    0 5px 1px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(201, 169, 110, 0.18),
+    0 0 12px rgba(201, 169, 110, 0.08);
+}
+
+/* Pressed state: key bottoms out */
 .skillChip:active {
-  border-color: rgba(210, 184, 141, 0.58);
-  box-shadow: 0 0 18px rgba(201, 169, 110, 0.16);
-  transform: scale(1.05);
+  transform: translateY(3px);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.5) inset,
+    0 1px 0 #0e0c09,                               /* side almost gone */
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(0, 0, 0, 0.4);
+  color: var(--text-accent);
 }
 
 /* ─── Contact ───────────────────────────────────────────────── */
