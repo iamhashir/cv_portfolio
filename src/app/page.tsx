@@ -54,7 +54,10 @@ export default function Home() {
       <div className={styles.grid} aria-hidden="true" />
       <div className={styles.axis} aria-hidden="true" />
 
-      <div className={styles.identity}>Malik Hashir</div>
+      <div className={styles.identity}>
+        <span className={styles.identityName}>Malik Hashir</span>
+        <span className={styles.identityRole}>Full-stack engineer · CRM, automation &amp; AI tooling</span>
+      </div>
 
       <Link
         href="/hr"
@@ -64,9 +67,12 @@ export default function Home() {
         onBlur={() => setActiveDoor(null)}
         onClick={(event) => handleDoorClick(event, "hr", "/hr")}
       >
-        <span className={styles.doorText} data-text="I'm hiring">
-          I&apos;m hiring
-        </span>
+        <div className={styles.doorContent}>
+          <span className={styles.doorText} data-text="I'm hiring">
+            I&apos;m hiring
+          </span>
+          <span className={styles.doorSub}>Looking to hire a full-stack engineer</span>
+        </div>
         <ArrowUpRight className={styles.arrow} strokeWidth={1.25} aria-hidden="true" />
       </Link>
 
@@ -78,9 +84,12 @@ export default function Home() {
         onBlur={() => setActiveDoor(null)}
         onClick={(event) => handleDoorClick(event, "client", "/client")}
       >
-        <span className={styles.doorText} data-text="I need software built">
-          I need software built
-        </span>
+        <div className={styles.doorContent}>
+          <span className={styles.doorText} data-text="I need software built">
+            I need software built
+          </span>
+          <span className={styles.doorSub}>Need a CRM, automation, or operational system</span>
+        </div>
         <ArrowUpRight className={styles.arrow} strokeWidth={1.25} aria-hidden="true" />
       </Link>
     </section>

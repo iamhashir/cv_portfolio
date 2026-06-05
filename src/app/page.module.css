@@ -84,18 +84,27 @@
   top: 34px;
   left: 50%;
   z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.identityName {
+  position: relative;
   color: rgba(244, 238, 228, 0.86);
   font-family: var(--font-mono);
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  transform: translateX(-50%);
   white-space: nowrap;
 }
 
-.identity::before,
-.identity::after {
+.identityName::before,
+.identityName::after {
   content: "";
   position: absolute;
   top: 50%;
@@ -104,12 +113,21 @@
   background: rgba(210, 184, 141, 0.28);
 }
 
-.identity::before {
+.identityName::before {
   right: calc(100% + 16px);
 }
 
-.identity::after {
+.identityName::after {
   left: calc(100% + 16px);
+}
+
+.identityRole {
+  color: rgba(244, 238, 228, 0.46);
+  font-family: var(--font-sans);
+  font-size: 0.73rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
 }
 
 .door {
@@ -164,6 +182,37 @@
 .gateway:has(.clientDoor:hover) .clientDoor,
 .gateway:has(.clientDoor:focus-visible) .clientDoor {
   width: 63%;
+}
+
+.doorContent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.clientDoor .doorContent {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.doorSub {
+  font-family: var(--font-mono);
+  font-size: 0.67rem;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: rgba(244, 238, 228, 0.34);
+  transition: color 400ms ease;
+}
+
+.hrDoor:hover .doorSub,
+.hrDoor:focus-visible .doorSub {
+  color: rgba(244, 238, 228, 0.68);
+}
+
+.clientDoor:hover .doorSub,
+.clientDoor:focus-visible .doorSub {
+  color: rgba(225, 241, 235, 0.68);
 }
 
 .doorText {
@@ -236,13 +285,28 @@
 @media (max-width: 720px) {
   .identity {
     top: 24px;
+  }
+
+  .identityName {
     font-size: 0.62rem;
     letter-spacing: 0.22em;
   }
 
-  .identity::before,
-  .identity::after {
+  .identityName::before,
+  .identityName::after {
     width: 24px;
+  }
+
+  .identityRole {
+    white-space: normal;
+    text-align: center;
+    max-width: 80vw;
+    font-size: 0.68rem;
+  }
+
+  .doorSub {
+    font-size: 0.6rem;
+    letter-spacing: 0.05em;
   }
 
   .axis {
@@ -352,6 +416,7 @@
   .door,
   .doorText,
   .doorText::after,
+  .doorSub,
   .arrow {
     transition: none;
   }
