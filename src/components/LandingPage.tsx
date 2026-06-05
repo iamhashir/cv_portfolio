@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowRight, ChevronDown, FileText, Mail, MessageCircle } from "lucide-react"
+import { ArrowRight, ChevronDown, FileText, Github, Linkedin, Mail, MessageCircle } from "lucide-react"
 import { motion, useReducedMotion } from "framer-motion"
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent } from "react"
 import CVModal from "@/components/CVModal"
@@ -27,8 +27,9 @@ const systemVisuals: Record<string, { label: string; accent: string }> = {
   "ui-analyzer": { label: "screens → vision → fixes", accent: "#b7a4ff" },
 }
 
-const emailAddress = "malikhashir@example.com"
-const whatsAppMessage = encodeURIComponent("Hi Malik, I would like to discuss a software project.")
+const DEFAULT_EMAIL = "magnotekbyasool@gmail.com"
+const DEFAULT_WHATSAPP = "971504442178"
+const whatsAppMessage = encodeURIComponent("Hi Malik, I'd like to discuss an engineering role.")
 
 type SectionContent = {
   label: string
@@ -58,9 +59,15 @@ export type LandingPageContent = {
   showProcess?: boolean
   showTechFilter?: boolean
   availability?: { label: string; active: boolean }
+  currentFocus?: string
+  email?: string
+  whatsappNumber?: string
+  socialLinks?: { github?: string; linkedin?: string }
 }
 
 export default function LandingPage({ content }: { content: LandingPageContent }) {
+  const email = content.email ?? DEFAULT_EMAIL
+  const whatsappNumber = content.whatsappNumber ?? DEFAULT_WHATSAPP
   const shouldReduceMotion = useReducedMotion()
   const activeProject = useAppStore((state) => state.activeProject)
   const activeVisual = systemVisuals[activeProject ?? "opsflow"] ?? systemVisuals.opsflow
@@ -215,6 +222,12 @@ export default function LandingPage({ content }: { content: LandingPageContent }
             />
             <span>{activeAvailability.label}</span>
           </div>
+          {content.currentFocus && (
+            <p className={styles.currentFocus}>
+              <span className={styles.currentFocusLabel}>Now:</span>
+              {content.currentFocus}
+            </p>
+          )}
         </motion.div>
 
         <div className={styles.heroActions}>
@@ -235,6 +248,32 @@ export default function LandingPage({ content }: { content: LandingPageContent }
           <Link href={content.secondaryHref} className={styles.secondaryAction}>
             <span>{content.secondaryAction}</span>
           </Link>
+          {content.socialLinks && (
+            <div className={styles.socialLinks}>
+              {content.socialLinks.github && (
+                <a
+                  href={content.socialLinks.github}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={styles.socialLink}
+                  aria-label="GitHub profile"
+                >
+                  <Github size={18} />
+                </a>
+              )}
+              {content.socialLinks.linkedin && (
+                <a
+                  href={content.socialLinks.linkedin}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={styles.socialLink}
+                  aria-label="LinkedIn profile"
+                >
+                  <Linkedin size={18} />
+                </a>
+              )}
+            </div>
+          )}
         </div>
 
         <div className={styles.tickerWrapper} aria-hidden="true">
@@ -340,11 +379,11 @@ export default function LandingPage({ content }: { content: LandingPageContent }
           <h2>{content.ctaTitle}</h2>
         </header>
         <div className={styles.mobileContactActions}>
-          <a href={`https://wa.me/?text=${whatsAppMessage}`} className={styles.whatsappAction}>
+          <a href={`https://wa.me/${whatsappNumber}?text=${whatsAppMessage}`} className={styles.whatsappAction}>
             <MessageCircle size={19} />
             <span>WhatsApp me directly</span>
           </a>
-          <a href={`mailto:${emailAddress}`} className={styles.emailAction}>
+          <a href={`mailto:${email}`} className={styles.emailAction}>
             <Mail size={19} />
             <span>Send an email</span>
           </a>
@@ -356,8 +395,8 @@ export default function LandingPage({ content }: { content: LandingPageContent }
               <span>{content.ctaAction}</span>
               <ArrowRight size={16} />
             </Link>
-            <a href={`mailto:${emailAddress}`} className="btn-secondary">
-              {emailAddress}
+            <a href={`mailto:${email}`} className="btn-secondary">
+              {email}
             </a>
           </div>
         </div>

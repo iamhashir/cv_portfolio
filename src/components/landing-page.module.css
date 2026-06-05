@@ -224,6 +224,50 @@
   animation: availPulse 2s ease-in-out infinite;
 }
 
+.currentFocus {
+  margin-top: 8px;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+}
+
+.currentFocusLabel {
+  margin-right: 6px;
+  color: var(--text-accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ─── Social links row ───────────────────────────────────────── */
+
+.socialLinks {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+  width: 100%;
+}
+
+.socialLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(210, 184, 141, 0.18);
+  border-radius: 8px;
+  background: rgba(210, 184, 141, 0.04);
+  color: var(--text-secondary);
+  transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
+}
+
+.socialLink:hover {
+  border-color: rgba(201, 169, 110, 0.42);
+  color: var(--accent-color);
+  background: rgba(201, 169, 110, 0.07);
+}
+
 /* Mobile: primary CTA pushes to bottom of hero */
 .heroActions {
   margin-top: auto;
@@ -794,6 +838,21 @@
     padding: 0 22px;
     border-radius: 6px;
     font-size: 0.9rem;
+  }
+
+  .socialLinks {
+    width: auto;
+    margin-top: 0;
+  }
+
+  .socialLink {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+  }
+
+  .currentFocus {
+    text-align: center;
   }
 
   .tickerWrapper {

@@ -1,38 +1,38 @@
 import type { LandingPageContent } from "@/components/LandingPage"
 
 export const hrLandingContent: LandingPageContent = {
-  badge: "Open to full-stack engineering roles",
-  heroPrefix: "I turn",
-  heroHighlight: "operational complexity",
-  heroSuffix: "into reliable software.",
+  badge: "Open to AI Automation & Full-Stack Engineering roles",
+  heroPrefix: "I build",
+  heroHighlight: "AI-powered automation",
+  heroSuffix: "that scales real operations.",
   heroDescription:
-    "A product-minded full-stack developer with hands-on operations experience, building practical systems across workflow automation, CRM, and internal tooling.",
+    "AI Automation Engineer & Full-Stack Developer — I design intelligent workflow systems, build LLM-integrated tooling, and ship production-grade web applications end to end.",
   primaryAction: "Review Engineering Work",
   secondaryAction: "View Contact Details",
   secondaryHref: "/contact",
   process: {
     label: "Engineering approach",
     title: "From Ambiguity to Production",
-    description: "The decisions behind the systems: product judgment, architecture, and disciplined delivery.",
+    description: "How I scope, design, and deliver AI-driven systems that fit the real operation.",
   },
   timeline: [
     {
       stepNumber: "01 / UNDERSTAND",
-      stepName: "Product Judgment",
-      title: "Finding the Real Constraint",
-      desc: "Start with the operating problem, isolate the bottleneck, and define the smallest system that materially improves the workflow.",
+      stepName: "Problem Scoping",
+      title: "Finding Where AI Adds Real Leverage",
+      desc: "Map the manual workflow, identify where intelligence reduces friction, and define the minimal system that meaningfully improves the operation.",
     },
     {
       stepNumber: "02 / ARCHITECT",
       stepName: "System Design",
-      title: "Designing for Real Usage",
-      desc: "Translate requirements into data models, service boundaries, interface states, and clear operational ownership.",
+      title: "Designing the Intelligent Layer",
+      desc: "Model data flows, design LLM integration points, define API boundaries, and establish clear fallback behaviour for when automation breaks.",
     },
     {
       stepNumber: "03 / SHIP",
       stepName: "Production Delivery",
-      title: "Building Through the Last Mile",
-      desc: "Implement, verify, deploy, and refine the system around actual usage rather than stopping at a polished prototype.",
+      title: "Building Past the Prototype",
+      desc: "Implement, observe in production, close the feedback loop, and refine the automation around real usage rather than demo conditions.",
     },
   ],
   featured: {
@@ -45,16 +45,23 @@ export const hrLandingContent: LandingPageContent = {
     title: "More Technical Builds",
     description: "Selected utilities, product experiments, and supporting software projects.",
   },
-  ctaLabel: "Available for the right engineering team",
-  ctaTitle: "Looking for an engineer who understands the operation behind the interface?",
+  ctaLabel: "Available for AI & Full-Stack engineering roles",
+  ctaTitle: "Looking for an engineer who can build and ship AI-integrated systems?",
   ctaDescription:
-    "I bring full-stack execution, product judgment, and practical operating context to software teams building tools that need to work in the real world.",
+    "I bring AI automation expertise, full-stack execution, and product judgment to teams building intelligent software that needs to work reliably in production.",
   ctaAction: "Start a Conversation",
   ctaHref: "/contact",
   cvHref: "/Malik_Hashir_CV.pdf",
-  showProcess: false,
-  showTechFilter: false,
+  showProcess: true,
+  showTechFilter: true,
   availability: { label: "Open to new roles · GST", active: true },
+  currentFocus: "Building LLM workflow tooling + Next.js systems",
+  email: "magnotekbyasool@gmail.com",
+  whatsappNumber: "971504442178",
+  socialLinks: {
+    github: "https://github.com/iamhashir",
+    linkedin: "https://linkedin.com/in/malikhashir",
+  },
 }
 
 export const clientLandingContent: LandingPageContent = {
