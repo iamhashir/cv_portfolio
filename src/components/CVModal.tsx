@@ -6,7 +6,7 @@ import { X, Download, ChevronUp, ChevronDown } from "lucide-react"
 import * as pdfjsLib from "pdfjs-dist"
 import styles from "./cv-modal.module.css"
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`
+pdfjsLib.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.mjs`
 
 export default function CVModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [pdf, setPdf] = useState<pdfjsLib.PDFDocumentProxy | null>(null)
