@@ -129,6 +129,21 @@
   flex-shrink: 0;
 }
 
+.codeLink {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--transition-fast);
+}
+
+.codeLink:hover {
+  color: var(--text-accent);
+}
+
 .chevron {
   display: flex;
   align-items: center;

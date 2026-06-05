@@ -147,6 +147,14 @@
     0 3px 2px rgba(0,0,0,0.35);
 }
 
+.ctaRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+
 .ctaLink {
   display: inline-flex;
   align-items: center;
@@ -154,8 +162,20 @@
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-primary);
-  margin-top: auto;
   transition: color var(--transition-fast);
+}
+
+.codeLink {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--transition-fast);
+}
+
+.codeLink:hover {
+  color: var(--text-secondary);
 }
 
 .ctaLink svg {

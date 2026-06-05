@@ -8,76 +8,6 @@
   isolation: isolate;
 }
 
-/* Atmospheric backdrop — accent color shifts with active project */
-.backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-  will-change: background;
-  background:
-    radial-gradient(circle at 70% 18%, color-mix(in srgb, var(--system-accent) 20%, transparent), transparent 18rem),
-    linear-gradient(180deg, rgba(9, 8, 6, 0.34), rgba(9, 8, 6, 0.86));
-  transition: background 380ms ease;
-}
-
-.ambientGlow {
-  position: absolute;
-  inset: 0;
-  /* Tracks cursor in real time — intentionally no transition */
-  background: radial-gradient(
-    circle at var(--pointer-x, 50%) var(--pointer-y, 30%),
-    color-mix(in srgb, var(--system-accent) 16%, transparent),
-    transparent 20rem
-  );
-  pointer-events: none;
-}
-
-.backdrop::before,
-.backdrop::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-}
-
-.backdrop::before {
-  opacity: 0.22;
-  background-image:
-    linear-gradient(color-mix(in srgb, var(--system-accent) 14%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--system-accent) 14%, transparent) 1px, transparent 1px);
-  /* 48px matches gateway's 54px grid more closely; -5deg is a softer skew */
-  background-size: 48px 48px;
-  /* Gyroscope: grid shifts at a different rate than the glow → depth illusion */
-  background-position:
-    calc(var(--gyro-x, 0) * -10px)
-    calc(var(--gyro-y, 0) * -7px);
-  transform: skewY(-5deg) translateY(-6%);
-  transition: opacity 380ms ease;
-}
-
-.backdrop::after {
-  inset: 0;
-  opacity: 1;
-  background: linear-gradient(180deg, transparent 40%, rgba(9, 8, 6, 0.35) 100%);
-  animation: none;
-}
-
-.backdrop span {
-  position: absolute;
-  right: 18px;
-  bottom: 20px;
-  max-width: 16rem;
-  color: color-mix(in srgb, var(--system-accent) 72%, white);
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  line-height: 1.45;
-  text-align: right;
-  text-transform: uppercase;
-}
-
 /* ─── Hero ──────────────────────────────────────────────────── */
 
 .hero {
@@ -91,19 +21,6 @@
   padding: 20px 24px 24px;
   isolation: isolate;
   z-index: 1;
-}
-
-.mesh {
-  position: absolute;
-  inset: -22%;
-  z-index: -1;
-  background:
-    radial-gradient(circle at 28% 26%, rgba(170, 122, 61, 0.3), transparent 25%),
-    radial-gradient(circle at 80% 72%, rgba(89, 64, 36, 0.28), transparent 34%),
-    radial-gradient(circle at 66% 20%, rgba(198, 162, 99, 0.1), transparent 24%),
-    #090806;
-  animation: meshBreathe 12s ease-in-out infinite alternate;
-  transform: scale(1.04);
 }
 
 .badge {
@@ -401,16 +318,6 @@
   transform: scale(0.98);
 }
 
-.tickerWrapper {
-  display: none;
-}
-
-/* ─── Minimap (desktop-only) ────────────────────────────────── */
-
-.minimapWrapper {
-  display: none;
-}
-
 /* ─── Process (desktop-only) ────────────────────────────────── */
 
 .processSection {
@@ -599,185 +506,109 @@
   line-height: 1.7;
 }
 
+.projectLinkRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
 .projectLink {
   display: inline-flex;
   min-height: 48px;
   align-items: center;
   gap: 8px;
-  margin-top: 8px;
   color: var(--text-accent);
   font-size: 0.9rem;
   font-weight: 600;
 }
 
-/* ─── Skills — Circuit Board Layout ─────────────────────────── */
+.projectCodeLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--transition-fast);
+}
+
+.projectCodeLink:hover {
+  color: var(--text-secondary);
+}
+
+/* ─── Skills ─────────────────────────────────────────────────── */
 
 .skillsSection {
   position: relative;
   z-index: 1;
   padding: 72px 24px;
-  /* PCB board dark surface */
-  background-color: #131109;
-  /* Faint PCB silkscreen grid */
-  background-image:
-    linear-gradient(rgba(201, 169, 110, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(201, 169, 110, 0.04) 1px, transparent 1px);
-  background-size: 22px 22px;
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-muted);
 }
 
 .skillLanes {
   display: flex;
   flex-direction: column;
   gap: 28px;
-  margin: 0 -24px;
+  margin: 0;
 }
-
-/* ─── PCB lane — one board "row" ─────────────────────────────── */
 
 .skillLane {
   position: relative;
 }
 
-/* Trace backbone along the bottom of each lane */
-.skillLane::after {
-  content: '';
-  position: absolute;
-  bottom: -14px;
-  left: 24px;
-  right: 24px;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(201, 169, 110, 0.14) 12%,
-    rgba(201, 169, 110, 0.14) 88%,
-    transparent
-  );
-  pointer-events: none;
-}
-
-.skillLane:last-child::after {
-  display: none;
-}
-
-/* ─── Component designator label ─────────────────────────────── */
-
 .skillLane h3 {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 24px 10px;
-  color: var(--text-secondary);
+  margin: 0 0 10px;
+  color: var(--text-muted);
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.66rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
-/* Via dot before the label — PCB via marker */
-.skillLane h3::before {
-  content: '';
-  flex-shrink: 0;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(201, 169, 110, 0.18);
-  border: 1px solid rgba(201, 169, 110, 0.38);
-  box-shadow: 0 0 6px rgba(201, 169, 110, 0.1);
-}
-
-/* ─── PCB trace shelf ─────────────────────────────────────────── */
-
 .skillShelf {
-  position: relative;
   display: flex;
-  gap: 8px;
+  gap: 6px;
   overflow-x: auto;
-  padding: 6px 24px 10px;
+  padding: 0 0 4px;
   scrollbar-width: none;
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
+  flex-wrap: wrap;
 }
 
 .skillShelf::-webkit-scrollbar {
   display: none;
 }
 
-/* Horizontal copper trace running through the shelf */
-.skillShelf::before {
-  content: '';
-  position: absolute;
-  left: 24px;
-  right: 24px;
-  top: 50%;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(201, 169, 110, 0.16) 8%,
-    rgba(201, 169, 110, 0.16) 92%,
-    transparent
-  );
-  pointer-events: none;
-  z-index: 0;
-}
-
 .skillChip {
   flex: 0 0 auto;
-  position: relative;
-  z-index: 1;  /* sit on top of the PCB trace line */
-  min-height: 38px;
-  padding: 7px 14px;
-  /* Keycap face: dark warm surface with top-lit gradient */
-  background:
-    linear-gradient(
-      160deg,
-      rgba(255, 255, 255, 0.07) 0%,
-      rgba(255, 255, 255, 0.02) 40%,
-      rgba(0, 0, 0, 0.06) 100%
-    ),
-    #1e1b16;
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 7px 7px 6px 6px;
-  /* Depth: keycap sides + ambient glow */
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.06) inset,       /* top sheen */
-    0 -1px 0 rgba(0, 0, 0, 0.4) inset,             /* bottom inner shadow */
-    0 4px 0 #0b0a07,                                /* keycap side depth */
-    0 5px 1px rgba(0, 0, 0, 0.5),                  /* drop shadow */
-    0 0 0 1px rgba(0, 0, 0, 0.35);                 /* outer edge */
+  min-height: 30px;
+  padding: 4px 12px;
+  background: rgba(210, 184, 141, 0.05);
+  border: 1px solid rgba(210, 184, 141, 0.14);
+  border-radius: 4px;
   color: var(--text-secondary);
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.67rem;
   line-height: 1.35;
   white-space: nowrap;
-  cursor: pointer;
+  cursor: default;
   user-select: none;
-  transition: box-shadow 80ms ease, transform 80ms ease, color 120ms ease;
+  transition: color var(--transition-fast);
 }
 
 .skillChip:hover {
-  color: var(--text-accent);
-  border-color: rgba(201, 169, 110, 0.22);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.08) inset,
-    0 -1px 0 rgba(0, 0, 0, 0.4) inset,
-    0 4px 0 #0e0c09,
-    0 5px 1px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(201, 169, 110, 0.18),
-    0 0 12px rgba(201, 169, 110, 0.08);
+  color: var(--text-primary);
+  border-color: rgba(210, 184, 141, 0.26);
 }
 
-/* Pressed state: key bottoms out */
 .skillChip:active {
-  transform: translateY(3px);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.04) inset,
-    0 -1px 0 rgba(0, 0, 0, 0.5) inset,
-    0 1px 0 #0e0c09,                               /* side almost gone */
-    0 1px 2px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(0, 0, 0, 0.4);
   color: var(--text-accent);
 }
 
@@ -893,18 +724,6 @@
 /* ─── Desktop (769px+) ──────────────────────────────────────── */
 
 @media (min-width: 769px) {
-  /* Minimap: let the component's own fixed positioning handle placement */
-  .minimapWrapper {
-    display: contents;
-  }
-
-  /* Backdrop: shift gradient origin for wide layouts */
-  .backdrop {
-    background:
-      radial-gradient(circle at 68% 22%, color-mix(in srgb, var(--system-accent) 16%, transparent), transparent 28rem),
-      linear-gradient(180deg, rgba(9, 8, 6, 0.18), rgba(9, 8, 6, 0.72));
-  }
-
   /* Hero: centered, tall */
   .hero {
     min-height: 88svh;
@@ -1063,12 +882,6 @@
     margin-bottom: 0;
   }
 
-  .tickerWrapper {
-    display: block;
-    width: 100%;
-    padding-bottom: 80px;
-  }
-
   /* Process section */
   .processSection {
     display: block;
@@ -1154,9 +967,6 @@
   }
 
   .briefPanelContent {
-    display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    min-height: 460px;
     margin-top: 18px;
     background: linear-gradient(168deg, #1b1710 0%, #161310 55%, #131009 100%);
     border: 1px solid rgba(180, 140, 68, 0.28);
@@ -1168,13 +978,11 @@
       inset 0 1px 0 rgba(210, 170, 90, 0.05);
   }
 
-  /* Info column */
   .briefPanelInfo {
     padding: 40px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    border-right: 1px solid rgba(180, 140, 68, 0.15);
+    max-width: 640px;
   }
 
   .bpHeaderRow {
@@ -1322,98 +1130,53 @@
     transform: translateX(4px);
   }
 
-  /* Visual column */
-  .briefPanelVisual {
+  .bpCtaRow {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 32px;
-    background-color: #0d0b08;
-    overflow: hidden;
-    position: relative;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: auto;
   }
 
-  .bpDiagram {
-    width: 100%;
-    height: 100%;
-    min-height: 280px;
-    border: 1px solid rgba(180, 140, 68, 0.12);
-    border-radius: 8px;
-    background-color: #0f0e0c;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+  .bpCodeLink {
+    font-size: 0.84rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color var(--transition-fast);
   }
 
-  /* Skills: horizontal layout, PCB board grid */
+  .bpCodeLink:hover {
+    color: var(--text-secondary);
+  }
+
+  /* Skills: horizontal layout */
   .skillsSection {
-    padding: 100px 0;
-    background-color: #131109;
-    background-image:
-      linear-gradient(rgba(201, 169, 110, 0.038) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(201, 169, 110, 0.038) 1px, transparent 1px);
-    background-size: 22px 22px;
-    border-top: 1px solid rgba(201, 169, 110, 0.1);
-    border-bottom: 1px solid rgba(201, 169, 110, 0.1);
+    padding: 80px 0;
   }
 
   .skillLanes {
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 48px 64px;
-    margin: 0;
+    gap: 40px 56px;
     max-width: 1100px;
     margin: 0 auto;
     padding: 0 24px;
   }
 
   .skillLane {
-    flex: 1 1 200px;
-  }
-
-  /* Trace backbone: bottom edge of each lane (not row-separator when wrapped) */
-  .skillLane::after {
-    bottom: -24px;
-    left: 0;
-    right: 0;
+    flex: 1 1 180px;
   }
 
   .skillLane h3 {
-    margin: 0 0 12px;
+    margin: 0 0 10px;
   }
 
   .skillShelf {
-    padding: 6px 0 10px;
-    flex-wrap: wrap;
     overflow-x: visible;
-  }
-
-  /* Desktop trace: full width */
-  .skillShelf::before {
-    left: 0;
-    right: 0;
-  }
-
-  .skillChip {
-    min-height: 36px;
-  }
-
-  .skillChip:hover {
-    border-color: rgba(201, 169, 110, 0.35);
-    box-shadow:
-      0 1px 0 rgba(255,255,255,0.08) inset,
-      0 -1px 0 rgba(0,0,0,0.4) inset,
-      0 4px 0 #0b0a07,
-      0 5px 1px rgba(0,0,0,0.5),
-      0 0 0 1px rgba(201, 169, 110, 0.18),
-      0 0 14px rgba(201, 169, 110, 0.1);
-    transform: translateY(-1px);
-    color: var(--text-accent);
-  }
-
-  .skillChip:active {
-    transform: translateY(0);
+    flex-wrap: wrap;
+    padding: 0;
   }
 
   /* Contact: hide mobile buttons, show desktop card */
@@ -1567,24 +1330,6 @@
 
 /* ─── Keyframes ─────────────────────────────────────────────── */
 
-@keyframes meshBreathe {
-  from {
-    transform: scale(1.04) translate3d(-2%, -1%, 0);
-  }
-  to {
-    transform: scale(1.14) translate3d(3%, 2%, 0);
-  }
-}
-
-@keyframes circuitDrift {
-  from {
-    transform: translate3d(-2%, -1%, 0);
-  }
-  to {
-    transform: translate3d(2%, 3%, 0);
-  }
-}
-
 @keyframes cardEnter {
   from {
     opacity: 0;
@@ -1604,7 +1349,6 @@
 /* ─── Reduced motion ────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
-  .mesh,
   .projectCard,
   .availabilityDotActive {
     animation: none;

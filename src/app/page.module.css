@@ -1,427 +1,299 @@
-.gateway {
-  --pointer-x: 50%;
-  --pointer-y: 50%;
-  --line-color: rgba(210, 184, 141, 0.34);
-  position: relative;
-  isolation: isolate;
-  width: 100vw;
-  height: 100svh;
-  overflow: hidden;
-  background: #080806;
-  color: #f4eee4;
+/* ─── Home page ──────────────────────────────────────────────── */
+
+.home {
+  padding-bottom: 96px;
 }
 
-.ambient,
-.grid,
-.axis,
-.gateway::before,
-.gateway::after {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
+/* ─── Intro ──────────────────────────────────────────────────── */
+
+.intro {
+  padding-top: 72px;
+  padding-bottom: 64px;
+  border-bottom: 1px solid var(--border-muted);
 }
 
-.ambient {
-  z-index: -3;
-  background:
-    radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(202, 165, 102, 0.13), transparent 24rem),
-    radial-gradient(circle at 10% 100%, rgba(109, 79, 43, 0.1), transparent 34rem),
-    #080806;
-  transition: background 800ms cubic-bezier(0.16, 1, 0.3, 1);
+.intro .container {
+  max-width: 720px;
 }
 
-.grid {
-  z-index: -2;
-  opacity: 0.34;
-  background-image:
-    linear-gradient(rgba(220, 197, 159, 0.055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(220, 197, 159, 0.055) 1px, transparent 1px);
-  background-size: 54px 54px;
-  mask-image: linear-gradient(90deg, transparent, black 24%, black 76%, transparent);
+.name {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-accent);
+  margin-bottom: 16px;
 }
 
-.axis {
-  z-index: 4;
-  left: 50%;
-  width: 1px;
-  background: linear-gradient(transparent 4%, var(--line-color) 18%, var(--line-color) 82%, transparent 96%);
-  transform: skewX(-10deg);
-  transform-origin: center;
-  transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1), background 500ms ease;
+.role {
+  font-size: clamp(1.75rem, 4vw, 2.6rem);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin-bottom: 16px;
 }
 
-.gateway::before,
-.gateway::after {
-  content: "";
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 900ms cubic-bezier(0.16, 1, 0.3, 1);
+.descriptor {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  max-width: 56ch;
+  margin-bottom: 28px;
 }
 
-.gateway::before {
-  background: radial-gradient(ellipse at 26% 44%, rgba(157, 119, 69, 0.17), transparent 54%);
-}
-
-.gateway::after {
-  background: radial-gradient(ellipse at 76% 56%, rgba(82, 115, 111, 0.19), transparent 54%);
-}
-
-.hrActive::before,
-.clientActive::after {
-  opacity: 1;
-}
-
-.hrActive .axis {
-  transform: translateX(3vw) skewX(-10deg);
-}
-
-.clientActive .axis {
-  transform: translateX(-3vw) skewX(-10deg);
-}
-
-.identity {
-  position: absolute;
-  top: 34px;
-  left: 50%;
-  z-index: 6;
+.links {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  align-items: center;
+}
+
+.link {
+  display: inline-flex;
   align-items: center;
   gap: 7px;
-  transform: translateX(-50%);
-  text-align: center;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--border-focus);
+  transition: color var(--transition-fast), text-decoration-color var(--transition-fast);
 }
 
-.identityName {
-  position: relative;
-  color: rgba(244, 238, 228, 0.86);
+.link:hover {
+  color: var(--text-primary);
+  text-decoration-color: var(--text-muted);
+}
+
+/* ─── Selected work ──────────────────────────────────────────── */
+
+.workSection {
+  padding-top: 64px;
+  padding-bottom: 64px;
+  border-bottom: 1px solid var(--border-muted);
+}
+
+.sectionLabel {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  white-space: nowrap;
+  color: var(--text-muted);
+  margin-bottom: 28px;
 }
 
-.identityName::before,
-.identityName::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  width: 42px;
-  height: 1px;
-  background: rgba(210, 184, 141, 0.28);
+.projectList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px;
 }
 
-.identityName::before {
-  right: calc(100% + 16px);
-}
-
-.identityName::after {
-  left: calc(100% + 16px);
-}
-
-.identityRole {
-  color: rgba(244, 238, 228, 0.46);
-  font-family: var(--font-sans);
-  font-size: 0.73rem;
-  font-weight: 400;
-  letter-spacing: 0.01em;
-  white-space: nowrap;
-}
-
-.door {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  width: 57%;
-  color: rgba(244, 238, 228, 0.84);
-  outline: none;
-  transition:
-    width 900ms cubic-bezier(0.16, 1, 0.3, 1),
-    color 500ms ease,
-    background-color 700ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.door:focus-visible {
-  box-shadow: inset 0 0 0 1px rgba(226, 194, 139, 0.72);
-}
-
-.hrDoor {
-  left: 0;
-  justify-content: flex-start;
-  padding-left: clamp(28px, 7vw, 138px);
-  clip-path: polygon(0 0, 100% 0, 82% 100%, 0 100%);
-}
-
-.clientDoor {
-  right: 0;
-  justify-content: flex-end;
-  padding-right: clamp(28px, 7vw, 138px);
-  text-align: right;
-  clip-path: polygon(18% 0, 100% 0, 100% 100%, 0 100%);
-}
-
-.hrDoor:hover,
-.hrDoor:focus-visible {
-  background-color: rgba(154, 113, 61, 0.1);
-  color: #f8e6c6;
-}
-
-.clientDoor:hover,
-.clientDoor:focus-visible {
-  background-color: rgba(72, 108, 105, 0.1);
-  color: #e1f1eb;
-}
-
-.gateway:has(.hrDoor:hover) .hrDoor,
-.gateway:has(.hrDoor:focus-visible) .hrDoor,
-.gateway:has(.clientDoor:hover) .clientDoor,
-.gateway:has(.clientDoor:focus-visible) .clientDoor {
-  width: 63%;
-}
-
-.doorContent {
+.projectRow {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border-muted);
 }
 
-.clientDoor .doorContent {
-  align-items: flex-end;
-  text-align: right;
+.projectRow:first-child {
+  border-top: 1px solid var(--border-muted);
 }
 
-.doorSub {
+.projectMeta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.projectCategory {
   font-family: var(--font-mono);
-  font-size: 0.67rem;
-  font-weight: 500;
-  letter-spacing: 0.07em;
+  font-size: 0.63rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(244, 238, 228, 0.34);
-  transition: color 400ms ease;
+  color: var(--text-accent);
 }
 
-.hrDoor:hover .doorSub,
-.hrDoor:focus-visible .doorSub {
-  color: rgba(244, 238, 228, 0.68);
+.projectYear {
+  font-family: var(--font-mono);
+  font-size: 0.63rem;
+  color: var(--text-muted);
 }
 
-.clientDoor:hover .doorSub,
-.clientDoor:focus-visible .doorSub {
-  color: rgba(225, 241, 235, 0.68);
+.projectTitle {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+  margin: 0;
 }
 
-.doorText {
-  position: relative;
-  display: block;
-  max-width: 9ch;
-  font-family: var(--font-sans);
-  font-size: clamp(3rem, 7vw, 8.5rem);
+.projectSummary {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.projectActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+}
+
+.codeLink {
+  font-size: 0.85rem;
   font-weight: 500;
-  letter-spacing: 0;
-  line-height: 0.9;
-  text-wrap: balance;
-  transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1), letter-spacing 900ms cubic-bezier(0.16, 1, 0.3, 1);
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--transition-fast);
 }
 
-.doorText::after {
-  content: attr(data-text);
-  position: absolute;
-  inset: 0;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(244, 238, 228, 0.36);
-  opacity: 1;
-  clip-path: inset(0 100% 0 0);
-  transform: translate(0, 0);
-  transition: clip-path 700ms cubic-bezier(0.16, 1, 0.3, 1), transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+.codeLink:hover {
+  color: var(--text-secondary);
 }
 
-.hrDoor:hover .doorText,
-.hrDoor:focus-visible .doorText {
-  letter-spacing: 0;
-  transform: translateX(1vw);
+.caseLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-accent);
+  transition: color var(--transition-fast);
 }
 
-.clientDoor:hover .doorText,
-.clientDoor:focus-visible .doorText {
-  letter-spacing: 0;
-  transform: translateX(-1vw);
+.caseLink:hover {
+  color: var(--text-primary);
 }
 
-.door:hover .doorText::after,
-.door:focus-visible .doorText::after {
-  opacity: 1;
-  transform: translate(12px, 12px);
+.allWork {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--transition-fast);
 }
 
-.arrow {
-  width: clamp(28px, 3vw, 52px);
-  height: clamp(28px, 3vw, 52px);
-  margin-top: auto;
-  margin-bottom: clamp(28px, 5vw, 84px);
-  opacity: 0.42;
-  transition: opacity 500ms ease, transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+.allWork:hover {
+  color: var(--text-primary);
 }
 
-.hrDoor .arrow {
-  margin-left: clamp(14px, 2vw, 36px);
+/* ─── Audience signposts ─────────────────────────────────────── */
+
+.signpostSection {
+  padding-top: 56px;
 }
 
-.clientDoor .arrow {
-  order: -1;
-  margin-right: clamp(14px, 2vw, 36px);
+.signposts {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.door:hover .arrow,
-.door:focus-visible .arrow {
-  opacity: 1;
-  transform: translate(8px, -8px);
+.signpost {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+  border: 1px solid var(--border-muted);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  text-decoration: none;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
 }
 
-@media (max-width: 720px) {
-  .identity {
-    top: 24px;
+.signpost:hover {
+  border-color: var(--border-focus);
+  background: var(--bg-tertiary);
+}
+
+.signpostTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 4px;
+}
+
+.signpostDesc {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.signpostArrow {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition: transform var(--transition-fast), color var(--transition-fast);
+}
+
+.signpost:hover .signpostArrow {
+  transform: translateX(4px);
+  color: var(--text-secondary);
+}
+
+/* ─── Desktop ────────────────────────────────────────────────── */
+
+@media (min-width: 769px) {
+  .intro {
+    padding-top: 80px;
+    padding-bottom: 72px;
   }
 
-  .identityName {
-    font-size: 0.62rem;
-    letter-spacing: 0.22em;
+  .projectRow {
+    display: grid;
+    grid-template-columns: 200px 1fr auto;
+    align-items: start;
+    gap: 24px;
+    padding: 22px 0;
   }
 
-  .identityName::before,
-  .identityName::after {
-    width: 24px;
-  }
-
-  .identityRole {
-    white-space: normal;
-    text-align: center;
-    max-width: 80vw;
-    font-size: 0.68rem;
-  }
-
-  .doorSub {
-    font-size: 0.6rem;
-    letter-spacing: 0.05em;
-  }
-
-  .axis {
-    top: 50%;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent 4%, var(--line-color) 18%, var(--line-color) 82%, transparent 96%);
-    transform: skewY(-6deg);
-  }
-
-  .hrActive .axis {
-    transform: translateY(2vh) skewY(-6deg);
-  }
-
-  .clientActive .axis {
-    transform: translateY(-2vh) skewY(-6deg);
-  }
-
-  .door {
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 50%;
-    padding: 0 26px;
-    clip-path: none;
-    transition: height 520ms cubic-bezier(0.16, 1, 0.3, 1), opacity 240ms ease, transform 160ms ease, background-color 240ms ease;
-  }
-
-  .hrDoor {
-    top: 0;
-    bottom: auto;
-    align-items: flex-end;
-    justify-content: flex-start;
-    padding-bottom: 10vh;
-    border-bottom: 1px solid rgba(210, 184, 141, 0.2);
-  }
-
-  .clientDoor {
-    top: auto;
-    bottom: 0;
+  .projectMeta {
+    flex-direction: column;
     align-items: flex-start;
-    justify-content: flex-end;
-    padding-top: 10vh;
+    gap: 4px;
   }
 
-  .gateway:has(.hrDoor:hover) .hrDoor,
-  .gateway:has(.hrDoor:focus-visible) .hrDoor,
-  .gateway:has(.clientDoor:hover) .clientDoor,
-  .gateway:has(.clientDoor:focus-visible) .clientDoor {
-    width: 100%;
-    height: 50%;
+  .projectActions {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    padding-top: 0;
   }
 
-  .door:active {
-    transform: scale(0.985);
+  .signposts {
+    flex-direction: row;
+    gap: 16px;
   }
 
-  .expanding .door:not(.selectedDoor) {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-
-  .expanding .selectedDoor {
-    top: 0;
-    bottom: 0;
-    z-index: 8;
-    height: 100%;
-    border-bottom-color: transparent;
-    transform: scale(1);
-  }
-
-  .doorText {
-    width: 82vw;
-    max-width: none;
-    overflow-wrap: anywhere;
-    font-size: clamp(3.35rem, 14vw, 5.4rem);
-  }
-
-  .clientDoor .doorText {
-    width: 82vw;
-  }
-
-  .arrow {
-    position: absolute;
-    width: 32px;
-    height: 32px;
-    margin: 0;
-  }
-
-  .hrDoor .arrow {
-    right: 28px;
-    bottom: 11vh;
-  }
-
-  .clientDoor .arrow {
-    left: 28px;
-    top: 11vh;
+  .signpost {
+    flex: 1;
   }
 }
+
+/* ─── Reduced motion ─────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
-  .ambient,
-  .axis,
-  .gateway::before,
-  .gateway::after,
-  .door,
-  .doorText,
-  .doorText::after,
-  .doorSub,
-  .arrow {
+  .signpostArrow,
+  .link,
+  .codeLink,
+  .caseLink,
+  .allWork,
+  .signpost {
     transition: none;
-  }
-
-  .doorText::after {
-    display: none;
   }
 }

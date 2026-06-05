@@ -3,17 +3,13 @@
 import Link from "next/link"
 import { Activity, ArrowRight, ChevronDown, FileText, Github, Linkedin, Mail, MessageCircle } from "lucide-react"
 import { motion, useReducedMotion } from "framer-motion"
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent } from "react"
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react"
 import dynamic from "next/dynamic"
 const CVModal = dynamic(() => import("@/components/CVModal"), { ssr: false })
-import ScrambleText from "@/components/ScrambleText"
-import ExplodedProjectView from "@/components/ExplodedProjectView"
 import ProjectBriefCard from "@/components/ProjectBriefCard"
 import ProjectCard from "@/components/ProjectCard"
 import ScrollReveal from "@/components/ScrollReveal"
 import SectionHeader from "@/components/SectionHeader"
-import SectionMinimap from "@/components/SectionMinimap"
-import SignalTicker from "@/components/SignalTicker"
 import Timeline, { type TimelineStep } from "@/components/Timeline"
 import { projectCategoryGroups, projects, type Project } from "@/data/projects"
 import { useAppStore } from "@/lib/store"
@@ -74,9 +70,7 @@ export default function LandingPage({ content }: { content: LandingPageContent }
   const activeProject = useAppStore((state) => state.activeProject)
   const activeVisual = systemVisuals[activeProject ?? "opsflow"] ?? systemVisuals.opsflow
   const landingRef = useRef<HTMLDivElement>(null)
-  const pointerRafRef = useRef<number>(0)
   const [cvOpen, setCvOpen] = useState(false)
-  const gyroRafRef = useRef<number>(0)
 
   useEffect(() => {
     const handler = () => setCvOpen(true)
@@ -85,13 +79,6 @@ export default function LandingPage({ content }: { content: LandingPageContent }
   }, [])
   const computedAvailability = useMemo(getAvailability, [])
   const activeAvailability = content.availability ?? computedAvailability
-  const minimapSections = useMemo(() => [
-    { id: "landing-hero", label: "Intro" },
-    ...(content.showProcess !== false ? [{ id: "landing-process", label: "Process" }] : []),
-    { id: "landing-projects", label: "Work" },
-    { id: "landing-skills", label: "Stack" },
-    { id: "landing-contact", label: "Contact" },
-  ], [content.showProcess])
   const [filterTech, setFilterTech] = useState<string | null>(null)
   const [expandedSlug, setExpandedSlug] = useState<string | null>(null)
 
@@ -103,44 +90,6 @@ export default function LandingPage({ content }: { content: LandingPageContent }
   const filteredProjects = filterTech ? projects.filter((p) => p.techStack.includes(filterTech)) : projects
   const featuredProjects = filteredProjects.filter((p) => p.featured)
   const secondaryProjects = filteredProjects.filter((p) => !p.featured)
-
-  const handlePointerMove = (e: PointerEvent<HTMLDivElement>) => {
-    cancelAnimationFrame(pointerRafRef.current)
-    pointerRafRef.current = requestAnimationFrame(() => {
-      const x = (e.clientX / window.innerWidth) * 100
-      const y = (e.clientY / window.innerHeight) * 100
-      landingRef.current?.style.setProperty("--pointer-x", `${x}%`)
-      landingRef.current?.style.setProperty("--pointer-y", `${y}%`)
-    })
-  }
-
-  // Gyroscope: on mobile, device tilt drives the ambient glow + grid parallax
-  useEffect(() => {
-    if (!("DeviceOrientationEvent" in window)) return
-
-    const handleOrientation = (e: DeviceOrientationEvent) => {
-      if (e.gamma === null || e.beta === null) return
-      cancelAnimationFrame(gyroRafRef.current)
-      gyroRafRef.current = requestAnimationFrame(() => {
-        // gamma: left/right tilt (−90° to 90°) → pointer-x (25% to 75%)
-        // beta: front/back tilt (0°–180°, natural hold ≈45°) → pointer-y (32% to 68%)
-        const x = 50 + (e.gamma! / 45) * 25
-        const y = 50 + ((e.beta! - 45) / 40) * 18
-        const gx = (e.gamma! / 45).toFixed(3)   // −1 to 1 for grid parallax
-        const gy = ((e.beta! - 45) / 40).toFixed(3)
-        landingRef.current?.style.setProperty("--pointer-x", `${x.toFixed(1)}%`)
-        landingRef.current?.style.setProperty("--pointer-y", `${y.toFixed(1)}%`)
-        landingRef.current?.style.setProperty("--gyro-x", gx)
-        landingRef.current?.style.setProperty("--gyro-y", gy)
-      })
-    }
-
-    window.addEventListener("deviceorientation", handleOrientation, { passive: true })
-    return () => {
-      window.removeEventListener("deviceorientation", handleOrientation)
-      cancelAnimationFrame(gyroRafRef.current)
-    }
-  }, [])
 
   const filterBar = (
     <div className={styles.techFilterBar} role="group" aria-label="Filter projects by technology">
@@ -178,21 +127,9 @@ export default function LandingPage({ content }: { content: LandingPageContent }
     <div
       ref={landingRef}
       className={styles.landing}
-      style={{ "--system-accent": activeVisual.accent, "--pointer-x": "50%", "--pointer-y": "30%", "--gyro-x": "0", "--gyro-y": "0" } as CSSProperties}
-      onPointerMove={handlePointerMove}
+      style={{ "--system-accent": activeVisual.accent } as CSSProperties}
     >
-      <div className={styles.backdrop} aria-hidden="true">
-        {/* Pointer glow: no transition, snaps to cursor in real time */}
-        <div className={styles.ambientGlow} />
-        <span>{activeVisual.label}</span>
-      </div>
-
-      <div className={styles.minimapWrapper} aria-hidden="true">
-        <SectionMinimap sections={minimapSections} />
-      </div>
-
       <section id="landing-hero" className={styles.hero}>
-        <div className={styles.mesh} aria-hidden="true" />
         <div className={styles.badge}>{content.badge}</div>
 
         <motion.div
@@ -203,18 +140,14 @@ export default function LandingPage({ content }: { content: LandingPageContent }
         >
           <h1 className={styles.heroTitle}>
             {content.heroPrefix}{" "}
-            <ScrambleText
-              text={content.heroHighlight}
-              className={styles.heroHighlight}
-              delay={320}
-            />{" "}
+            <span className={styles.heroHighlight}>{content.heroHighlight}</span>{" "}
             {content.heroSuffix}
           </h1>
           <p className={styles.heroDescription}>{content.heroDescription}</p>
           <div className={styles.heroMetrics} aria-label="Portfolio proof points">
             {heroMetrics.map((metric) => (
               <div key={metric.label} className={styles.heroMetric}>
-                <CountUp value={metric.value} />
+                <strong>{metric.value}</strong>
                 <span>{metric.label}</span>
               </div>
             ))}
@@ -294,9 +227,6 @@ export default function LandingPage({ content }: { content: LandingPageContent }
           )}
         </div>
 
-        <div className={styles.tickerWrapper} aria-hidden="true">
-          <SignalTicker />
-        </div>
       </section>
 
       {content.showProcess !== false && (
@@ -397,17 +327,17 @@ export default function LandingPage({ content }: { content: LandingPageContent }
                                 ))}
                               </div>
                             </div>
-                            <Link href={`/work/${ep.slug}`} className={styles.bpCta}>
-                              <span>Analyze System Architecture</span>
-                              <ArrowRight size={15} />
-                            </Link>
-                          </div>
-                          {/* Visual column */}
-                          <div className={styles.briefPanelVisual}>
-                            <ExplodedProjectView
-                              projectId={ep.slug}
-                              className={styles.bpDiagram}
-                            />
+                            <div className={styles.bpCtaRow}>
+                              <Link href={`/work/${ep.slug}`} className={styles.bpCta}>
+                                <span>Analyze System Architecture</span>
+                                <ArrowRight size={15} />
+                              </Link>
+                              {ep.githubUrl && !ep.status?.toLowerCase().includes("private") && (
+                                <a href={ep.githubUrl} target="_blank" rel="noopener noreferrer" className={styles.bpCodeLink}>
+                                  View code ↗
+                                </a>
+                              )}
+                            </div>
                           </div>
                         </div>
                       )}
@@ -522,40 +452,6 @@ function getAvailability() {
   return { active: false, label: `Responds in ~${hrs}h · GST` }
 }
 
-function CountUp({ value, duration = 1100 }: { value: string; duration?: number }) {
-  const num = parseInt(value, 10)
-  const [count, setCount] = useState(0)
-  const elRef = useRef<HTMLElement>(null)
-  const started = useRef(false)
-
-  useEffect(() => {
-    if (isNaN(num)) return
-    const el = elRef.current
-    if (!el) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting || started.current) return
-        started.current = true
-        observer.disconnect()
-        const t0 = performance.now()
-        const tick = (now: number) => {
-          const t = Math.min((now - t0) / duration, 1)
-          setCount(Math.round((1 - (1 - t) ** 3) * num))
-          if (t < 1) requestAnimationFrame(tick)
-        }
-        requestAnimationFrame(tick)
-      },
-      { threshold: 0.3 },
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [num, duration])
-
-  if (isNaN(num)) return <strong>{value}</strong>
-  return <strong ref={elRef}>{count}</strong>
-}
-
 // ─── Project accordion card ───────────────────────────────────────────────────
 
 function ProjectAccordionCard({
@@ -614,10 +510,17 @@ function ProjectAccordionCard({
       )}
       <div className={styles.projectDetails}>
         <p>{project.outcome[0]}</p>
-        <Link href={`/work/${project.slug}`} className={styles.projectLink}>
-          <span>View case study</span>
-          <ArrowRight size={16} />
-        </Link>
+        <div className={styles.projectLinkRow}>
+          <Link href={`/work/${project.slug}`} className={styles.projectLink}>
+            <span>View case study</span>
+            <ArrowRight size={16} />
+          </Link>
+          {project.githubUrl && !project.status?.toLowerCase().includes("private") && (
+            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className={styles.projectCodeLink}>
+              View code ↗
+            </a>
+          )}
+        </div>
       </div>
     </article>
   )

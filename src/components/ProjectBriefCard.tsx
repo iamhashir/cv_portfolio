@@ -5,6 +5,10 @@ import { motion } from "framer-motion"
 import { Project } from "@/data/projects"
 import styles from "./project-brief-card.module.css"
 
+function isPrivate(status?: string) {
+  return status?.toLowerCase().includes("private") ?? false
+}
+
 interface Props {
   project: Project
   isExpanded: boolean
@@ -33,6 +37,17 @@ export default function ProjectBriefCard({ project, isExpanded, onToggle }: Prop
       <div className={styles.footer}>
         <span className={styles.projectName}>{project.title}</span>
         <span className={styles.year}>{project.year}</span>
+        {project.githubUrl && !isPrivate(project.status) && (
+          <a
+            href={project.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.codeLink}
+            onClick={(e) => e.stopPropagation()}
+          >
+            Code ↗
+          </a>
+        )}
         <motion.span
           className={styles.chevron}
           animate={{ rotate: isExpanded ? 180 : 0 }}

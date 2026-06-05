@@ -3,6 +3,10 @@ import { ArrowRight } from "lucide-react"
 import { Project } from "@/data/projects"
 import styles from "./project-card.module.css"
 
+function isPrivate(status?: string) {
+  return status?.toLowerCase().includes("private") ?? false
+}
+
 type ProjectCardProps = {
   project: Project
 }
@@ -49,10 +53,23 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           )}
         </ul>
 
-        <span className={styles.ctaLink}>
-          <span>View case study</span>
-          <ArrowRight size={16} />
-        </span>
+        <div className={styles.ctaRow}>
+          <span className={styles.ctaLink}>
+            <span>View case study</span>
+            <ArrowRight size={16} />
+          </span>
+          {project.githubUrl && !isPrivate(project.status) && (
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.codeLink}
+              onClick={(e) => e.stopPropagation()}
+            >
+              View code ↗
+            </a>
+          )}
+        </div>
       </div>
     </Link>
   )

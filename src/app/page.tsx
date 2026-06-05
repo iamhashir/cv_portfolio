@@ -1,97 +1,115 @@
-"use client"
-
 import Link from "next/link"
-import { ArrowUpRight } from "lucide-react"
-import { useReducedMotion } from "framer-motion"
-import { useRouter } from "next/navigation"
-import { useEffect, useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent } from "react"
+import { ArrowRight, FileText, Github, Mail } from "lucide-react"
+import { projects } from "@/data/projects"
 import styles from "./page.module.css"
 
-type Door = "hr" | "client" | null
-
 export default function Home() {
-  const shouldReduceMotion = useReducedMotion()
-  const router = useRouter()
-  const [activeDoor, setActiveDoor] = useState<Door>(null)
-  const [navigatingDoor, setNavigatingDoor] = useState<Door>(null)
-  const [pointer, setPointer] = useState({ x: 50, y: 50 })
-  const navigationTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  useEffect(() => {
-    return () => {
-      if (navigationTimer.current) clearTimeout(navigationTimer.current)
-    }
-  }, [])
-
-  const handlePointerMove = (event: PointerEvent<HTMLElement>) => {
-    if (shouldReduceMotion) return
-
-    const bounds = event.currentTarget.getBoundingClientRect()
-    setPointer({
-      x: ((event.clientX - bounds.left) / bounds.width) * 100,
-      y: ((event.clientY - bounds.top) / bounds.height) * 100,
-    })
-  }
-
-  const handleDoorClick = (event: MouseEvent<HTMLAnchorElement>, door: Exclude<Door, null>, href: string) => {
-    const isTouchCanvas = window.matchMedia("(max-width: 720px)").matches
-
-    if (!isTouchCanvas || shouldReduceMotion) return
-
-    event.preventDefault()
-    setNavigatingDoor(door)
-    navigationTimer.current = setTimeout(() => router.push(href), 520)
-  }
+  const featured = projects.filter((p) => p.featured)
 
   return (
-    <section
-      className={`${styles.gateway} ${activeDoor ? styles[`${activeDoor}Active`] : ""} ${navigatingDoor ? styles.expanding : ""}`}
-      style={{ "--pointer-x": `${pointer.x}%`, "--pointer-y": `${pointer.y}%` } as CSSProperties}
-      onPointerMove={handlePointerMove}
-      onPointerLeave={() => setActiveDoor(null)}
-    >
-      <div className={styles.ambient} aria-hidden="true" />
-      <div className={styles.grid} aria-hidden="true" />
-      <div className={styles.axis} aria-hidden="true" />
-
-      <div className={styles.identity}>
-        <span className={styles.identityName}>Malik Hashir</span>
-        <span className={styles.identityRole}>Full-stack engineer · CRM, automation &amp; AI tooling</span>
-      </div>
-
-      <Link
-        href="/hr"
-        className={`${styles.door} ${styles.hrDoor} ${navigatingDoor === "hr" ? styles.selectedDoor : ""}`}
-        onPointerEnter={() => setActiveDoor("hr")}
-        onFocus={() => setActiveDoor("hr")}
-        onBlur={() => setActiveDoor(null)}
-        onClick={(event) => handleDoorClick(event, "hr", "/hr")}
-      >
-        <div className={styles.doorContent}>
-          <span className={styles.doorText} data-text="I'm hiring">
-            I&apos;m hiring
-          </span>
-          <span className={styles.doorSub}>Looking to hire a full-stack engineer</span>
+    <div className={styles.home}>
+      {/* Identity */}
+      <section className={styles.intro}>
+        <div className="container">
+          <p className={styles.name}>Malik Hashir</p>
+          <h1 className={styles.role}>
+            Full-stack engineer building operational software for businesses.
+          </h1>
+          <p className={styles.descriptor}>
+            CRM systems, workflow automation, and AI tooling — the internal software that replaces manual coordination and runs reliably in production.
+          </p>
+          <div className={styles.links}>
+            <a
+              href="https://github.com/iamhashir"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.link}
+            >
+              <Github size={15} aria-hidden="true" />
+              <span>GitHub</span>
+            </a>
+            <a href="mailto:magnotekbyasool@gmail.com" className={styles.link}>
+              <Mail size={15} aria-hidden="true" />
+              <span>magnotekbyasool@gmail.com</span>
+            </a>
+            <a
+              href="/Malik_Hashir_CV.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.link}
+            >
+              <FileText size={15} aria-hidden="true" />
+              <span>Download CV</span>
+            </a>
+          </div>
         </div>
-        <ArrowUpRight className={styles.arrow} strokeWidth={1.25} aria-hidden="true" />
-      </Link>
+      </section>
 
-      <Link
-        href="/client"
-        className={`${styles.door} ${styles.clientDoor} ${navigatingDoor === "client" ? styles.selectedDoor : ""}`}
-        onPointerEnter={() => setActiveDoor("client")}
-        onFocus={() => setActiveDoor("client")}
-        onBlur={() => setActiveDoor(null)}
-        onClick={(event) => handleDoorClick(event, "client", "/client")}
-      >
-        <div className={styles.doorContent}>
-          <span className={styles.doorText} data-text="I need software built">
-            I need software built
-          </span>
-          <span className={styles.doorSub}>Need a CRM, automation, or operational system</span>
+      {/* Selected work */}
+      <section className={styles.workSection}>
+        <div className="container">
+          <h2 className={styles.sectionLabel}>Selected work</h2>
+          <ul className={styles.projectList}>
+            {featured.map((project) => (
+              <li key={project.slug} className={styles.projectRow}>
+                <div className={styles.projectMeta}>
+                  <span className={styles.projectCategory}>{project.category}</span>
+                  <span className={styles.projectYear}>{project.year}</span>
+                </div>
+                <div className={styles.projectInfo}>
+                  <h3 className={styles.projectTitle}>{project.title}</h3>
+                  <p className={styles.projectSummary}>{project.summary}</p>
+                </div>
+                <div className={styles.projectActions}>
+                  {project.githubUrl &&
+                    !project.status?.toLowerCase().includes("private") && (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.codeLink}
+                      >
+                        View code ↗
+                      </a>
+                    )}
+                  <Link href={`/work/${project.slug}`} className={styles.caseLink}>
+                    Case study <ArrowRight size={13} aria-hidden="true" />
+                  </Link>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <Link href="/work" className={styles.allWork}>
+            See all work <ArrowRight size={14} aria-hidden="true" />
+          </Link>
         </div>
-        <ArrowUpRight className={styles.arrow} strokeWidth={1.25} aria-hidden="true" />
-      </Link>
-    </section>
+      </section>
+
+      {/* Audience signposts */}
+      <section className={styles.signpostSection}>
+        <div className="container">
+          <div className={styles.signposts}>
+            <Link href="/hr" className={styles.signpost}>
+              <div>
+                <h3 className={styles.signpostTitle}>Looking to hire?</h3>
+                <p className={styles.signpostDesc}>
+                  Open to AI automation and full-stack engineering roles
+                </p>
+              </div>
+              <ArrowRight size={18} className={styles.signpostArrow} aria-hidden="true" />
+            </Link>
+            <Link href="/client" className={styles.signpost}>
+              <div>
+                <h3 className={styles.signpostTitle}>Need software built?</h3>
+                <p className={styles.signpostDesc}>
+                  Available for contract CRM, automation, and operations work
+                </p>
+              </div>
+              <ArrowRight size={18} className={styles.signpostArrow} aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
   )
 }
