@@ -297,7 +297,107 @@
   border-radius: 50%;
 }
 
-/* Responsive */
+/* ─── Entrance animations ───────────────────────────────────── */
+
+@keyframes revealUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes revealFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Page-load entrance: back link + header stagger in on arrival */
+.backLink {
+  animation: revealUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.title {
+  animation: revealUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.06s both;
+}
+
+.summary {
+  animation: revealUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+}
+
+.headerMetaGrid {
+  animation: revealUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.18s both;
+}
+
+/* Scroll-driven reveals — CSS-native, zero JS */
+@supports (animation-timeline: view()) {
+  .snapshotBox {
+    animation: revealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 28%;
+  }
+
+  .section {
+    animation: revealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 28%;
+  }
+
+  /* Architecture cards cascade in */
+  .archCard {
+    animation: revealUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 32%;
+  }
+
+  .archCard:nth-child(2) { animation-range: entry 5%  cover 37%; }
+  .archCard:nth-child(3) { animation-range: entry 10% cover 42%; }
+  .archCard:nth-child(4) { animation-range: entry 15% cover 47%; }
+
+  /* Challenge cards cascade */
+  .challengeCard {
+    animation: revealUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 35%;
+  }
+
+  .challengeCard:nth-child(2) { animation-range: entry 8% cover 43%; }
+
+  /* Snapshot items stagger */
+  .snapshotItem {
+    animation: revealFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 40%;
+  }
+
+  .snapshotItem:nth-child(2) { animation-range: entry 5%  cover 45%; }
+  .snapshotItem:nth-child(3) { animation-range: entry 10% cover 50%; }
+  .snapshotItem:nth-child(4) { animation-range: entry 15% cover 55%; }
+
+  /* Reflection items stagger */
+  .reflectionItem {
+    animation: revealFade 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 45%;
+  }
+
+  .reflectionItem:nth-child(2) { animation-range: entry 6%  cover 51%; }
+  .reflectionItem:nth-child(3) { animation-range: entry 12% cover 57%; }
+
+  /* Diagram box reveal */
+  .diagramBox {
+    animation: revealFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 30%;
+  }
+
+  /* Reflection box */
+  .reflectionBox {
+    animation: revealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 28%;
+  }
+}
+
+/* ─── Responsive ────────────────────────────────────────────── */
+
 @media (max-width: 900px) {
   .snapshotGrid {
     grid-template-columns: 1fr;

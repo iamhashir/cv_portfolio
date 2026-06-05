@@ -97,7 +97,13 @@ export default function LandingPage({ content }: { content: LandingPageContent }
       <div className={styles.backdrop} aria-hidden="true">
         {/* Pointer glow: no transition, snaps to cursor in real time */}
         <div className={styles.ambientGlow} />
-        <span>{activeVisual.label}</span>
+        {/* key forces remount → re-triggers scramble on every project change */}
+        <ScrambleText
+          key={activeVisual.label}
+          text={activeVisual.label}
+          className={styles.backdropLabel}
+          delay={0}
+        />
       </div>
 
       <div className={styles.minimapWrapper} aria-hidden="true">

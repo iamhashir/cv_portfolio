@@ -61,7 +61,7 @@
   animation: circuitDrift 10s ease-in-out infinite alternate;
 }
 
-.backdrop span {
+.backdropLabel {
   position: absolute;
   right: 18px;
   bottom: 20px;
@@ -74,6 +74,7 @@
   line-height: 1.45;
   text-align: right;
   text-transform: uppercase;
+  transition: color 380ms ease;
 }
 
 /* ─── Hero ──────────────────────────────────────────────────── */

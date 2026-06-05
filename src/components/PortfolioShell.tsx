@@ -7,6 +7,7 @@ import Cursor from "@/components/Cursor"
 import Footer from "@/components/Footer"
 import Navbar from "@/components/Navbar"
 import PageTransition from "@/components/PageTransition"
+import ScrollProgress from "@/components/ScrollProgress"
 import { useMobileExperience } from "@/lib/useMobileExperience"
 
 export default function PortfolioShell({ children }: { children: React.ReactNode }) {
@@ -45,9 +46,12 @@ export default function PortfolioShell({ children }: { children: React.ReactNode
   // Default (null) falls through to full shell so desktop never flashes mobile layout
   if (isAudienceLanding && isMobile === true) {
     return (
-      <main className="mobile-main-content">
-        <PageTransition>{children}</PageTransition>
-      </main>
+      <>
+        <ScrollProgress />
+        <main className="mobile-main-content">
+          <PageTransition>{children}</PageTransition>
+        </main>
+      </>
     )
   }
 
@@ -56,6 +60,7 @@ export default function PortfolioShell({ children }: { children: React.ReactNode
   // Audience landings skip the footer (they have their own contact section)
   return (
     <>
+      <ScrollProgress />
       <Cursor />
       {isMobile === false && <AuditToggle />}
       {DesktopScene && <DesktopScene />}

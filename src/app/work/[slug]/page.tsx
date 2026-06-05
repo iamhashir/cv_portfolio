@@ -4,7 +4,11 @@ import { ArrowLeft, Server, Cpu, Database, Link2, Key, HelpCircle } from "lucide
 import { projects } from "@/data/projects"
 import { ArchitectureDiagram } from "@/lib/architectureDiagrams"
 import SectionMinimap from "@/components/SectionMinimap"
+import ProjectConsole from "@/components/ProjectConsole"
 import styles from "./project-detail.module.css"
+
+/** Prototype: projects routed through the new Console layout. */
+const CONSOLE_PROTOTYPE = new Set(["mina-games"])
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -36,6 +40,10 @@ export default async function ProjectPage({ params }: Props) {
 
   if (!project) {
     notFound()
+  }
+
+  if (CONSOLE_PROTOTYPE.has(slug)) {
+    return <ProjectConsole project={project} slug={slug} />
   }
 
   return (

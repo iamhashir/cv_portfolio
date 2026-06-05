@@ -1,6 +1,6 @@
 /* Only active on fine-pointer (mouse) devices */
 @media (pointer: fine) {
-  *, *::before, *::after {
+  :global(*), :global(*::before), :global(*::after) {
     cursor: none !important;
   }
 }
