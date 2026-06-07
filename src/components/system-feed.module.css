@@ -1,0 +1,191 @@
+/* ─── SystemFeed — the "Noise" monitor ──────────────────────── */
+
+.monitor {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 340px;
+  border: 1px solid var(--border-muted);
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, rgba(201, 169, 110, 0.025), transparent 40%),
+    var(--bg-secondary);
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Title bar — terminal chrome */
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border-muted);
+  background: var(--bg-tertiary);
+  flex-shrink: 0;
+}
+
+.dots {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.dots i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--border-focus);
+}
+
+.dots i:nth-child(1) { background: #c9756e; }
+.dots i:nth-child(2) { background: #c9a96e; }
+.dots i:nth-child(3) { background: #6ee7b7; }
+
+.barLabel {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.live {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--status-active);
+}
+
+.liveDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--status-active);
+  box-shadow: 0 0 6px var(--status-active-glow);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+/* Scrolling screen */
+.screen {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  padding: 6px 0;
+}
+
+.track {
+  display: flex;
+  flex-direction: column;
+  animation: feedScroll 34s linear infinite;
+  will-change: transform;
+}
+
+/* Pause so recruiters can actually read it */
+.monitor:hover .track {
+  animation-play-state: paused;
+}
+
+@keyframes feedScroll {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-50%); }
+}
+
+.line {
+  display: grid;
+  grid-template-columns: auto auto auto 1fr;
+  align-items: baseline;
+  gap: 10px;
+  padding: 5px 16px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.time {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.level {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  min-width: 50px;
+}
+
+.deploy { color: #c9a96e; }
+.ws     { color: #6ee7b7; }
+.infer  { color: #d4b896; }
+.cron   { color: #a89f91; }
+.db     { color: #9db4c9; }
+.ok     { color: #6ee7b7; }
+.warn   { color: #c9a06e; }
+
+.tag {
+  color: var(--text-accent);
+  opacity: 0.7;
+  min-width: 64px;
+}
+
+.msg {
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Subtle moving scanline for CRT/monitor feel */
+.scanline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 60px;
+  top: -60px;
+  background: linear-gradient(180deg, transparent, rgba(201, 169, 110, 0.05), transparent);
+  animation: scan 6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes scan {
+  from { transform: translateY(0); }
+  to   { transform: translateY(460px); }
+}
+
+/* Edge fades */
+.fadeTop,
+.fadeBottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 48px;
+  pointer-events: none;
+}
+
+.fadeTop {
+  top: 0;
+  background: linear-gradient(180deg, var(--bg-secondary), transparent);
+}
+
+.fadeBottom {
+  bottom: 0;
+  background: linear-gradient(0deg, var(--bg-secondary), transparent);
+}
+
+/* ─── Reduced motion: freeze the stream, keep it legible ─────── */
+@media (prefers-reduced-motion: reduce) {
+  .track { animation: none !important; transform: none !important; }
+  .scanline { display: none; }
+  .liveDot { animation: none !important; }
+}

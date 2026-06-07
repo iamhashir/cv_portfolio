@@ -2,9 +2,10 @@
   "mcpServers": {
     "magic": {
       "command": "npx",
-      "args": ["-y", "@21st-dev/magic@latest"],
+      "args": ["-y", "@21st-dev/magic@latest", "API_KEY=4b01e913eeb236adc14c5364cbc3bf7faf5eafbd6771622ccffcb72ce9c600a5"],
       "env": {
-        "MAGIC_API_KEY": "${MAGIC_API_KEY}"
+        "API_KEY": "4b01e913eeb236adc14c5364cbc3bf7faf5eafbd6771622ccffcb72ce9c600a5",
+        "TWENTY_FIRST_API_KEY": "4b01e913eeb236adc14c5364cbc3bf7faf5eafbd6771622ccffcb72ce9c600a5"
       }
     }
   }

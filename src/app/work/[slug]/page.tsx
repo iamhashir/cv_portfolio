@@ -13,7 +13,7 @@ interface Props {
 }
 
 /** Prototype: projects routed through the new Console layout. */
-const CONSOLE_PROTOTYPE = new Set(["reactor", "mina-games", "opsflow", "financesmith", "traverse", "ui-analyzer"])
+const CONSOLE_PROTOTYPE = new Set<string>([])
 
 export async function generateStaticParams() {
   return projects.map((project) => ({
