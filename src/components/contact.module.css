@@ -37,9 +37,11 @@
 }
 
 .card {
-  /* Dark embossed panel — like a business card holder insert */
+  /* Glass panel — frosted dark surface */
   background:
-    linear-gradient(160deg, #111009 0%, #0d0c08 100%);
+    linear-gradient(160deg, rgba(17, 16, 9, 0.88) 0%, rgba(13, 12, 8, 0.82) 100%);
+  backdrop-filter: blur(20px) saturate(115%);
+  -webkit-backdrop-filter: blur(20px) saturate(115%);
   border: 1px solid rgba(201, 169, 110, 0.2);
   border-radius: 10px;
   padding: 32px;
@@ -47,21 +49,20 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 16px;
-  /* Embossed depth */
   box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(201, 169, 110, 0.07),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    0 2px 12px rgba(0, 0, 0, 0.46),
+    inset 0 1px 0 rgba(201, 169, 110, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.18);
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
 }
 
 .card:hover {
-  border-color: rgba(201, 169, 110, 0.38);
+  border-color: rgba(201, 169, 110, 0.4);
   transform: translateY(-2px);
   box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.5),
+    0 12px 32px rgba(0, 0, 0, 0.48),
     inset 0 1px 0 rgba(201, 169, 110, 0.1),
-    0 0 16px rgba(201, 169, 110, 0.05);
+    0 0 24px rgba(201, 169, 110, 0.06);
 }
 
 .iconWrapper {
@@ -110,7 +111,7 @@
 /* ─── Business Card ──────────────────────────────────────────── */
 
 .copySection {
-  /* Physical business card proportions & embossed dark surface */
+  /* Glass business card — frosted with warm amber shimmer */
   position: relative;
   max-width: 620px;
   margin: 0 auto;
@@ -121,20 +122,22 @@
   align-items: center;
   gap: 24px;
 
-  /* Embossed dark card — near-black with warm hint */
   background:
-    linear-gradient(160deg, #0d0b08 0%, #0a0907 40%, #0c0a07 100%);
-  border: 1px solid rgba(201, 169, 110, 0.42);
+    radial-gradient(ellipse 90% 70% at 50% 50%, rgba(201, 169, 110, 0.045) 0%, transparent 65%),
+    linear-gradient(160deg, rgba(13, 11, 8, 0.88) 0%, rgba(10, 9, 7, 0.84) 40%, rgba(12, 10, 7, 0.88) 100%);
+  backdrop-filter: blur(24px) saturate(125%);
+  -webkit-backdrop-filter: blur(24px) saturate(125%);
+  border: 1px solid rgba(201, 169, 110, 0.44);
   border-radius: 14px;
 
-  /* Multi-layer physical card shadow */
+  /* Multi-layer glass card shadow */
   box-shadow:
-    0 6px 24px rgba(0, 0, 0, 0.6),
-    0 0 0 1px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(201, 169, 110, 0.14),   /* top gold sheen */
-    inset 0 -1px 0 rgba(0, 0, 0, 0.3),          /* bottom shadow */
-    inset 1px 0 0 rgba(201, 169, 110, 0.06),
-    inset -1px 0 0 rgba(201, 169, 110, 0.06);
+    0 8px 32px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(201, 169, 110, 0.16),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.25),
+    inset 1px 0 0 rgba(201, 169, 110, 0.07),
+    inset -1px 0 0 rgba(201, 169, 110, 0.07);
 }
 
 /* Engraved line detail across the card top */

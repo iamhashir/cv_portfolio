@@ -35,6 +35,20 @@
   /* Animation / Transitions — slow, refined */
   --transition-fast: 0.18s ease;
   --transition-normal: 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Glassmorphism tokens */
+  --glass-bg: rgba(14, 13, 11, 0.62);
+  --glass-bg-medium: rgba(16, 15, 12, 0.74);
+  --glass-bg-heavy: rgba(11, 10, 8, 0.86);
+  --glass-border: rgba(201, 169, 110, 0.13);
+  --glass-border-strong: rgba(201, 169, 110, 0.24);
+  --glass-blur: 20px;
+  --glass-shine: inset 0 1px 0 rgba(210, 170, 90, 0.07);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.42), 0 2px 8px rgba(0, 0, 0, 0.28);
+
+  /* Gradient ambient orbs */
+  --orb-amber: rgba(201, 169, 110, 0.065);
+  --orb-emerald: rgba(110, 231, 183, 0.038);
 }
 /* Base resets */
 *, *::before, *::after {
@@ -44,7 +58,10 @@
 }
 
 html, body {
-  background-color: var(--bg-primary);
+  background:
+    radial-gradient(ellipse 120% 65% at 8% 0%, var(--orb-amber) 0%, transparent 58%),
+    radial-gradient(ellipse 80% 55% at 92% 96%, var(--orb-emerald) 0%, transparent 52%),
+    var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-sans);
   font-size: 16px;

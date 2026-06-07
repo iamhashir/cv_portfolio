@@ -5,19 +5,25 @@
   left: 0;
   width: 100%;
   height: var(--header-height);
-  background-color: transparent;
+  background: rgba(9, 8, 6, 0.22);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid transparent;
   z-index: 100;
   display: flex;
   align-items: center;
-  transition: background-color var(--transition-normal), border-color var(--transition-normal);
+  transition: background var(--transition-normal), border-color var(--transition-normal), backdrop-filter var(--transition-normal);
 }
 
 .navbarScrolled {
-  background-color: rgba(11, 13, 18, 0.8);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border-muted);
+  background:
+    linear-gradient(180deg, rgba(9, 8, 6, 0.88) 0%, rgba(12, 11, 9, 0.82) 100%);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow:
+    0 1px 0 rgba(201, 169, 110, 0.06),
+    0 4px 24px rgba(0, 0, 0, 0.28);
 }
 
 /* Animated gradient line at bottom of navbar */
@@ -203,8 +209,12 @@
 .footer {
   position: relative;
   z-index: 1;
-  border-top: 1px solid var(--border-muted);
-  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--glass-border);
+  background:
+    linear-gradient(180deg, rgba(20, 19, 16, 0.62) 0%, rgba(14, 13, 11, 0.88) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: inset 0 1px 0 rgba(201, 169, 110, 0.05);
   padding: 48px 0 32px 0;
   margin-top: auto;
 }
