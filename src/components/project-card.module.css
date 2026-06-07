@@ -21,7 +21,14 @@
     0 0 0 1px rgba(0, 0, 0, 0.25),
     inset 0 1px 0 rgba(210, 170, 90, 0.05);
 
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+  transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 250ms ease-out, border-color 250ms ease-out;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.card:focus-visible {
+  outline-color: #d4b896;
+  outline-offset: 4px;
 }
 
 .card:hover {
@@ -29,9 +36,7 @@
   transform: translateY(-5px) rotate(-0.25deg);
   box-shadow:
     0 16px 40px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(180, 140, 68, 0.12),
-    0 0 28px rgba(180, 140, 68, 0.07),
-    inset 0 1px 0 rgba(210, 170, 90, 0.08);
+    0 0 0 1px rgba(180, 140, 68, 0.15);
 }
 
 /* ─── Folder tab strip ────────────────────────────────────────── */
@@ -110,8 +115,8 @@
 .metadataGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  padding: 16px 0;
+  gap: 20px;
+  padding: 20px 0;
   border-top: 1px solid rgba(180, 140, 68, 0.12);
   border-bottom: 1px solid rgba(180, 140, 68, 0.12);
   margin-bottom: 22px;
@@ -135,9 +140,9 @@
   font-size: 0.85rem;
   color: var(--text-primary);
   font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.4;
 }
 
 .stackList {
@@ -168,7 +173,7 @@
 .ctaRow {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
   flex-wrap: wrap;
   margin-top: auto;
 }
@@ -181,6 +186,8 @@
   font-weight: 600;
   color: var(--text-primary);
   transition: color var(--transition-fast);
+  min-height: 44px;
+  padding: 8px 0;
 }
 
 .codeLink {
@@ -190,6 +197,10 @@
   text-decoration: underline;
   text-underline-offset: 3px;
   transition: color var(--transition-fast);
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 0;
 }
 
 .codeLink:hover {
@@ -205,7 +216,23 @@
 }
 
 .card:hover .ctaLink svg {
-  transform: translateX(4px);
+  transform: translateX(6px);
+}
+
+/* ─── Reduced Motion ──────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none !important;
+  }
+
+  .card:hover {
+    transform: none;
+  }
+
+  .card:hover .ctaLink svg {
+    transform: none;
+  }
 }
 
 /* ─── Responsive ──────────────────────────────────────────────── */

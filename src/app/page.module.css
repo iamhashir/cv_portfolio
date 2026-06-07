@@ -96,6 +96,12 @@
   text-decoration-color: var(--text-muted);
 }
 
+.link:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
 /* ─── Selected work ──────────────────────────────────────────── */
 
 .workSection {
@@ -192,6 +198,10 @@
   text-decoration: underline;
   text-underline-offset: 3px;
   transition: color var(--transition-fast);
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 0;
 }
 
 .codeLink:hover {
@@ -206,10 +216,18 @@
   font-weight: 600;
   color: var(--text-accent);
   transition: color var(--transition-fast);
+  min-height: 44px;
+  padding: 8px 0;
 }
 
 .caseLink:hover {
   color: var(--text-primary);
+}
+
+.caseLink:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 .allWork {
@@ -226,6 +244,12 @@
 
 .allWork:hover {
   color: var(--text-primary);
+}
+
+.allWork:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 4px;
+  border-radius: 2px;
 }
 
 /* ─── Audience signposts ─────────────────────────────────────── */
@@ -251,11 +275,18 @@
   background: var(--bg-secondary);
   text-decoration: none;
   transition: border-color var(--transition-fast), background var(--transition-fast);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
 }
 
 .signpost:hover {
   border-color: var(--border-focus);
   background: var(--bg-tertiary);
+}
+
+.signpost:focus-visible {
+  outline-color: var(--accent-color);
+  outline-offset: 4px;
 }
 
 .signpostTitle {
@@ -279,13 +310,34 @@
 }
 
 .signpost:hover .signpostArrow {
-  transform: translateX(4px);
+  transform: translateX(8px);
   color: var(--text-secondary);
+}
+
+/* ─── Tablet ─────────────────────────────────────────────────── */
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .projectRow {
+    grid-template-columns: 140px 1fr 110px;
+    gap: 16px;
+  }
+
+  .projectMeta {
+    gap: 2px;
+  }
+
+  .projectTitle {
+    font-size: 0.95rem;
+  }
+
+  .projectActions {
+    gap: 6px;
+  }
 }
 
 /* ─── Desktop ────────────────────────────────────────────────── */
 
-@media (min-width: 769px) {
+@media (min-width: 1025px) {
   .intro {
     padding-top: 80px;
     padding-bottom: 72px;
@@ -331,6 +383,7 @@
   .caseLink,
   .allWork,
   .signpost {
-    transition: none;
+    transition: none !important;
+    transform: none !important;
   }
 }
