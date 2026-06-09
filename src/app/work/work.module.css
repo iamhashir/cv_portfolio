@@ -74,17 +74,14 @@
   color: var(--text-accent);
 }
 
-/* Giant gradient title */
+/* Giant title */
 .title {
   font-family: var(--font-display, var(--font-sans));
   font-size: clamp(3.2rem, 7vw, 5.5rem);
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 0.95;
-  background: linear-gradient(135deg, #f0ebe2 0%, #c9a96e 55%, #b8894a 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ffffff;
   margin: 0;
 }
 
@@ -315,10 +312,7 @@
 /* ── Light Theme ─────────────────────────────────────────────── */
 
 :global([data-theme="light"]) .title {
-  background: linear-gradient(135deg, #1a1209 0%, #c9a96e 60%, #a8874e 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #1a1209;
 }
 
 :global([data-theme="light"]) .headerOrb {
