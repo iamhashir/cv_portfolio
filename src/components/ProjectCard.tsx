@@ -9,14 +9,23 @@ function isPrivate(status?: string) {
 
 type ProjectCardProps = {
   project: Project
+  featured?: boolean
 }
 
-export default function ProjectCard({ project }: ProjectCardProps) {
+export default function ProjectCard({ project, featured = false }: ProjectCardProps) {
   return (
-    <Link href={`/work/${project.slug}`} className={styles.card}>
-      <div className={styles.category}>{project.category}</div>
-      <div className={styles.cardBody}>
-        <h3 className={styles.title}>{project.title}</h3>
+    <Link
+      href={`/work/${project.slug}`}
+      className={`${styles.card} ${featured ? styles.cardFeatured : ""}`}
+    >
+      <div className={styles.category}>
+        {project.category}
+        {featured && <span className={styles.featuredBadge}>Featured</span>}
+      </div>
+      <div className={`${styles.cardBody} ${featured ? styles.cardBodyFeatured : ""}`}>
+        <h3 className={`${styles.title} ${featured ? styles.titleFeatured : ""}`}>
+          {project.title}
+        </h3>
         <p className={styles.summary}>{project.summary}</p>
 
         {project.metric && (
@@ -41,18 +50,36 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             <span className={styles.metaLabel}>Year</span>
             <span className={styles.metaVal}>{project.year}</span>
           </div>
+          {featured && (
+            <div className={styles.metaItem}>
+              <span className={styles.metaLabel}>Stack</span>
+              <span className={styles.metaVal}>{project.techStack?.slice(0, 3).join(", ")}</span>
+            </div>
+          )}
         </div>
 
-        <ul className={styles.stackList}>
-          {project.techStack?.slice(0, 4).map((tech) => (
-            <li key={tech} className={styles.stackItem}>
-              {tech}
-            </li>
-          ))}
-          {project.techStack?.length > 4 && (
-            <li className={styles.stackItem}>+{project.techStack.length - 4}</li>
-          )}
-        </ul>
+        {!featured && (
+          <ul className={styles.stackList}>
+            {project.techStack?.slice(0, 4).map((tech) => (
+              <li key={tech} className={styles.stackItem}>
+                {tech}
+              </li>
+            ))}
+            {project.techStack?.length > 4 && (
+              <li className={styles.stackItem}>+{project.techStack.length - 4}</li>
+            )}
+          </ul>
+        )}
+
+        {featured && (
+          <ul className={styles.stackList}>
+            {project.techStack?.map((tech) => (
+              <li key={tech} className={styles.stackItem}>
+                {tech}
+              </li>
+            ))}
+          </ul>
+        )}
 
         <div className={styles.ctaRow}>
           <span className={styles.ctaLink}>

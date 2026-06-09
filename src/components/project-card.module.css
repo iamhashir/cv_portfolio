@@ -90,13 +90,20 @@
 }
 
 .title {
-  font-family: var(--font-sans);
+  font-family: var(--font-display, var(--font-sans));
   font-size: 1.8rem;
-  font-weight: 500;
+  font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 12px;
-  line-height: 1.2;
-  letter-spacing: 0;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.titleFeatured {
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
 }
 
 .summary {
@@ -242,6 +249,79 @@
   transform: translateX(6px);
 }
 
+/* ─── Featured Hero Card ──────────────────────────────────────── */
+
+.cardFeatured {
+  border-color: rgba(201, 169, 110, 0.32);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(0, 0, 0, 0.22),
+    0 0 48px rgba(201, 169, 110, 0.06),
+    inset 0 1px 0 rgba(210, 170, 90, 0.1);
+}
+
+.cardFeatured:hover {
+  border-color: rgba(201, 169, 110, 0.55);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.52),
+    0 0 0 1px rgba(201, 169, 110, 0.18),
+    0 0 64px rgba(201, 169, 110, 0.1),
+    inset 0 1px 0 rgba(210, 170, 90, 0.12);
+}
+
+.cardBodyFeatured {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  column-gap: 48px;
+  row-gap: 0;
+}
+
+.cardBodyFeatured .title {
+  grid-column: 1 / -1;
+}
+
+.cardBodyFeatured .summary {
+  grid-column: 1;
+  flex-grow: 0;
+}
+
+.cardBodyFeatured .metricCallout {
+  grid-column: 2;
+  grid-row: 2;
+  margin-bottom: 0;
+  align-self: start;
+}
+
+.cardBodyFeatured .metadataGrid {
+  grid-column: 1;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.cardBodyFeatured .stackList {
+  grid-column: 1 / -1;
+}
+
+.cardBodyFeatured .ctaRow {
+  grid-column: 1 / -1;
+}
+
+.featuredBadge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 10px;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: rgba(201, 169, 110, 0.15);
+  border: 1px solid rgba(201, 169, 110, 0.3);
+  color: var(--text-accent);
+  vertical-align: middle;
+}
+
 /* ─── Reduced Motion ──────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
@@ -317,4 +397,16 @@
   box-shadow:
     0 1px 0 rgba(255,255,255,0.95) inset,
     0 2px 0 rgba(160,120,60,0.07);
+}
+:global([data-theme="light"]) .cardFeatured {
+  border-color: rgba(160,120,60,0.3);
+  box-shadow:
+    0 4px 16px rgba(0,0,0,0.09),
+    0 0 48px rgba(201,169,110,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.95);
+}
+:global([data-theme="light"]) .featuredBadge {
+  background: rgba(201,169,110,0.12);
+  border-color: rgba(160,120,60,0.28);
+  color: #a8874e;
 }
