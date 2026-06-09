@@ -1,82 +1,87 @@
 /* Custom Reset & Typography Tokens */
 :root {
-  /* Colors — Warm Ink Editorial Palette */
-  --bg-primary: #0e0d0b;       /* Deep warm ink */
-  --bg-secondary: #141310;     /* Charcoal secondary */
-  --bg-tertiary: #1c1a17;      /* Lifted charcoal tertiary */
+  /* Colors — Rich Warm Parchment Palette */
+  --bg-primary: #0f0c08;       /* Deep espresso ink — amber-tinted */
+  --bg-secondary: #171209;     /* Darker coffee layer */
+  --bg-tertiary: #201912;      /* Rich warm tertiary */
 
-  --border-muted: #272420;
-  --border-focus: #3d3830;
+  --border-muted: #2e2618;     /* Amber-tinted border */
+  --border-focus: #4a3e28;     /* Rich amber focus border */
 
-  --navbar-scrolled-bg: linear-gradient(180deg, rgba(9, 8, 6, 0.88) 0%, rgba(12, 11, 9, 0.82) 100%);
+  --navbar-scrolled-bg: linear-gradient(180deg, rgba(8, 6, 4, 0.92) 0%, rgba(12, 9, 5, 0.86) 100%);
 
-  /* Muted Amber Accent — used sparingly */
-  --accent-color: #c9a96e;     /* Warm muted amber */
-  --accent-muted: #a8874e;     /* Deeper amber on hover */
-  --accent-glow: rgba(201, 169, 110, 0.06);
-  --accent-glow-hover: rgba(201, 169, 110, 0.14);
+  /* Rich Amber Accent */
+  --accent-color: #c9a96e;
+  --accent-muted: #a8874e;
+  --accent-glow: rgba(201, 169, 110, 0.1);
+  --accent-glow-hover: rgba(201, 169, 110, 0.22);
 
-  /* Status — keep emerald, it reads clearly on warm dark */
-  --status-active: #6ee7b7;    /* Soft mint active */
+  /* Status */
+  --status-active: #6ee7b7;
   --status-active-glow: rgba(110, 231, 183, 0.12);
 
-  /* Warm Ivory Text Neutrals */
-  --text-primary: #f0ebe2;     /* Warm ivory */
-  --text-secondary: #a89f91;   /* Warm stone */
-  --text-muted: #6b6358;       /* Muted warm grey */
-  --text-accent: #d4b896;      /* Soft amber text */
+  /* Rich Cream Text Neutrals */
+  --text-primary: #f8f0dc;     /* Warm thick cream */
+  --text-secondary: #b5a48a;   /* Warm parchment stone */
+  --text-muted: #7a6d5a;       /* Warm muted */
+  --text-accent: #d4b896;
   --text-gold: #c9a96e;
 
-  /* Font Families — --font-mono and --font-display are injected by Next.js font classes on <html> */
+  /* Font Families */
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
   /* Layout */
   --max-width: 1200px;
   --header-height: 72px;
 
-  /* Animation / Transitions — slow, refined */
+  /* Animation / Transitions */
   --transition-fast: 0.18s ease;
   --transition-normal: 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* Glassmorphism tokens */
-  --glass-bg: rgba(14, 13, 11, 0.62);
-  --glass-bg-medium: rgba(16, 15, 12, 0.74);
-  --glass-bg-heavy: rgba(11, 10, 8, 0.86);
-  --glass-border: rgba(201, 169, 110, 0.13);
-  --glass-border-strong: rgba(201, 169, 110, 0.24);
+  /* Glassmorphism — amber-tinted glass surfaces */
+  --glass-bg: rgba(15, 11, 6, 0.66);
+  --glass-bg-medium: rgba(18, 13, 7, 0.78);
+  --glass-bg-heavy: rgba(12, 9, 5, 0.90);
+  --glass-border: rgba(201, 169, 110, 0.22);
+  --glass-border-strong: rgba(201, 169, 110, 0.40);
   --glass-blur: 20px;
-  --glass-shine: inset 0 1px 0 rgba(210, 170, 90, 0.07);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.42), 0 2px 8px rgba(0, 0, 0, 0.28);
+  --glass-shine: inset 0 1px 0 rgba(220, 180, 100, 0.12);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.52), 0 2px 8px rgba(0, 0, 0, 0.32);
 
-  /* Gradient ambient orbs */
-  --orb-amber: rgba(201, 169, 110, 0.065);
-  --orb-emerald: rgba(110, 231, 183, 0.038);
+  /* Rich ambient orbs */
+  --orb-amber: rgba(201, 169, 110, 0.15);
+  --orb-warm:  rgba(180, 130, 55, 0.07);
+  --orb-depth: rgba(140, 90, 30, 0.04);
 }
-/* Light Theme — Warm Cream Editorial */
+/* Light Theme — Rich Butter Cream */
 [data-theme="light"] {
-  --bg-primary: #faf8f5;
-  --bg-secondary: #f2ede6;
-  --bg-tertiary: #e8e2d8;
+  --bg-primary: #fef8ea;        /* Rich warm cream — like butter or heavy cream */
+  --bg-secondary: #f5e8cf;      /* Cream paper */
+  --bg-tertiary: #ebd8b8;       /* Deep cream parchment */
 
-  --border-muted: #ddd5c8;
-  --border-focus: #c9bfb0;
+  --border-muted: #d9c49a;      /* Warm golden border */
+  --border-focus: #c4a870;      /* Amber focus border */
 
   --status-active: #0a7c52;
   --status-active-glow: rgba(10, 124, 82, 0.12);
 
-  --text-primary: #1a1612;
-  --text-secondary: #5c5248;
-  --text-muted: #8c7d70;
-  --text-accent: #a8874e;
-  --text-gold: #c9a96e;
+  --text-primary: #1c1207;      /* Deep warm ink */
+  --text-secondary: #5a4a32;    /* Warm brown */
+  --text-muted: #8c7860;        /* Warm muted */
+  --text-accent: #a8784a;
+  --text-gold: #b08040;
 
-  --navbar-scrolled-bg: rgba(250, 248, 245, 0.92);
+  --navbar-scrolled-bg: rgba(254, 248, 234, 0.94);
 
-  --glass-bg: rgba(250, 248, 245, 0.6);
-  --glass-border: rgba(201, 169, 110, 0.2);
-  --glass-border-strong: rgba(201, 169, 110, 0.35);
-  --glass-shine: inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  --footer-bg: linear-gradient(180deg, rgba(245, 241, 234, 0.88) 0%, rgba(235, 229, 218, 0.96) 100%);
+  --glass-bg: rgba(254, 248, 234, 0.7);
+  --glass-border: rgba(180, 140, 68, 0.32);
+  --glass-border-strong: rgba(180, 140, 68, 0.52);
+  --glass-shine: inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  --footer-bg: linear-gradient(180deg, rgba(245, 232, 207, 0.94) 0%, rgba(232, 214, 182, 0.99) 100%);
+
+  --orb-amber: rgba(201, 169, 110, 0.25);
+  --orb-warm:  rgba(220, 170, 80, 0.14);
+  --orb-depth: rgba(190, 140, 60, 0.08);
 }
 
 /* Base resets */
@@ -88,8 +93,9 @@
 
 html, body {
   background:
-    radial-gradient(ellipse 120% 65% at 8% 0%, var(--orb-amber) 0%, transparent 58%),
-    radial-gradient(ellipse 80% 55% at 92% 96%, var(--orb-emerald) 0%, transparent 52%),
+    radial-gradient(ellipse 140% 70% at 5% -5%,  var(--orb-amber) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 95% 100%, var(--orb-warm) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 80% 20%,  var(--orb-depth) 0%, transparent 60%),
     var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-sans);
@@ -109,18 +115,17 @@ body {
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
   background: var(--bg-primary);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border-focus);
+  background: linear-gradient(180deg, rgba(201, 169, 110, 0.45), rgba(180, 140, 68, 0.3));
   border-radius: 4px;
-  border: 1px solid transparent;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-muted);
+  background: linear-gradient(180deg, rgba(201, 169, 110, 0.7), rgba(180, 140, 68, 0.55));
 }
 
 /* Typography styles */
