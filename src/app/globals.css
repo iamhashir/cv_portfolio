@@ -8,7 +8,7 @@
   --border-muted: #272420;
   --border-focus: #3d3830;
 
-  --navbar-scrolled-bg: rgba(11, 13, 18, 0.8);
+  --navbar-scrolled-bg: linear-gradient(180deg, rgba(9, 8, 6, 0.88) 0%, rgba(12, 11, 9, 0.82) 100%);
 
   /* Muted Amber Accent — used sparingly */
   --accent-color: #c9a96e;     /* Warm muted amber */
@@ -70,7 +70,13 @@
   --text-accent: #a8874e;
   --text-gold: #c9a96e;
 
-  --navbar-scrolled-bg: rgba(250, 248, 245, 0.88);
+  --navbar-scrolled-bg: rgba(250, 248, 245, 0.92);
+
+  --glass-bg: rgba(250, 248, 245, 0.6);
+  --glass-border: rgba(201, 169, 110, 0.2);
+  --glass-border-strong: rgba(201, 169, 110, 0.35);
+  --glass-shine: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  --footer-bg: linear-gradient(180deg, rgba(245, 241, 234, 0.88) 0%, rgba(235, 229, 218, 0.96) 100%);
 }
 
 /* Base resets */
