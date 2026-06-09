@@ -6,9 +6,10 @@ import { useEffect, useRef, useState } from "react"
 import { FileText } from "lucide-react"
 import styles from "./layout.module.css"
 import ThemeToggle from "./ThemeToggle"
+import { site } from "@/data/site"
 
 const SCRAMBLE_CHARS = "!<>-_\\/[]{}—=+*^?#@$%"
-const TITLES = ["Full-Stack Developer", "AI Automations Engineer", "Systems Architect"]
+const TITLES: string[] = [...site.roles]
 
 function NavCenterTitle() {
   const [idx, setIdx] = useState(0)
@@ -62,12 +63,7 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const links = [
-    { name: "Home",    href: "/"        },
-    { name: "Work",    href: "/work"    },
-    { name: "About",   href: "/about"   },
-    { name: "Contact", href: "/contact" },
-  ]
+  const links = site.navLinks
 
   return (
     <nav className={`${styles.navbar} ${isScrolled ? styles.navbarScrolled : ""}`}>
@@ -79,7 +75,7 @@ export default function Navbar() {
 
       <div className={`container ${styles.navContainer}`}>
         <div className={styles.brand}>
-          <Link href="/" className={styles.logo}>Malik Hashir</Link>
+          <Link href="/" className={styles.logo}>{site.name}</Link>
         </div>
 
         <ul className={styles.navLinks}>

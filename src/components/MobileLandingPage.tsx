@@ -6,8 +6,9 @@ import { useState, type CSSProperties } from "react"
 import type { LandingPageContent } from "@/components/LandingPage"
 import { projectCategoryGroups, projects, type Project } from "@/data/projects"
 import styles from "./mobile-landing-page.module.css"
+import { site } from "@/data/site"
 
-const emailAddress = "malikhashir@example.com"
+const emailAddress = site.email
 const whatsAppMessage = encodeURIComponent("Hi Malik, I would like to discuss a software project.")
 type HeroMetric = {
   value: string

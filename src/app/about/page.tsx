@@ -1,8 +1,9 @@
 import styles from "./about.module.css"
+import { site } from "@/data/site"
 
 export const metadata = {
-  title: "About | Malik Hashir",
-  description: "Read about Malik Hashir's professional journey, combining full-stack software development with operational logic and sales operations backgrounds.",
+  title: `About | ${site.name}`,
+  description: `Read about ${site.name}'s professional journey, combining full-stack software development with operational logic and sales operations backgrounds.`,
 }
 
 export default function About() {
@@ -11,7 +12,7 @@ export default function About() {
       {/* 1. Intro Section */}
       <section className={styles.introSection}>
         <div className={styles.introContent}>
-          <h1 className={styles.title}>Malik Hashir</h1>
+          <h1 className={styles.title}>{site.name}</h1>
           <p className={styles.subtitle}>
             Full-stack developer building CRM, automation, and operations platforms.
           </p>

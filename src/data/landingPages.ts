@@ -1,4 +1,5 @@
 import type { LandingPageContent } from "@/components/LandingPage"
+import { site } from "@/data/site"
 
 export const hrLandingContent: LandingPageContent = {
   badge: "Open to AI Automation & Full-Stack Engineering roles",
@@ -56,11 +57,11 @@ export const hrLandingContent: LandingPageContent = {
   showTechFilter: true,
   availability: { label: "Open to new roles · GST", active: true },
   currentFocus: "Building LLM workflow tooling + Next.js systems",
-  email: "magnotekbyasool@gmail.com",
+  email: site.email,
   whatsappNumber: "971504442178",
   socialLinks: {
-    github: "https://github.com/iamhashir",
-    linkedin: "https://linkedin.com/in/malikhashir",
+    github: site.github,
+    linkedin: site.linkedin,
   },
 }
 

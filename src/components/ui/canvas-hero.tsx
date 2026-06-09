@@ -5,6 +5,7 @@ import Link from "next/link"
 import { renderCanvas } from "@/components/ui/canvas"
 import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { site } from "@/data/site"
 
 export function CanvasHero() {
   useEffect(() => {
@@ -61,7 +62,7 @@ export function CanvasHero() {
                 View Work <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
-            <Link href="mailto:magnotekbyasool@gmail.com">
+            <Link href={`mailto:${site.email}`}>
               <Button variant="outline" size="lg" className="border-white/20 hover:border-amber-600">
                 Get in Touch
               </Button>

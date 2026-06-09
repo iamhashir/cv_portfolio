@@ -12,6 +12,7 @@ import ScrollReveal from "@/components/ScrollReveal"
 import SectionHeader from "@/components/SectionHeader"
 import Timeline, { type TimelineStep } from "@/components/Timeline"
 import { projectCategoryGroups, projects, type Project } from "@/data/projects"
+import { site } from "@/data/site"
 import { useAppStore } from "@/lib/store"
 import styles from "./landing-page.module.css"
 
@@ -25,7 +26,7 @@ const systemVisuals: Record<string, { label: string; accent: string }> = {
   "ui-analyzer": { label: "screens → vision → fixes", accent: "#b7a4ff" },
 }
 
-const DEFAULT_EMAIL = "magnotekbyasool@gmail.com"
+const DEFAULT_EMAIL = site.email
 const DEFAULT_WHATSAPP = "971504442178"
 const whatsAppMessage = encodeURIComponent("Hi Malik, I'd like to discuss an engineering role.")
 

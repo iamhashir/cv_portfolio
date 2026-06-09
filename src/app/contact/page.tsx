@@ -3,10 +3,11 @@
 import { useState } from "react"
 import { Mail, Linkedin, Github, Copy, Check, ExternalLink, MessageCircle } from "lucide-react"
 import styles from "@/components/contact.module.css"
+import { site } from "@/data/site"
 
 export default function Contact() {
   const [copied, setCopied] = useState(false)
-  const emailAddress = "malikhashir@example.com"
+  const emailAddress = site.email
   const whatsAppMessage = encodeURIComponent("Hi Malik, I would like to discuss a software project.")
 
   const handleCopy = async () => {
@@ -23,9 +24,7 @@ export default function Contact() {
     <div className={`container ${styles.contactPage}`}>
       <header className={styles.header}>
         <h1 className={styles.title}>Let&apos;s Connect</h1>
-        <p className={styles.description}>
-          I am currently open to technical contracts, operations system consulting, and full-stack software development roles in Abu Dhabi and remote worldwide.
-        </p>
+        <p className={styles.description}>{site.availability}</p>
       </header>
 
       <div className={styles.mobileActions}>
@@ -63,7 +62,7 @@ export default function Contact() {
           <p className={styles.cardDesc}>
             For professional networking, employment opportunities, operational discussions, and referrals.
           </p>
-          <a href="https://linkedin.com/in/malikhashir" target="_blank" rel="noopener noreferrer" className={styles.link}>
+          <a href={site.linkedin} target="_blank" rel="noopener noreferrer" className={styles.link}>
             <span>View profile</span>
             <ExternalLink size={14} />
           </a>
@@ -77,7 +76,7 @@ export default function Contact() {
           <p className={styles.cardDesc}>
             For exploring open-source repositories, system architecture blueprints, and active code metrics.
           </p>
-          <a href="https://github.com/iamhashir" target="_blank" rel="noopener noreferrer" className={styles.link}>
+          <a href={site.github} target="_blank" rel="noopener noreferrer" className={styles.link}>
             <span>View repositories</span>
             <ExternalLink size={14} />
           </a>
@@ -87,17 +86,17 @@ export default function Contact() {
       {/* Business Card */}
       <section className={styles.copySection}>
         <div className={styles.cardFace}>
-          <div className={styles.cardName}>Malik Hashir</div>
+          <div className={styles.cardName}>{site.name}</div>
           <div className={styles.cardRole}>Full-Stack Engineer · Systems</div>
           <div className={styles.cardDivider} aria-hidden="true" />
           <div className={styles.emailDisplay}>{emailAddress}</div>
           <a
-            href="https://linkedin.com/in/malikhashir"
+            href={site.linkedin}
             target="_blank"
             rel="noopener noreferrer"
             className={styles.cardSocial}
           >
-            linkedin.com/in/malikhashir
+            {site.linkedinHandle}
           </a>
         </div>
         <button

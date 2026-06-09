@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google"
 import PortfolioShell from "@/components/PortfolioShell"
+import { site } from "@/data/site"
 import "./globals.css"
 
 const inter = Inter({
@@ -24,10 +25,10 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "Malik Hashir | Full-Stack Developer for CRM & Business Systems",
-  description: "Full-stack developer building CRM, workflow automation, and internal operations tools. Custom operations software and AI-assisted workflows in React, TS, and Node.js.",
-  keywords: ["Malik Hashir", "Full Stack Developer", "CRM", "Automation", "Operations Software", "Internal Tools", "React", "TypeScript", "Node.js", "Abu Dhabi", "UAE"],
-  authors: [{ name: "Malik Hashir" }],
+  title: site.seo.title,
+  description: site.seo.description,
+  keywords: site.seo.keywords,
+  authors: [{ name: site.name }],
 }
 
 export const viewport = {

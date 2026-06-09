@@ -5,15 +5,10 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { ArrowRight, Github, Linkedin, Mail, Code2, Brain, Rocket, CheckCircle2, Database } from "lucide-react"
 import styles from "./page.module.css"
+import { site } from "@/data/site"
 
 // ─── Splash ────────────────────────────────────────────────────
-const SPLASH_LINES = [
-  { prefix: ">", text: "ssh malik@malik-hashir.dev" },
-  { prefix: "✓", text: "connected  ·  latency 12ms" },
-  { prefix: "✓", text: "build: PASSING  ·  tests: 100%" },
-  { prefix: "✓", text: "uptime: 99.98%  ·  last deploy: 2m ago" },
-  { prefix: "",  text: "" },
-]
+const SPLASH_LINES = site.splashLines
 
 function SplashTerminal({ onDone }: { onDone: () => void }) {
   const [step, setStep] = useState(0)
@@ -343,7 +338,7 @@ export default function Home() {
                   letterSpacing: "-0.02em",
                 }}
               >
-                Malik Hashir
+                {site.name}
               </motion.h1>
 
               {/* Role */}
@@ -359,7 +354,7 @@ export default function Home() {
                   opacity: 0.88,
                 }}
               >
-                Full-Stack & AI Engineer
+                {site.role}
               </motion.p>
 
               {/* Subtitle */}
@@ -451,9 +446,9 @@ export default function Home() {
                 style={{ display: "flex", gap: "10px" }}
               >
                 {[
-                  { href: "https://github.com/ihashirr",                    icon: <Github   size={20} color="#c9a96e" />, label: "GitHub"   },
-                  { href: "https://linkedin.com",                           icon: <Linkedin size={20} color="#c9a96e" />, label: "LinkedIn" },
-                  { href: "mailto:magnotekbyasool@gmail.com",               icon: <Mail     size={20} color="#c9a96e" />, label: "Email"    },
+                  { href: site.github,                    icon: <Github   size={20} color="#c9a96e" />, label: "GitHub"   },
+                  { href: site.linkedin,                  icon: <Linkedin size={20} color="#c9a96e" />, label: "LinkedIn" },
+                  { href: `mailto:${site.email}`,         icon: <Mail     size={20} color="#c9a96e" />, label: "Email"    },
                 ].map(({ href, icon, label }) => (
                   <motion.a
                     key={label}

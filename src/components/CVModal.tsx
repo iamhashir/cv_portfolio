@@ -4,6 +4,7 @@ import React, { useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { X, Download } from "lucide-react"
 import styles from "./cv-modal.module.css"
+import { site } from "@/data/site"
 
 const PDF_PATH = "/Malik_Hashir_CV.pdf"
 
@@ -51,7 +52,7 @@ export default function CVModal({ isOpen, onClose }: { isOpen: boolean; onClose:
             onClick={(e: React.MouseEvent) => e.stopPropagation()}
           >
             <div className={styles.toolbar}>
-              <span className={styles.toolbarTitle}>Malik Hashir — CV</span>
+              <span className={styles.toolbarTitle}>{site.name} — CV</span>
               <div className={styles.toolbarActions}>
                 <a
                   href={PDF_PATH}
@@ -75,7 +76,7 @@ export default function CVModal({ isOpen, onClose }: { isOpen: boolean; onClose:
               <iframe
                 src={PDF_PATH}
                 className={styles.pdfFrame}
-                title="Malik Hashir CV"
+                title={`${site.name} CV`}
               />
             </div>
           </motion.div>
