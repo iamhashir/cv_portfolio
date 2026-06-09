@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { FileText } from "lucide-react"
 import styles from "./layout.module.css"
+import ThemeToggle from "./ThemeToggle"
 
 const SCRAMBLE_CHARS = "!<>-_\\/[]{}—=+*^?#@$%"
 const TITLES = ["Full-Stack Developer", "AI Automations Engineer", "Systems Architect"]
@@ -101,6 +102,9 @@ export default function Navbar() {
               </button>
             </li>
           )}
+          <li>
+            <ThemeToggle />
+          </li>
         </ul>
       </div>
     </nav>

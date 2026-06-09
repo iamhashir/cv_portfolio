@@ -189,3 +189,12 @@
   .scanline { display: none; }
   .liveDot { animation: none !important; }
 }
+
+/* ═══ Light Theme Overrides ════════════════════════════════════ */
+:global([data-theme="light"]) .deploy { color: #a8874e; }
+:global([data-theme="light"]) .ws     { color: #0a7c52; }
+:global([data-theme="light"]) .infer  { color: #8c6a3c; }
+:global([data-theme="light"]) .cron   { color: #7a6e62; }
+:global([data-theme="light"]) .db     { color: #5a7a8c; }
+:global([data-theme="light"]) .ok     { color: #0a7c52; }
+:global([data-theme="light"]) .warn   { color: #a8874e; }

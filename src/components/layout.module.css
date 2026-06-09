@@ -16,11 +16,10 @@
 }
 
 .navbarScrolled {
-  background:
-    linear-gradient(180deg, rgba(9, 8, 6, 0.88) 0%, rgba(12, 11, 9, 0.82) 100%);
+  background-color: var(--navbar-scrolled-bg);
   backdrop-filter: blur(24px) saturate(140%);
   -webkit-backdrop-filter: blur(24px) saturate(140%);
-  border-bottom: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border, var(--border-muted));
   box-shadow:
     0 1px 0 rgba(201, 169, 110, 0.06),
     0 4px 24px rgba(0, 0, 0, 0.28);
@@ -203,6 +202,33 @@
 .cvLink:hover {
   background: rgba(201, 169, 110, 0.08);
   border-color: rgba(201, 169, 110, 0.6);
+}
+
+/* Theme toggle button */
+.themeToggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 169, 110, 0.3);
+  background: transparent;
+  color: var(--accent-color);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.themeToggle:hover {
+  background: rgba(201, 169, 110, 0.08);
+  border-color: rgba(201, 169, 110, 0.6);
+}
+
+.themeToggle:active {
+  transform: scale(0.94);
 }
 
 /* Footer Styles */

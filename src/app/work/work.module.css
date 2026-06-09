@@ -19,10 +19,12 @@
 }
 
 .title {
-  font-family: var(--font-sans);
+  font-family: var(--font-display, var(--font-sans));
   font-size: 3.5rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
   margin-bottom: 12px;
-  letter-spacing: 0;
 }
 
 .description {

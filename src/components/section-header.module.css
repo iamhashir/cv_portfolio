@@ -16,11 +16,12 @@
 }
 
 .title {
-  font-family: var(--font-sans);
+  font-family: var(--font-display, var(--font-sans));
   font-size: clamp(2.25rem, 4vw, 3.25rem);
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--text-primary);
-  line-height: 1.15;
+  line-height: 1.1;
   margin-bottom: 12px;
 }
 

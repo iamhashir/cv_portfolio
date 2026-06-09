@@ -460,3 +460,130 @@
   .coordDisplay { display: none; }
   .corner { width: 12px; height: 12px; }
 }
+
+/* ═══ Light Theme Overrides ════════════════════════════════════ */
+:global([data-theme="light"]) .heroContainer {
+  background: #faf8f5;
+}
+
+/* Invert dot grid: dark dots on warm cream */
+:global([data-theme="light"]) .dotGrid {
+  background-image: radial-gradient(rgba(26,22,18,0.08) 1px, transparent 1px);
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+}
+
+/* Soften ambient glows for light bg */
+:global([data-theme="light"]) .glowTop {
+  background: radial-gradient(ellipse, rgba(201,169,110,0.1) 0%, transparent 70%);
+}
+:global([data-theme="light"]) .glowBottom {
+  background: radial-gradient(ellipse, rgba(120,113,108,0.05) 0%, transparent 70%);
+}
+
+/* Rule lines: dark on light */
+:global([data-theme="light"]) .ruleLeft,
+:global([data-theme="light"]) .ruleRight {
+  background: linear-gradient(to bottom, transparent, rgba(26,22,18,0.05) 30%, rgba(26,22,18,0.05) 70%, transparent);
+}
+
+/* Badge: warm cream glass with amber rim */
+:global([data-theme="light"]) .badge {
+  border-color: rgba(201,169,110,0.35);
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.9),
+    0 1px 8px rgba(201,169,110,0.12),
+    0 0 0 1px rgba(201,169,110,0.08);
+  color: rgba(26,22,18,0.65);
+}
+
+/* Title: dark ink gradient */
+:global([data-theme="light"]) .titleGradient {
+  background: linear-gradient(to bottom, #1a1612 45%, rgba(26,22,18,0.48));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Subtitle */
+:global([data-theme="light"]) .heroSubtitle {
+  color: rgba(26,22,18,0.58);
+}
+
+/* Secondary CTA */
+:global([data-theme="light"]) .ctaSecondary {
+  background: rgba(255,255,255,0.55);
+  color: rgba(26,22,18,0.85);
+  border-color: rgba(26,22,18,0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+:global([data-theme="light"]) .ctaSecondary:hover {
+  background: rgba(255,255,255,0.8);
+  border-color: rgba(201,169,110,0.5);
+}
+
+/* Metrics row: warm frosted glass card */
+:global([data-theme="light"]) .metricsRow {
+  background: rgba(255,255,255,0.65);
+  border-color: rgba(201,169,110,0.2);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.95),
+    0 4px 24px rgba(201,169,110,0.08),
+    0 1px 4px rgba(0,0,0,0.05);
+}
+:global([data-theme="light"]) .metricLabel {
+  color: rgba(26,22,18,0.45);
+}
+:global([data-theme="light"]) .metricDivider {
+  background: rgba(201,169,110,0.2);
+}
+
+/* Tech pills: warm cream glass */
+:global([data-theme="light"]) .pill {
+  background: rgba(255,255,255,0.6);
+  border-color: rgba(201,169,110,0.3);
+  box-shadow:
+    0 0 12px rgba(201,169,110,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+/* Cursor coords */
+:global([data-theme="light"]) .coordText {
+  color: rgba(26,22,18,0.22);
+}
+
+/* Click ripple */
+:global([data-theme="light"]) .clickRipple {
+  border-color: rgba(26,22,18,0.18);
+}
+
+/* ── Animated gradient border ring on glass panel ─────────── */
+@keyframes borderSpin {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.panelGlowRing {
+  position: relative;
+  border-radius: 34px;
+  background: linear-gradient(270deg, #c9a96e, #e8c47a, rgba(200,110,40,0.9), #c9a96e);
+  background-size: 300% 300%;
+  animation: borderSpin 6s ease infinite;
+  padding: 1.5px;
+}
+
+:global([data-theme="light"]) .panelGlowRing {
+  background: linear-gradient(270deg, #ffb830, #ff8c20, #ffdc6e, #ffb830);
+  background-size: 300% 300%;
+  animation: borderSpin 4s ease infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panelGlowRing { animation: none; }
+}
