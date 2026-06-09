@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { Mail, Linkedin, Github, MapPin } from "lucide-react"
+import { EnvelopeSimple as Mail, LinkedinLogo as Linkedin, GithubLogo as Github, MapPin } from "@/components/ui/Icons"
+import { Magnetic } from "@/components/ui/Magnetic"
 import styles from "./layout.module.css"
 import { site } from "@/data/site"
 
@@ -23,7 +24,9 @@ export default function Footer() {
               <ul className={styles.footerList}>
                 {site.navLinks.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} className={styles.footerLink}>{link.name}</Link>
+                    <Magnetic strength={5}>
+                      <Link href={link.href} className={styles.footerLink}>{link.name}</Link>
+                    </Magnetic>
                   </li>
                 ))}
               </ul>
@@ -33,22 +36,28 @@ export default function Footer() {
               <span className={styles.footerLinksHeading}>Connect</span>
               <ul className={styles.footerList}>
                 <li>
-                  <a href={`mailto:${site.email}`} className={styles.footerLink}>
-                    <Mail size={16} />
-                    <span>Email</span>
-                  </a>
+                  <Magnetic strength={5}>
+                    <a href={`mailto:${site.email}`} className={styles.footerLink}>
+                      <Mail size={18} weight="duotone" />
+                      <span>Email</span>
+                    </a>
+                  </Magnetic>
                 </li>
                 <li>
-                  <a href={site.linkedin} target="_blank" rel="noopener noreferrer" className={styles.footerLink}>
-                    <Linkedin size={16} />
-                    <span>LinkedIn</span>
-                  </a>
+                  <Magnetic strength={5}>
+                    <a href={site.linkedin} target="_blank" rel="noopener noreferrer" className={styles.footerLink}>
+                      <Linkedin size={18} weight="duotone" />
+                      <span>LinkedIn</span>
+                    </a>
+                  </Magnetic>
                 </li>
                 <li>
-                  <a href={site.github} target="_blank" rel="noopener noreferrer" className={styles.footerLink}>
-                    <Github size={16} />
-                    <span>GitHub</span>
-                  </a>
+                  <Magnetic strength={5}>
+                    <a href={site.github} target="_blank" rel="noopener noreferrer" className={styles.footerLink}>
+                      <Github size={18} weight="duotone" />
+                      <span>GitHub</span>
+                    </a>
+                  </Magnetic>
                 </li>
               </ul>
             </div>
@@ -60,7 +69,7 @@ export default function Footer() {
             &copy; {currentYear} {site.name}. Built with Next.js &amp; Vanilla CSS.
           </span>
           <div className={styles.footerLocation}>
-            <MapPin size={14} />
+            <MapPin size={16} weight="duotone" />
             <span>{site.location}</span>
           </div>
         </div>

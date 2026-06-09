@@ -5,17 +5,17 @@ import Link from "next/link"
 import {
   ArrowLeft,
   Cpu,
-  Server,
+  HardDrives as Server,
   Database,
-  Link2,
+  Link as Link2,
   Key,
-  GitCompare,
-  LayoutDashboard,
-  Boxes,
+  GitDiff as GitCompare,
+  SquaresFour as LayoutDashboard,
+  Package as Boxes,
   Wrench,
-  TrendingUp,
-  Code2,
-} from "lucide-react"
+  TrendUp as TrendingUp,
+  CodeBlock as Code2,
+} from "@phosphor-icons/react"
 import type { Project } from "@/data/projects"
 import WorkflowDemo from "@/components/WorkflowDemo"
 import CodePreview from "@/components/CodePreview"
@@ -72,7 +72,7 @@ export default function ProjectConsole({ project }: { project: Project }) {
           <span /><span /><span />
         </div>
         <Link href="/work" className={styles.crumb}>
-          <ArrowLeft size={13} />
+          <ArrowLeft size={14} weight="bold" />
           <span>work</span>
         </Link>
         <span className={styles.path}>/ {project.slug}.case</span>
@@ -96,7 +96,7 @@ export default function ProjectConsole({ project }: { project: Project }) {
                 onClick={() => setView(v.id)}
               >
                 <span className={styles.navIndex}>{i + 1}</span>
-                <Icon size={15} className={styles.navIcon} />
+                <Icon size={16} weight="duotone" className={styles.navIcon} />
                 <span className={styles.navLabel}>{v.label}</span>
               </button>
             )
@@ -130,13 +130,13 @@ export default function ProjectConsole({ project }: { project: Project }) {
           <div className={styles.metaBlock}>
             <span className={styles.metaKey}>source</span>
             {isPrivate ? (
-              <span className={styles.metaVal}><Key size={13} /> private</span>
+              <span className={styles.metaVal}><Key size={14} weight="duotone" /> private</span>
             ) : project.githubUrl ? (
               <a className={styles.metaLink} href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                <Link2 size={13} /> repository
+                <Link2 size={14} weight="duotone" /> repository
               </a>
             ) : (
-              <span className={styles.metaVal}><Link2 size={13} /> case study</span>
+              <span className={styles.metaVal}><Link2 size={14} weight="duotone" /> case study</span>
             )}
           </div>
         </aside>
@@ -166,6 +166,17 @@ function Overview({ project }: { project: Project }) {
           <span key={i} className={styles.chip}>{f}</span>
         ))}
       </div>
+
+      {project.imageUrl && (
+        <div className={styles.consoleImageContainer}>
+          <img
+            src={project.imageUrl}
+            alt={`${project.title} overview concept`}
+            className={styles.consoleImage}
+            loading="lazy"
+          />
+        </div>
+      )}
     </div>
   )
 }
@@ -177,7 +188,7 @@ function Diff({ project }: { project: Project }) {
   return (
     <div className={styles.view}>
       <div className={styles.diffHead}>
-        <GitCompare size={15} className={styles.navIcon} />
+        <GitCompare size={16} weight="duotone" className={styles.navIcon} />
         <span>the_shift.diff</span>
         <span className={styles.diffStat}>
           <span className={styles.del}>−{before.length}</span>
@@ -226,7 +237,7 @@ function Stack({ project }: { project: Project }) {
           const Icon = l.icon
           return (
             <div key={i} className={styles.layer}>
-              <div className={styles.layerHead}><Icon size={15} className={styles.navIcon} />{l.label}</div>
+              <div className={styles.layerHead}><Icon size={16} weight="duotone" className={styles.navIcon} />{l.label}</div>
               <p className={styles.layerBody}>{l.value}</p>
             </div>
           )

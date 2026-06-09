@@ -1,7 +1,7 @@
 "use client"
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
-import { Activity, ChevronRight, Code, X } from "lucide-react"
+import { Heartbeat, CaretRight, Code, X } from "@phosphor-icons/react"
 import { usePathname } from "next/navigation"
 import { useMemo } from "react"
 import { projects } from "@/data/projects"
@@ -31,7 +31,7 @@ export default function AuditToggle() {
         aria-expanded={isAuditMode}
         aria-controls="system-audit-panel"
       >
-        {isAuditMode ? <X size={15} /> : <Activity size={15} />}
+        {isAuditMode ? <X size={16} weight="duotone" /> : <Heartbeat size={16} weight="duotone" />}
         <span>{isAuditMode ? "Close audit" : "Inspect system"}</span>
       </button>
 
@@ -50,7 +50,7 @@ export default function AuditToggle() {
                 <span className={styles.eyebrow}>Live architecture audit</span>
                 <h2 className={styles.panelTitle}>{project ? project.title : "Portfolio Systems Atlas"}</h2>
               </div>
-              <Code size={18} className={styles.headerIcon} />
+              <Code size={20} weight="duotone" className={styles.headerIcon} />
             </div>
 
             {project ? <ProjectAudit project={project} /> : <AtlasAudit />}
@@ -185,7 +185,7 @@ function AtlasAudit() {
       <AuditSection label="Transformation index">
         {projects.filter(({ featured }) => featured).map((project) => (
           <div key={project.slug} className={styles.indexRow}>
-            <ChevronRight size={13} />
+            <CaretRight size={14} weight="bold" />
             <div>
               <strong>{project.title}</strong>
               <span>{boardBehaviors[project.slug]}</span>

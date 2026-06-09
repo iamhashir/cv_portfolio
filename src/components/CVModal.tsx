@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { X, Download } from "lucide-react"
+import { X, DownloadSimple as Download } from "@phosphor-icons/react"
 import styles from "./cv-modal.module.css"
 import { site } from "@/data/site"
 

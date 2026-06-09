@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useState } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { ArrowRight, Github, Linkedin, Mail, Code2, Brain, Rocket, CheckCircle2, Database } from "lucide-react"
+import { ArrowRight, GithubLogo, LinkedinLogo, EnvelopeSimple, CodeBlock, Brain, RocketLaunch, CheckCircle, Database } from "@phosphor-icons/react"
+import { Magnetic } from "@/components/ui/Magnetic"
 import styles from "./page.module.css"
 import { site } from "@/data/site"
 
@@ -85,14 +86,21 @@ function MetricCard({ value, label, delay = 0, isDark }: {
 }
 
 // ─── Tech Pill ─────────────────────────────────────────────────
-function TechPill({ icon, label, delay = 0, isDark }: {
-  icon: React.ReactNode; label: string; delay?: number; isDark: boolean
+import { useAppStore } from "@/lib/store"
+
+function TechPill({ icon, label, delay = 0, isDark, projectSlug }: {
+  icon: React.ReactNode; label: string; delay?: number; isDark: boolean; projectSlug?: string
 }) {
+  const setActiveProject = useAppStore((state) => state.setActiveProject)
+
   return (
     <motion.div
+      className="interactive-hover"
       initial={{ opacity: 0, scale: 0.85 }}
       animate={{ opacity: 1, scale: 1 }}
       whileHover={{ scale: 1.05, y: -2 }}
+      onMouseEnter={() => projectSlug && setActiveProject(projectSlug)}
+      onMouseLeave={() => projectSlug && setActiveProject(null)}
       transition={{ duration: 0.3, delay }}
       style={{
         display: "inline-flex",
@@ -114,7 +122,7 @@ function TechPill({ icon, label, delay = 0, isDark }: {
         boxShadow: isDark
           ? "0 4px 16px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.1)"
           : "0 4px 16px rgba(180,120,10,0.16), inset 0 1px 0 rgba(255,255,255,0.9)",
-        cursor: "default",
+        cursor: "pointer",
       }}
     >
       {icon}
@@ -221,14 +229,7 @@ export default function Home() {
 
       <div style={{ position: "relative", minHeight: "100vh", width: "100%", overflow: "hidden", background: bg }}>
 
-        {/* Noise texture — adds depth/grain to the gradient */}
-        <div style={{
-          position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
-          opacity: isDark ? 0.055 : 0.04,
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-          backgroundRepeat: "repeat",
-          backgroundSize: "128px 128px",
-        }} />
+        {/* Noise texture handled globally by PortfolioShell */}
 
         {/* Orb — top-left: vibrant amber */}
         <motion.div
@@ -321,6 +322,11 @@ export default function Home() {
 
             <div style={{ position: "relative", zIndex: 1 }}>
 
+              {/* Availability */}
+              <div style={{ marginBottom: "16px" }}>
+                <AvailabilityBadge isDark={isDark} />
+              </div>
+
               {/* Name */}
               <motion.h1
                 initial={{ opacity: 0, y: 28 }}
@@ -381,12 +387,12 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: 0.44 }}
                 style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "40px" }}
               >
-                <TechPill icon={<Code2 size={15} color="#c9a96e" />}     label="React & Next.js"  delay={0.5}  isDark={isDark} />
-                <TechPill icon={<Brain size={15} color="#c9a96e" />}      label="AI / ML"          delay={0.54} isDark={isDark} />
-                <TechPill icon={<Rocket size={15} color="#c9a96e" />}     label="Node.js"          delay={0.58} isDark={isDark} />
-                <TechPill icon={<CheckCircle2 size={15} color="#c9a96e"/>} label="TypeScript"      delay={0.62} isDark={isDark} />
-                <TechPill icon={<Code2 size={15} color="#c9a96e" />}      label="Python"           delay={0.66} isDark={isDark} />
-                <TechPill icon={<Database size={15} color="#c9a96e" />}   label="PostgreSQL"       delay={0.7}  isDark={isDark} />
+                <TechPill icon={<CodeBlock size={16} weight="duotone" color="#c9a96e" />}     label="React & Next.js"  delay={0.5}  isDark={isDark} projectSlug="reactor" />
+                <TechPill icon={<Brain size={16} weight="duotone" color="#c9a96e" />}      label="AI / ML"          delay={0.54} isDark={isDark} projectSlug="mina-games" />
+                <TechPill icon={<RocketLaunch size={16} weight="duotone" color="#c9a96e" />}     label="Node.js"          delay={0.58} isDark={isDark} projectSlug="opsflow" />
+                <TechPill icon={<CheckCircle size={16} weight="duotone" color="#c9a96e"/>} label="TypeScript"      delay={0.62} isDark={isDark} projectSlug="reactor" />
+                <TechPill icon={<CodeBlock size={16} weight="duotone" color="#c9a96e" />}      label="Python"           delay={0.66} isDark={isDark} projectSlug="opsflow" />
+                <TechPill icon={<Database size={16} weight="duotone" color="#c9a96e" />}   label="PostgreSQL"       delay={0.7}  isDark={isDark} projectSlug="opsflow" />
               </motion.div>
 
               {/* Metrics */}
@@ -408,34 +414,38 @@ export default function Home() {
                 transition={{ duration: 0.6, delay: 0.88 }}
                 style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "32px" }}
               >
-                <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }}>
-                  <Link href="/work" style={{
-                    display: "inline-flex", alignItems: "center", gap: "8px",
-                    padding: "14px 30px", fontSize: "15px", fontWeight: "600",
-                    color: "#fff",
-                    background: "linear-gradient(135deg, #c9a96e 0%, #b8894a 100%)",
-                    border: "none", borderRadius: "12px", cursor: "pointer", textDecoration: "none",
-                    boxShadow: "0 8px 24px rgba(201,169,110,0.38), inset 0 1px 0 rgba(255,255,255,0.22)",
-                  }}>
-                    See the Work <ArrowRight size={15} />
-                  </Link>
-                </motion.div>
+                <Magnetic strength={15}>
+                  <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }}>
+                    <Link href="/work" style={{
+                      display: "inline-flex", alignItems: "center", gap: "8px",
+                      padding: "14px 30px", fontSize: "15px", fontWeight: "600",
+                      color: "#fff",
+                      background: "linear-gradient(135deg, #c9a96e 0%, #b8894a 100%)",
+                      border: "none", borderRadius: "12px", cursor: "pointer", textDecoration: "none",
+                      boxShadow: "0 8px 24px rgba(201,169,110,0.38), inset 0 1px 0 rgba(255,255,255,0.22)",
+                    }}>
+                      See the Work <ArrowRight size={16} weight="bold" />
+                    </Link>
+                  </motion.div>
+                </Magnetic>
 
-                <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }}>
-                  <Link href="/contact" style={{
-                    display: "inline-flex", alignItems: "center", gap: "8px",
-                    padding: "14px 30px", fontSize: "15px", fontWeight: "600",
-                    color: textPrimary,
-                    background: btnGlassBg,
-                    backdropFilter: "blur(10px)",
-                    WebkitBackdropFilter: "blur(10px)",
-                    border: btnGlassBdr,
-                    borderRadius: "12px", cursor: "pointer", textDecoration: "none",
-                    boxShadow: "0 4px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.3)",
-                  }}>
-                    Get in Touch
-                  </Link>
-                </motion.div>
+                <Magnetic strength={15}>
+                  <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }}>
+                    <Link href="/contact" style={{
+                      display: "inline-flex", alignItems: "center", gap: "8px",
+                      padding: "14px 30px", fontSize: "15px", fontWeight: "600",
+                      color: textPrimary,
+                      background: btnGlassBg,
+                      backdropFilter: "blur(10px)",
+                      WebkitBackdropFilter: "blur(10px)",
+                      border: btnGlassBdr,
+                      borderRadius: "12px", cursor: "pointer", textDecoration: "none",
+                      boxShadow: "0 4px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.3)",
+                    }}>
+                      Get in Touch
+                    </Link>
+                  </motion.div>
+                </Magnetic>
               </motion.div>
 
               {/* Social icons */}
@@ -446,31 +456,32 @@ export default function Home() {
                 style={{ display: "flex", gap: "10px" }}
               >
                 {[
-                  { href: site.github,                    icon: <Github   size={20} color="#c9a96e" />, label: "GitHub"   },
-                  { href: site.linkedin,                  icon: <Linkedin size={20} color="#c9a96e" />, label: "LinkedIn" },
-                  { href: `mailto:${site.email}`,         icon: <Mail     size={20} color="#c9a96e" />, label: "Email"    },
+                  { href: site.github,                    icon: <GithubLogo   size={22} weight="duotone" color="#c9a96e" />, label: "GitHub"   },
+                  { href: site.linkedin,                  icon: <LinkedinLogo size={22} weight="duotone" color="#c9a96e" />, label: "LinkedIn" },
+                  { href: `mailto:${site.email}`,         icon: <EnvelopeSimple     size={22} weight="duotone" color="#c9a96e" />, label: "Email"    },
                 ].map(({ href, icon, label }) => (
-                  <motion.a
-                    key={label}
-                    href={href}
-                    target={href.startsWith("http") ? "_blank" : undefined}
-                    rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    aria-label={label}
-                    whileHover={{ scale: 1.1, y: -2 }}
-                    style={{
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      width: "46px", height: "46px",
-                      background: socialBg,
-                      backdropFilter: "blur(10px)",
-                      WebkitBackdropFilter: "blur(10px)",
-                      border: isDark ? "1px solid rgba(201,169,110,0.18)" : "1px solid rgba(255,255,255,0.65)",
-                      borderRadius: "12px", cursor: "pointer",
-                      boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-                      minWidth: "46px", minHeight: "46px",
-                    }}
-                  >
-                    {icon}
-                  </motion.a>
+                  <Magnetic strength={15} key={label}>
+                    <motion.a
+                      href={href}
+                      target={href.startsWith("http") ? "_blank" : undefined}
+                      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      aria-label={label}
+                      whileHover={{ scale: 1.1, y: -2 }}
+                      style={{
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        width: "46px", height: "46px",
+                        background: socialBg,
+                        backdropFilter: "blur(10px)",
+                        WebkitBackdropFilter: "blur(10px)",
+                        border: isDark ? "1px solid rgba(201,169,110,0.18)" : "1px solid rgba(255,255,255,0.65)",
+                        borderRadius: "12px", cursor: "pointer",
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+                        minWidth: "46px", minHeight: "46px",
+                      }}
+                    >
+                      {icon}
+                    </motion.a>
+                  </Magnetic>
                 ))}
               </motion.div>
 

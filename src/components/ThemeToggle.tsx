@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Sun, Moon } from "lucide-react"
+import { Sun, Moon } from "@phosphor-icons/react"
 import styles from "./layout.module.css"
 
 export default function ThemeToggle() {
@@ -40,7 +40,7 @@ export default function ThemeToggle() {
       className={styles.themeToggle}
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
     >
-      {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
+      {theme === "dark" ? <Sun size={18} weight="duotone" /> : <Moon size={18} weight="duotone" />}
     </button>
   )
 }

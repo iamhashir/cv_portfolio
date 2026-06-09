@@ -1,6 +1,6 @@
-import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+import { useAppStore } from "@/lib/store"
 import { Project } from "@/data/projects"
+import { ArrowRight } from "@/components/ui/Icons"
 import styles from "./project-card.module.css"
 
 function isPrivate(status?: string) {
@@ -13,20 +13,58 @@ type ProjectCardProps = {
 }
 
 export default function ProjectCard({ project, featured = false }: ProjectCardProps) {
+  const { setSelectedProjectSlug } = useAppStore()
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    // If clicking a sub-link (like Github View code ↗), let it proceed naturally
+    const target = e.target as HTMLElement;
+    if (target.closest('a')) {
+      return;
+    }
+    
+    e.preventDefault();
+    setSelectedProjectSlug(project.slug);
+    window.history.pushState(null, "", `/work/${project.slug}`);
+  };
+
   return (
-    <Link
-      href={`/work/${project.slug}`}
+    <div
+      onClick={handleCardClick}
       className={`${styles.card} ${featured ? styles.cardFeatured : ""}`}
+      style={{ cursor: "pointer" }}
     >
       <div className={styles.category}>
         {project.category}
         {featured && <span className={styles.featuredBadge}>Featured</span>}
       </div>
+
+      {project.imageUrl && !featured && (
+        <div className={styles.cardImageContainer}>
+          <img
+            src={project.imageUrl}
+            alt={project.title}
+            className={styles.cardImage}
+            loading="lazy"
+          />
+        </div>
+      )}
+
       <div className={`${styles.cardBody} ${featured ? styles.cardBodyFeatured : ""}`}>
         <h3 className={`${styles.title} ${featured ? styles.titleFeatured : ""}`}>
           {project.title}
         </h3>
         <p className={styles.summary}>{project.summary}</p>
+
+        {featured && project.imageUrl && (
+          <div className={styles.featuredImageContainer}>
+            <img
+              src={project.imageUrl}
+              alt={project.title}
+              className={styles.featuredImage}
+              loading="lazy"
+            />
+          </div>
+        )}
 
         {project.metric && (
           <div className={styles.metricCallout}>
@@ -84,7 +122,7 @@ export default function ProjectCard({ project, featured = false }: ProjectCardPr
         <div className={styles.ctaRow}>
           <span className={styles.ctaLink}>
             <span>View case study</span>
-            <ArrowRight size={16} />
+            <ArrowRight size={16} weight="bold" />
           </span>
           {project.githubUrl && !isPrivate(project.status) && (
             <a
@@ -99,6 +137,6 @@ export default function ProjectCard({ project, featured = false }: ProjectCardPr
           )}
         </div>
       </div>
-    </Link>
+    </div>
   )
 }

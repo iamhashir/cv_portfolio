@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useEffect, useRef } from 'react'
+import { usePathname } from 'next/navigation'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useReducedMotion } from 'framer-motion'
 import * as THREE from 'three'
@@ -77,7 +78,11 @@ function CameraController() {
 }
 
 export default function Scene() {
+  const pathname = usePathname()
+  const isLanding = pathname === "/" || pathname === "/hr" || pathname === "/client"
+
   useEffect(() => {
+    if (!isLanding) return
     const onMouseMove = (e: MouseEvent) => {
       // Normalize to -1..1 range centered at viewport center
       mouse.x = (e.clientX / window.innerWidth - 0.5) * 2
@@ -85,12 +90,13 @@ export default function Scene() {
     }
     window.addEventListener("mousemove", onMouseMove, { passive: true })
     return () => window.removeEventListener("mousemove", onMouseMove)
-  }, [])
+  }, [isLanding])
+
+  if (!isLanding) return null
 
   return (
     <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", zIndex: 0, pointerEvents: "none" }}>
       <Canvas camera={{ position: [0, 15, 15], rotation: [-Math.PI / 4, 0, 0], fov: 45 }}>
-        <color attach="background" args={["#0a0908"]} />
         <ambientLight intensity={0.8} />
         <directionalLight position={[10, 20, 5]} intensity={1.5} color="#c9a96e" />
         <CameraController />

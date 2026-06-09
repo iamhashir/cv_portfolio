@@ -53,6 +53,7 @@ export type Project = {
   reflection: string[]
   workflow?: WorkflowStep[]
   demoSnippet?: DemoSnippet
+  imageUrl?: string
 }
 
 export const projects: Project[] = [
@@ -68,6 +69,7 @@ export const projects: Project[] = [
     techStack: ["TypeScript", "JSX Runtime", "Hooks", "File-based Routing", "Rendering Engine"],
     githubUrl: "https://github.com/ihashirr/reactor",
     featured: true,
+    imageUrl: "/images/projects/reactor.png",
     year: "2024",
     targetUsers: "Frontend engineers exploring framework internals and lightweight application runtimes.",
     problem: "Modern frontend libraries hide much of the rendering lifecycle behind abstractions. Reactor explores how a compact framework can provide familiar application primitives while keeping routing, state, and rendering behavior understandable.",
@@ -153,6 +155,7 @@ export function withFiber<T>(fiber: Fiber, fn: () => T): T {
     techStack: ["Fastify", "WebSockets", "Prisma", "Docker", "NGINX", "TypeScript"],
     githubUrl: "https://github.com/ihashirr/mina-games",
     featured: true,
+    imageUrl: "/images/projects/mina-games.png",
     year: "2024",
     targetUsers: "Players joining real-time matches, tournaments, and multiplayer sessions.",
     problem: "A multiplayer platform has to coordinate user sessions, match state, and tournament flows while keeping interactions responsive across multiple connected clients.",
@@ -237,6 +240,7 @@ setInterval(() => {
     techStack: ["React", "JavaScript", "Firebase", "WhatsApp Automation"],
     githubUrl: "https://github.com/ihashirr/opsflow",
     featured: true,
+    imageUrl: "/images/projects/opsflow.png",
     year: "2023",
     targetUsers: "Operations staff, sales teams, and managers replacing spreadsheet-based workflows.",
     problem: "Manual spreadsheets make operational work difficult to track consistently. Orders, supplier purchases, balances, and sales reporting become fragmented as activity grows.",
@@ -317,6 +321,7 @@ async function sendOrderUpdate(order) {
     techStack: ["React", "Node.js", "PDF Automation", "Excel Automation", "Reporting"],
     githubUrl: "https://github.com/ihashirr/financesmith",
     featured: false,
+    imageUrl: "/images/projects/financesmith.png",
     year: "2023",
     targetUsers: "Finance and operations staff managing institutional records and reports.",
     problem: "Financial and operational records become difficult to reconcile when invoices, reports, and day-to-day workflows are handled across disconnected manual processes.",
@@ -401,6 +406,7 @@ async function generateMonthlyReport(institutionId, month, year) {
     techStack: ["TypeScript", "Node.js", "AI", "Behavioral Analytics"],
     githubUrl: "https://github.com/ihashirr/traverse",
     featured: false,
+    imageUrl: "/images/projects/traverse.png",
     year: "2024",
     targetUsers: "Travelers discovering destinations and restaurants across the UAE.",
     problem: "Generic travel discovery does not adapt well to individual interests or local context, making it harder for users to find relevant experiences efficiently.",
@@ -484,6 +490,7 @@ async function refreshFeed(userId: string, event: UserEvent) {
     techStack: ["Computer Vision", "Self-Hosted AI", "Automation"],
     githubUrl: "https://github.com/ihashirr/ui-analyzer",
     featured: false,
+    imageUrl: "/images/projects/ui-analyzer.png",
     year: "2024",
     targetUsers: "Designers and frontend developers reviewing interface quality.",
     problem: "Interface reviews can be slow and inconsistent when teams have to inspect usability weaknesses manually across many screens.",

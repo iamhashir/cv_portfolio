@@ -2,7 +2,7 @@
 
 import React from "react"
 import Link from "next/link"
-import { ArrowRight, Activity } from "lucide-react"
+import { ArrowRight, Heartbeat as Activity } from "@phosphor-icons/react"
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion"
 import { Project } from "@/data/projects"
 import ExplodedProjectView from "@/components/ExplodedProjectView"
@@ -69,7 +69,7 @@ export default function FeaturedProjectCard({ project }: FeaturedProjectCardProp
           {mainOutcome && (
             <div className={styles.outcomeCallout}>
               <div className={styles.outcomeIcon}>
-                <Activity size={16} />
+                <Activity size={18} weight="duotone" />
               </div>
               <div className={styles.outcomeText}>
                 <span className={styles.outcomeLabel}>Key Operational Impact</span>
@@ -100,7 +100,7 @@ export default function FeaturedProjectCard({ project }: FeaturedProjectCardProp
               }}
               transition={{ type: "spring", stiffness: 400, damping: 25 }}
             >
-              <ArrowRight size={16} />
+              <ArrowRight size={18} weight="bold" />
             </motion.span>
           </Link>
         </div>

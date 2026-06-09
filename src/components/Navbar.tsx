@@ -3,7 +3,8 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
-import { FileText } from "lucide-react"
+import { FileText } from "@phosphor-icons/react"
+import { Magnetic } from "@/components/ui/Magnetic"
 import styles from "./layout.module.css"
 import ThemeToggle from "./ThemeToggle"
 import { site } from "@/data/site"
@@ -75,7 +76,9 @@ export default function Navbar() {
 
       <div className={`container ${styles.navContainer}`}>
         <div className={styles.brand}>
-          <Link href="/" className={styles.logo}>{site.name}</Link>
+          <Magnetic strength={5}>
+            <Link href="/" className={styles.logo}>{site.name}</Link>
+          </Magnetic>
         </div>
 
         <ul className={styles.navLinks}>
@@ -83,23 +86,31 @@ export default function Navbar() {
             const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href))
             return (
               <li key={link.href}>
-                <Link href={link.href} className={`${styles.navLink} ${isActive ? styles.activeLink : ""}`}>
-                  {link.name}
-                </Link>
+                <Magnetic strength={8}>
+                  <Link href={link.href} className={`${styles.navLink} ${isActive ? styles.activeLink : ""}`}>
+                    {link.name}
+                  </Link>
+                </Magnetic>
               </li>
             )
           })}
           {pathname === "/hr" && (
             <li>
-              <button type="button" className={styles.cvLink}
-                onClick={() => window.dispatchEvent(new CustomEvent("open-cv-modal"))}>
-                <FileText size={13} />
-                <span>View CV</span>
-              </button>
+              <Magnetic strength={10}>
+                <button type="button" className={styles.cvLink}
+                  onClick={() => window.dispatchEvent(new CustomEvent("open-cv-modal"))}>
+                  <FileText size={16} weight="duotone" />
+                  <span>View CV</span>
+                </button>
+              </Magnetic>
             </li>
           )}
           <li>
-            <ThemeToggle />
+            <Magnetic strength={10}>
+              <div className="inline-block">
+                <ThemeToggle />
+              </div>
+            </Magnetic>
           </li>
         </ul>
       </div>

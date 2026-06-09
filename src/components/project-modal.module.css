@@ -1,0 +1,357 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(10, 8, 5, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.modal {
+  position: relative;
+  width: 95vw;
+  max-width: 1200px;
+  height: 90vh;
+  max-height: 850px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-muted);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.75), 
+              0 4px 16px rgba(0, 0, 0, 0.4),
+              inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Custom Titlebar for standard (non-console) case studies */
+.titlebar {
+  display: flex;
+  align-items: center;
+  height: 44px;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-muted);
+  padding: 0 16px;
+  justify-content: space-between;
+  user-select: none;
+}
+
+.lights {
+  display: flex;
+  gap: 8px;
+}
+
+.lights span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity var(--transition-fast);
+}
+
+.lights span:hover {
+  opacity: 1;
+}
+
+.red { background: #ef4444; }
+.yellow { background: #f59e0b; }
+.green { background: #10b981; }
+
+.crumb {
+  display: flex;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: lowercase;
+}
+
+.activeFile {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.closeBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.closeBtn:hover {
+  color: var(--text-primary);
+  background-color: var(--bg-tertiary);
+}
+
+/* Scroll area */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+  background: var(--bg-secondary);
+}
+
+/* Custom Scrollbar for Content */
+.content::-webkit-scrollbar {
+  width: 6px;
+}
+.content::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+.content::-webkit-scrollbar-thumb {
+  background: rgba(201, 169, 110, 0.25);
+  border-radius: 4px;
+}
+.content::-webkit-scrollbar-thumb:hover {
+  background: rgba(201, 169, 110, 0.45);
+}
+
+/* Standard Detail Page within Modal */
+.detailPage {
+  padding: 40px;
+  position: relative;
+}
+
+.header {
+  margin-bottom: 40px;
+}
+
+.title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.summary {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  max-width: 800px;
+  margin-bottom: 24px;
+}
+
+.headerMetaGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  border-top: 1px solid var(--border-muted);
+  border-bottom: 1px solid var(--border-muted);
+  padding: 16px 0;
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metaLabel {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.metaVal {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.metaLink {
+  color: var(--text-gold);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.metaLink:hover {
+  text-decoration: underline;
+}
+
+/* Snapshot box */
+.snapshotBox {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-muted);
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 40px;
+}
+
+.snapshotMetric {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-gold);
+  margin-bottom: 16px;
+  border-bottom: 1px dashed var(--border-muted);
+  padding-bottom: 8px;
+}
+
+.snapshotGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.snapshotItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.snapshotLabel {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.snapshotVal {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* Sections */
+.section {
+  margin-bottom: 48px;
+}
+
+.sectionTitle {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sectionIcon {
+  color: var(--text-gold);
+}
+
+.sectionText {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.bulletList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bulletItem {
+  position: relative;
+  padding-left: 20px;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.bulletItem::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--text-gold);
+}
+
+/* Architecture Grid */
+.architectureGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.archCard {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-muted);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.archHeader {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-gold);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.archContent {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* Challenge card */
+.challengeCard {
+  background: var(--bg-tertiary);
+  border-left: 3px solid var(--text-gold);
+  padding: 16px;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 12px;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .overlay {
+    padding: 0;
+  }
+  .modal {
+    width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    border: none;
+  }
+  .detailPage {
+    padding: 24px 16px;
+  }
+  .headerMetaGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .snapshotGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .architectureGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bannerContainer {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-muted);
+  margin-bottom: 40px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+  aspect-ratio: 16/9;
+}
+
+.bannerImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

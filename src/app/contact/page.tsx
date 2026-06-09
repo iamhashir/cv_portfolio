@@ -1,7 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { Mail, Linkedin, Github, Copy, Check, ExternalLink, MessageCircle } from "lucide-react"
+import { EnvelopeSimple as Mail, LinkedinLogo as Linkedin, GithubLogo as Github, Copy, Check, ArrowUpRight as ExternalLink, ChatCircle as MessageCircle } from "@phosphor-icons/react"
+import { Magnetic } from "@/components/ui/Magnetic"
 import styles from "@/components/contact.module.css"
 import { site } from "@/data/site"
 
@@ -29,11 +30,11 @@ export default function Contact() {
 
       <div className={styles.mobileActions}>
         <a href={`https://wa.me/?text=${whatsAppMessage}`} className={styles.mobilePrimaryAction}>
-          <MessageCircle size={19} />
+          <MessageCircle size={22} weight="duotone" />
           <span>WhatsApp me directly</span>
         </a>
         <a href={`mailto:${emailAddress}`} className={styles.mobileSecondaryAction}>
-          <Mail size={19} />
+          <Mail size={22} weight="duotone" />
           <span>Send an email</span>
         </a>
       </div>
@@ -42,7 +43,7 @@ export default function Contact() {
       <div className={styles.grid}>
         <div className={styles.card}>
           <div className={styles.iconWrapper}>
-            <Mail size={22} />
+            <Mail size={26} weight="duotone" />
           </div>
           <h3 className={styles.cardTitle}>Direct Email</h3>
           <p className={styles.cardDesc}>
@@ -50,13 +51,13 @@ export default function Contact() {
           </p>
           <a href={`mailto:${emailAddress}`} className={styles.link}>
             <span>Send email</span>
-            <ExternalLink size={14} />
+            <ExternalLink size={16} weight="bold" />
           </a>
         </div>
 
         <div className={styles.card}>
           <div className={styles.iconWrapper}>
-            <Linkedin size={22} />
+            <Linkedin size={26} weight="duotone" />
           </div>
           <h3 className={styles.cardTitle}>LinkedIn Profile</h3>
           <p className={styles.cardDesc}>
@@ -64,13 +65,13 @@ export default function Contact() {
           </p>
           <a href={site.linkedin} target="_blank" rel="noopener noreferrer" className={styles.link}>
             <span>View profile</span>
-            <ExternalLink size={14} />
+            <ExternalLink size={16} weight="bold" />
           </a>
         </div>
 
         <div className={styles.card}>
           <div className={styles.iconWrapper}>
-            <Github size={22} />
+            <Github size={26} weight="duotone" />
           </div>
           <h3 className={styles.cardTitle}>GitHub Repository</h3>
           <p className={styles.cardDesc}>
@@ -78,7 +79,7 @@ export default function Contact() {
           </p>
           <a href={site.github} target="_blank" rel="noopener noreferrer" className={styles.link}>
             <span>View repositories</span>
-            <ExternalLink size={14} />
+            <ExternalLink size={16} weight="bold" />
           </a>
         </div>
       </div>
@@ -99,23 +100,25 @@ export default function Contact() {
             {site.linkedinHandle}
           </a>
         </div>
-        <button
-          onClick={handleCopy}
-          className={`${styles.copyBtn} ${copied ? styles.copiedState : ""}`}
-          title="Click to copy email address"
-        >
-          {copied ? (
-            <>
-              <Check size={16} />
-              <span>Email Copied!</span>
-            </>
-          ) : (
-            <>
-              <Copy size={16} />
-              <span>Copy Email Address</span>
-            </>
-          )}
-        </button>
+        <Magnetic strength={10}>
+          <button
+            onClick={handleCopy}
+            className={`${styles.copyBtn} ${copied ? styles.copiedState : ""}`}
+            title="Click to copy email address"
+          >
+            {copied ? (
+              <>
+                <Check size={18} weight="bold" />
+                <span>Email Copied!</span>
+              </>
+            ) : (
+              <>
+                <Copy size={18} weight="duotone" />
+                <span>Copy Email Address</span>
+              </>
+            )}
+          </button>
+        </Magnetic>
       </section>
     </div>
   )
