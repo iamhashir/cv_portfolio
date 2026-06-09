@@ -25,38 +25,59 @@ export default function Work() {
     <div className={`container ${styles.workPage}`}>
 
       {/* ── Header ── */}
-      <motion.header
-        className={styles.header}
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      >
-        <motion.p
-          className={styles.eyebrow}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.05 }}
-        >
-          {filteredProjects.length} {activeCategory === "All" ? "projects" : "in " + activeCategory}
-        </motion.p>
-        <motion.h1
-          className={styles.title}
+      <header className={styles.header}>
+        {/* Ambient orb behind header */}
+        <div className={styles.headerOrb} aria-hidden />
+
+        {/* Left col — eyebrow + title */}
+        <div className={styles.headerLeft}>
+          <motion.div
+            className={styles.eyebrowRow}
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.05 }}
+          >
+            <span className={styles.eyebrowLine} aria-hidden />
+            <span className={styles.eyebrow}>Selected Work</span>
+          </motion.div>
+
+          <motion.h1
+            className={styles.title}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
+          >
+            Case<br />Studies
+          </motion.h1>
+
+          <motion.div
+            className={styles.statRow}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.28 }}
+          >
+            <span className={styles.statChip}>{projects.length} projects</span>
+            <span className={styles.statDivider} aria-hidden />
+            <span className={styles.statChip}>{projectCategoryGroups.length} categories</span>
+            <span className={styles.statDivider} aria-hidden />
+            <span className={styles.statChip}>2024 – 2025</span>
+          </motion.div>
+        </div>
+
+        {/* Right col — description + decorative rule */}
+        <motion.div
+          className={styles.headerRight}
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.55, delay: 0.22 }}
         >
-          Case Studies
-        </motion.h1>
-        <motion.p
-          className={styles.description}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          A detailed look at the software architectures, database schemas, and commercial
-          outcomes of systems I have designed and deployed.
-        </motion.p>
-      </motion.header>
+          <p className={styles.description}>
+            A detailed look at the software architectures, database schemas,
+            and commercial outcomes of systems I have designed and deployed.
+          </p>
+          <div className={styles.headerRule} aria-hidden />
+        </motion.div>
+      </header>
 
       {/* ── Filter Tabs ── */}
       <motion.div
