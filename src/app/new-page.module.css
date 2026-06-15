@@ -57,6 +57,25 @@
   opacity: 1;
 }
 
+/* Prominent CV download button in header */
+.headerCvBtn {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #F4F0EA;
+  background: #0B0B0C;
+  text-decoration: none;
+  padding: 7px 16px;
+  border: 1px solid #0B0B0C;
+  transition: background 0.18s ease, color 0.18s ease;
+  letter-spacing: 0.01em;
+}
+
+.headerCvBtn:hover {
+  background: transparent;
+  color: #0B0B0C;
+}
+
 /* ── Hero ────────────────────────────────────────────────────── */
 .hero {
   min-height: 100svh;
@@ -66,7 +85,7 @@
 }
 
 .heroLeft {
-  width: 55%;
+  width: 66.666%;
   background: #F4F0EA;
   display: flex;
   flex-direction: column;
@@ -76,7 +95,7 @@
 }
 
 .heroRight {
-  width: 45%;
+  width: 33.333%;
   background: #0B0B0C;
   display: flex;
   flex-direction: column;

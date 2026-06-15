@@ -1,78 +1,29 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
-import { site } from "@/data/site"
-import { projects, Project } from "@/data/projects"
+import {
+  site,
+  projects,
+  Project,
+  getFilename,
+  getBadgeLabel,
+  TELEMETRY,
+  CAPABILITIES,
+} from "@/data/portfolioData"
 import { PortfolioFrame } from "@/components/PortfolioFrame"
 import styles from "./new-page.module.css"
-
-// ─── Slug → display filename ────────────────────────────────────
-function getFilename(project: Project): string {
-  const map: Record<string, string> = {
-    reactor: "Reactor.framework",
-    "mina-games": "MINA.realtime",
-    opsflow: "OpsFlow.sys",
-    financesmith: "FinanceSmith.infra",
-    traverse: "Traverse.ai",
-    "ui-analyzer": "UIAnalyzer.ai",
-  }
-  return map[project.slug] ?? `${project.slug}.sys`
-}
-
-// ─── Status badge label ─────────────────────────────────────────
-function getBadgeLabel(project: Project): string {
-  if (project.status.toLowerCase().includes("private")) return "[PRIVATE]"
-  if (project.githubUrl) return "[MIT LICENSE]"
-  return "[PRODUCTION]"
-}
-
-// ─── Telemetry card data for hero right panel ───────────────────
-const TELEMETRY = [
-  {
-    title: "REACTOR.FRAMEWORK",
-    badge: "[MIT]",
-    rows: [
-      { key: "TYPE", val: "Zero-dependency engine" },
-      { key: "STACK", val: "TypeScript // Custom JSX" },
-      { key: "TESTS", val: "100% PASSING" },
-      { key: "METRIC", val: "Custom rendering pipeline" },
-    ],
-  },
-  {
-    title: "OPSFLOW.SYS",
-    badge: "[LIVE]",
-    rows: [
-      { key: "TYPE", val: "CRM + Workflow Platform" },
-      { key: "STACK", val: "React // Node.js // PG" },
-      { key: "TESTS", val: "Deployed · Production" },
-      { key: "METRIC", val: "1,200+ daily records" },
-    ],
-  },
-  {
-    title: "MINA.REALTIME",
-    badge: "[LIVE]",
-    rows: [
-      { key: "TYPE", val: "Multiplayer Platform" },
-      { key: "STACK", val: "Fastify // WebSockets" },
-      { key: "TESTS", val: "Sub-50ms latency" },
-      { key: "METRIC", val: "Real-time sync engine" },
-    ],
-  },
-]
 
 // ─── Accordion detail panel ─────────────────────────────────────
 function AccordionDetail({ project, onClose }: { project: Project; onClose: () => void }) {
   return (
     <div className={styles.accordionRow}>
       <div className={styles.accordionInner}>
-        {/* Close button spanning full width */}
         <div className={styles.accordionClose}>
           <button className={styles.accordionCloseBtn} onClick={onClose}>
             [CLOSE ×]
           </button>
         </div>
 
-        {/* Left column */}
         <div>
           <h3 className={styles.accordionTitle}>{project.title}</h3>
           <p className={styles.accordionFullSummary}>{project.solution}</p>
@@ -97,7 +48,6 @@ function AccordionDetail({ project, onClose }: { project: Project; onClose: () =
           </div>
         </div>
 
-        {/* Right column */}
         <div>
           <p className={styles.accordionSectionLabel}>Outcomes</p>
           <ul className={styles.accordionOutcomes}>
@@ -136,8 +86,8 @@ function ProjectCard({
   isExpanded: boolean
   onToggle: () => void
 }) {
-  const filename = getFilename(project)
-  const badge = getBadgeLabel(project)
+  const filename = getFilename(project.slug)
+  const badge = getBadgeLabel(project.status, project.githubUrl)
 
   return (
     <div
@@ -173,7 +123,7 @@ function ProjectCard({
   )
 }
 
-// ─── Build the grid with accordion panels injected per row ───────
+// ─── 3-column grid with inline accordion rows ───────────────────
 function ProjectsGrid({
   expandedSlug,
   onToggle,
@@ -183,8 +133,6 @@ function ProjectsGrid({
   onToggle: (slug: string) => void
   onClose: () => void
 }) {
-  // 3-column grid on desktop. Accordion spans full row.
-  // We chunk into rows of 3 and inject the accordion after each row that contains the expanded project.
   const COL_COUNT = 3
   const rows: Project[][] = []
   for (let i = 0; i < projects.length; i += COL_COUNT) {
@@ -224,7 +172,6 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false)
   const [expandedSlug, setExpandedSlug] = useState<string | null>(null)
 
-  // Track scroll for header background
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
     window.addEventListener("scroll", onScroll, { passive: true })
@@ -232,42 +179,35 @@ export default function Home() {
   }, [])
 
   function handleToggle(slug: string) {
-    setExpandedSlug((prev: string | null) => (prev === slug ? null : slug))
+    setExpandedSlug((prev) => (prev === slug ? null : slug))
   }
 
   return (
     <div className={styles.page}>
       <PortfolioFrame />
 
-      {/* ── Header ── */}
+      {/* ── Spec 1: Global Frame — rendered inside PortfolioFrame ── */}
+
+      {/* ── Spec 2: Floating Minimalist Header ── */}
       <header className={`${styles.header} ${scrolled ? styles.headerScrolled : ""}`}>
         <a href="#hero" className={styles.headerLogo}>M.H.</a>
         <nav className={styles.headerLinks}>
-          <a
-            href={site.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.headerLink}
-          >
+          <a href={site.github} target="_blank" rel="noopener noreferrer" className={styles.headerLink}>
             GitHub ↗
           </a>
-          <a
-            href={site.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.headerLink}
-          >
+          <a href={site.linkedin} target="_blank" rel="noopener noreferrer" className={styles.headerLink}>
             LinkedIn ↗
           </a>
-          <a href={`mailto:${site.email}`} className={styles.headerLink}>
-            Email →
+          <a href="/Malik_Hashir_CV.pdf" download className={styles.headerCvBtn}>
+            Download CV →
           </a>
         </nav>
       </header>
 
-      {/* ── Section 1: Hero ── */}
+      {/* ── Spec 3: Asymmetric Split Hero — flex col on mobile, row on desktop ── */}
       <section id="hero" className={styles.hero}>
-        {/* Left column — warm off-white */}
+
+        {/* Left — 2/3 width: clean off-white #F4F0EA */}
         <div className={styles.heroLeft}>
           <p className={styles.eyebrow}>FULL-STACK · AI · SYSTEMS</p>
 
@@ -277,7 +217,7 @@ export default function Home() {
 
           <p className={styles.heroSub}>
             Full-stack developer specializing in CRM automation, AI workflows,
-            and internal operations platforms.
+            and internal operations platforms across the JavaScript ecosystem.
           </p>
 
           <p className={styles.availabilityLine}>
@@ -286,11 +226,7 @@ export default function Home() {
           </p>
 
           <div className={styles.ctaGroup}>
-            <a
-              href="/Malik_Hashir_CV.pdf"
-              download
-              className={styles.ctaPrimary}
-            >
+            <a href="/Malik_Hashir_CV.pdf" download className={styles.ctaPrimary}>
               Download CV →
             </a>
             <a href="#systems" className={styles.ctaSecondary}>
@@ -299,13 +235,13 @@ export default function Home() {
           </div>
 
           <p className={styles.heroMetrics}>
-            12 systems built · 4 domains · UAE based
+            {projects.length} systems built · 4 domains · UAE based
           </p>
         </div>
 
-        {/* Right column — obsidian with telemetry */}
+        {/* Right — 1/3 width: deep dark structural block with telemetry */}
         <div className={styles.heroRight}>
-          <p className={styles.systemsLabel}>ACTIVE SYSTEMS // 12</p>
+          <p className={styles.systemsLabel}>ACTIVE SYSTEMS // {projects.length}</p>
           <div className={styles.telemetryCards}>
             {TELEMETRY.map((card) => (
               <div key={card.title} className={styles.telemetryCard}>
@@ -326,14 +262,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Section 2: Work Gallery ── */}
+      {/* ── Spec 4: Scrollable Work Gallery — bg-white, plain-text metadata ── */}
       <section id="systems" className={styles.systems}>
         <p className={styles.sectionLabel}>02 // SYSTEMS</p>
         <h2 className={styles.sectionH2}>Engineering Systems</h2>
         <p className={styles.sectionSubtitle}>
           Production-grade platforms, frameworks, and tools.
         </p>
-
         <ProjectsGrid
           expandedSlug={expandedSlug}
           onToggle={handleToggle}
@@ -341,7 +276,7 @@ export default function Home() {
         />
       </section>
 
-      {/* ── Section 3: About ── */}
+      {/* ── Spec 5: About — no separate /about route ── */}
       <section id="about" className={styles.about}>
         <p className={styles.sectionLabel}>03 // ABOUT</p>
         <h2 className={styles.sectionH2}>{site.name}</h2>
@@ -354,20 +289,10 @@ export default function Home() {
             <p className={styles.aboutBio}>{site.bio}</p>
             <p className={styles.aboutAvailability}>{site.availability}</p>
           </div>
-
           <div>
             <p className={styles.capabilitiesLabel}>Capabilities</p>
             <div className={styles.capabilitiesGrid}>
-              {[
-                "CRM Systems",
-                "React / Next.js",
-                "Workflow Automation",
-                "Node.js / Fastify",
-                "AI Integrations",
-                "PostgreSQL / Redis",
-                "Operations Platforms",
-                "TypeScript",
-              ].map((cap) => (
+              {CAPABILITIES.map((cap) => (
                 <span key={cap} className={styles.capabilityItem}>{cap}</span>
               ))}
             </div>
@@ -375,7 +300,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Section 4: Contact ── */}
+      {/* ── Spec 5: Contact — no separate /contact route ── */}
       <section id="contact" className={styles.contact}>
         <p className={styles.contactSectionLabel}>04 // CONTACT</p>
         <h2 className={styles.contactH2}>Get in touch.</h2>
@@ -386,22 +311,12 @@ export default function Home() {
             <span className={styles.contactRowValue}>{site.email}</span>
             <span className={styles.contactRowArrow}>→</span>
           </a>
-          <a
-            href={site.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.contactRow}
-          >
+          <a href={site.linkedin} target="_blank" rel="noopener noreferrer" className={styles.contactRow}>
             <span className={styles.contactRowLabel}>LinkedIn</span>
             <span className={styles.contactRowValue}>{site.linkedinHandle}</span>
             <span className={styles.contactRowArrow}>↗</span>
           </a>
-          <a
-            href={site.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.contactRow}
-          >
+          <a href={site.github} target="_blank" rel="noopener noreferrer" className={styles.contactRow}>
             <span className={styles.contactRowLabel}>GitHub</span>
             <span className={styles.contactRowValue}>github.com/{site.githubHandle}</span>
             <span className={styles.contactRowArrow}>↗</span>
@@ -409,7 +324,8 @@ export default function Home() {
         </div>
 
         <p className={styles.contactStatusBar}>
-          01 // Abu Dhabi, UAE &nbsp;·&nbsp; 02 // Available for Work &nbsp;·&nbsp; uptime: 99.98% &nbsp;·&nbsp; © 2025 Malik Hashir
+          01 // {site.location} &nbsp;·&nbsp; 02 // Available for Work &nbsp;·&nbsp;
+          uptime: 99.98% &nbsp;·&nbsp; © {new Date().getFullYear()} {site.name}
         </p>
       </section>
     </div>
