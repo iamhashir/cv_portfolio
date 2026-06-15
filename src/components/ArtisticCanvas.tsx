@@ -33,18 +33,25 @@ function Squishy({ position, scale = 1, color = INDIGO, floatSpeed = 3, children
   )
 }
 
-// ─── Cluster that tilts toward the cursor ────────────────────────
+// ─── Cluster that tilts toward the cursor + scroll parallax ──────
 function ShapeCluster() {
   const group = useRef<Group>(null)
 
   useFrame((state) => {
     if (!group.current) return
+
     // Pointer is normalized to -1..1 by R3F. Ease the whole cluster
-    // toward it for a subtle, immersive parallax tilt.
-    const targetY = state.pointer.x * 0.6
-    const targetX = -state.pointer.y * 0.4
-    group.current.rotation.y += (targetY - group.current.rotation.y) * 0.05
-    group.current.rotation.x += (targetX - group.current.rotation.x) * 0.05
+    // toward it for a subtle, immersive tilt.
+    const targetRotY = state.pointer.x * 0.6
+    const targetRotX = -state.pointer.y * 0.4
+    group.current.rotation.y += (targetRotY - group.current.rotation.y) * 0.05
+    group.current.rotation.x += (targetRotX - group.current.rotation.x) * 0.05
+
+    // Scroll-linked parallax: shapes drift upward as the page scrolls,
+    // at a slower rate than the text layer — creating layered depth.
+    const scrollY = typeof window !== "undefined" ? window.scrollY : 0
+    const targetPosY = scrollY * 0.0022
+    group.current.position.y += (targetPosY - group.current.position.y) * 0.08
   })
 
   return (

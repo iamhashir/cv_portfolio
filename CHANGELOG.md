@@ -120,9 +120,40 @@ src/
 
 ---
 
+## 6. Asymmetric Split-Pane Hero + Interactive 3D Canvas
+
+### Split-pane structure
+- `src/app/new-page.module.css` — hero is `flex-direction: row` on desktop
+  (left `66.6%` / right `33.3%`), stacking to `column` on mobile (≤900px)
+- Right panel `.heroRight`: background `#18181B`, `position: relative`,
+  `overflow: hidden`, centered — a dedicated visual canvas container
+
+### Interactive 3D artistic canvas
+- New `src/components/ArtisticCanvas.tsx` — native React Three Fiber + Drei
+  (no external 3D services; ships in-bundle, client-side only via `ssr: false`)
+- Cluster of squishy floating primitives: a `torusKnotGeometry` hero plus
+  cube, icosahedron, and capsule accents
+- Each shape wrapped in Drei `<Float>` for continuous wobble/drift motion
+- Black `<Outlines>` (`#18181B`) on every mesh for the bold inked-edge look
+- `useFrame` eases the whole cluster toward the cursor (`state.pointer`) for
+  an immersive tilt
+- **Scroll-linked parallax**: shapes drift upward as the page scrolls, at a
+  slower rate than the text layer (`scrollY * 0.0022`, eased) — layered depth
+- Palette: `#4F46E5`, `#818CF8`, `#F4F0EA`; `Environment preset="city"` lighting
+
+### Dependency / deployment shift
+- **Added `@react-three/drei ^10`** (compatible with `@react-three/fiber 9.6.1`
+  + React 19.2) — `package.json` + `package-lock.json` updated
+- `node_modules` was absent in the environment; ran `npm install` to restore it
+- **Build verified**: `next build` passes end-to-end — TypeScript checks and
+  static prerender of `/` both green. Deploys (Vercel) will now bundle the
+  three.js/drei client chunk for the hero canvas.
+
+---
+
 ## Branches
 | Branch | State |
 |--------|-------|
-| `main` | New single-page editorial design, fully cleaned |
+| `main` | New single-page editorial design + 3D hero canvas, fully cleaned |
 | `legacy` | Full original multi-page portfolio preserved |
 | `claude/user-navigation-workflow-r4fmgr` | Feature branch used during mobile bug fixes, merged |
