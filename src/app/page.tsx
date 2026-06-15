@@ -10,7 +10,13 @@ import {
   CAPABILITIES,
 } from "@/data/portfolioData"
 import { PortfolioFrame } from "@/components/PortfolioFrame"
+import dynamic from "next/dynamic"
 import styles from "./new-page.module.css"
+
+// Three.js needs the browser — load the canvas client-side only
+const ArtisticCanvas = dynamic(() => import("@/components/ArtisticCanvas"), {
+  ssr: false,
+})
 
 // ─── Accordion detail panel ─────────────────────────────────────
 function AccordionDetail({ project, onClose }: { project: Project; onClose: () => void }) {
@@ -238,16 +244,9 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Right — 1/3 width: indigo visual canvas panel */}
+        {/* Right — 1/3 width: indigo panel with artistic 3D canvas */}
         <div className={styles.heroRight}>
-          {/* GEOMETRIC ANIMATION CANVAS PLACEHOLDER */}
-          <div className={styles.canvasPlaceholder}>
-            3D Canvas
-            <br />
-            Component
-            <br />
-            Goes Here
-          </div>
+          <ArtisticCanvas />
         </div>
       </section>
 

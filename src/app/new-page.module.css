@@ -96,7 +96,7 @@
 
 .heroRight {
   width: 33.333%;
-  background: #4F46E5;
+  background: #18181B;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -721,25 +721,4 @@
     grid-template-columns: 70px 1fr auto;
     gap: 12px;
   }
-}
-
-/* ── Canvas placeholder (right hero panel) ───────────────────── */
-.canvasPlaceholder {
-  width: 80%;
-  max-width: 280px;
-  aspect-ratio: 1;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255, 255, 255, 0.35);
-  font-family: var(--font-mono, monospace);
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  text-align: center;
-  line-height: 1.6;
-  padding: 24px;
-}
 }
