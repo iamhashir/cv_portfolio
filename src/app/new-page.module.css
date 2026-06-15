@@ -6,6 +6,8 @@
   background: transparent;
   color: #0B0B0C;
   min-height: 100svh;
+  position: relative;
+  z-index: 1;
 }
 
 /* ── Header ──────────────────────────────────────────────────── */
@@ -21,6 +23,8 @@
   justify-content: space-between;
   padding: 0 clamp(20px, 4vw, 48px);
   background: transparent;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   transition: background 0.3s ease;
 }
 

@@ -26,40 +26,6 @@ export function getBadgeLabel(status: string, githubUrl?: string): string {
   return "[PRODUCTION]"
 }
 
-// ─── Hero telemetry cards (right dark panel) ─────────────────────
-export const TELEMETRY = [
-  {
-    title: "REACTOR.FRAMEWORK",
-    badge: "[MIT]",
-    rows: [
-      { key: "TYPE",   val: "Zero-dependency engine" },
-      { key: "STACK",  val: "TypeScript // Custom JSX" },
-      { key: "TESTS",  val: "100% PASSING" },
-      { key: "METRIC", val: "Custom rendering pipeline" },
-    ],
-  },
-  {
-    title: "OPSFLOW.SYS",
-    badge: "[LIVE]",
-    rows: [
-      { key: "TYPE",   val: "CRM + Workflow Platform" },
-      { key: "STACK",  val: "React // Node.js // PG" },
-      { key: "STATUS", val: "Deployed · Production" },
-      { key: "METRIC", val: "1,200+ daily records" },
-    ],
-  },
-  {
-    title: "MINA.REALTIME",
-    badge: "[LIVE]",
-    rows: [
-      { key: "TYPE",   val: "Multiplayer Platform" },
-      { key: "STACK",  val: "Fastify // WebSockets" },
-      { key: "PERF",   val: "Sub-50ms latency" },
-      { key: "METRIC", val: "Real-time sync engine" },
-    ],
-  },
-] as const
-
 // ─── Capabilities list for About section ─────────────────────────
 export const CAPABILITIES = [
   "CRM Systems",
