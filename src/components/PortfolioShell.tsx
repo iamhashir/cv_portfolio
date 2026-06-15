@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import React, { useEffect } from "react"
 import { usePathname } from "next/navigation"
 import Footer from "@/components/Footer"
 import Navbar from "@/components/Navbar"
@@ -19,9 +19,11 @@ export default function PortfolioShell({ children }: { children: React.ReactNode
   const pathname = usePathname()
   const isMobile = useMobileExperience()
   const isAudienceLanding = pathname === "/hr" || pathname === "/client"
+  const isHome = pathname === "/"
   const { setSelectedProjectSlug } = useAppStore()
 
   useEffect(() => {
+    if (isHome) return
     if (typeof window === "undefined") return
 
     // 1. Intercept query parameters on load (e.g. direct entry to /work/slug redirecting to /?work=slug)
@@ -67,7 +69,10 @@ export default function PortfolioShell({ children }: { children: React.ReactNode
       document.removeEventListener("click", handleGlobalClick)
       window.removeEventListener("popstate", handlePopState)
     }
-  }, [setSelectedProjectSlug])
+  }, [setSelectedProjectSlug, isHome])
+
+  // New home page is self-contained — skip navbar/footer/scene/auditToggle
+  if (isHome) return <>{children}</>
 
   // Audience landings on confirmed mobile: no navbar, no footer
   if (isAudienceLanding && isMobile === true) {

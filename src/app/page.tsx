@@ -1,495 +1,417 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
-import Link from "next/link"
-import { motion } from "framer-motion"
-import { ArrowRight, GithubLogo, LinkedinLogo, EnvelopeSimple, CodeBlock, Brain, RocketLaunch, CheckCircle, Database } from "@phosphor-icons/react"
-import { Magnetic } from "@/components/ui/Magnetic"
-import styles from "./page.module.css"
+import React, { useEffect, useState } from "react"
 import { site } from "@/data/site"
+import { projects, Project } from "@/data/projects"
+import { PortfolioFrame } from "@/components/PortfolioFrame"
+import styles from "./new-page.module.css"
 
-// ─── Splash ────────────────────────────────────────────────────
-const SPLASH_LINES = site.splashLines
+// ─── Slug → display filename ────────────────────────────────────
+function getFilename(project: Project): string {
+  const map: Record<string, string> = {
+    reactor: "Reactor.framework",
+    "mina-games": "MINA.realtime",
+    opsflow: "OpsFlow.sys",
+    financesmith: "FinanceSmith.infra",
+    traverse: "Traverse.ai",
+    "ui-analyzer": "UIAnalyzer.ai",
+  }
+  return map[project.slug] ?? `${project.slug}.sys`
+}
 
-function SplashTerminal({ onDone }: { onDone: () => void }) {
-  const [step, setStep] = useState(0)
-  const [fading, setFading] = useState(false)
+// ─── Status badge label ─────────────────────────────────────────
+function getBadgeLabel(project: Project): string {
+  if (project.status.toLowerCase().includes("private")) return "[PRIVATE]"
+  if (project.githubUrl) return "[MIT LICENSE]"
+  return "[PRODUCTION]"
+}
 
-  useEffect(() => {
-    const timers: ReturnType<typeof setTimeout>[] = []
-    SPLASH_LINES.forEach((_, i) => {
-      timers.push(setTimeout(() => setStep(i + 1), 120 + i * 420))
-    })
-    const total = 120 + SPLASH_LINES.length * 420
-    timers.push(setTimeout(() => setFading(true), total + 300))
-    timers.push(setTimeout(() => onDone(),         total + 1100))
-    return () => timers.forEach(clearTimeout)
-  }, [onDone])
+// ─── Telemetry card data for hero right panel ───────────────────
+const TELEMETRY = [
+  {
+    title: "REACTOR.FRAMEWORK",
+    badge: "[MIT]",
+    rows: [
+      { key: "TYPE", val: "Zero-dependency engine" },
+      { key: "STACK", val: "TypeScript // Custom JSX" },
+      { key: "TESTS", val: "100% PASSING" },
+      { key: "METRIC", val: "Custom rendering pipeline" },
+    ],
+  },
+  {
+    title: "OPSFLOW.SYS",
+    badge: "[LIVE]",
+    rows: [
+      { key: "TYPE", val: "CRM + Workflow Platform" },
+      { key: "STACK", val: "React // Node.js // PG" },
+      { key: "TESTS", val: "Deployed · Production" },
+      { key: "METRIC", val: "1,200+ daily records" },
+    ],
+  },
+  {
+    title: "MINA.REALTIME",
+    badge: "[LIVE]",
+    rows: [
+      { key: "TYPE", val: "Multiplayer Platform" },
+      { key: "STACK", val: "Fastify // WebSockets" },
+      { key: "TESTS", val: "Sub-50ms latency" },
+      { key: "METRIC", val: "Real-time sync engine" },
+    ],
+  },
+]
 
+// ─── Accordion detail panel ─────────────────────────────────────
+function AccordionDetail({ project, onClose }: { project: Project; onClose: () => void }) {
   return (
-    <div className={`${styles.splash} ${fading ? styles.splashOut : ""}`}>
-      <div className={styles.splashInner}>
-        <div className={styles.splashHeader}>malik-hashir.dev</div>
-        {SPLASH_LINES.slice(0, step).map(({ prefix, text }, i) => (
-          <div key={i} className={styles.splashLine}>
-            <span className={styles.splashGt}>{prefix}&nbsp;</span>
-            {text}
+    <div className={styles.accordionRow}>
+      <div className={styles.accordionInner}>
+        {/* Close button spanning full width */}
+        <div className={styles.accordionClose}>
+          <button className={styles.accordionCloseBtn} onClick={onClose}>
+            [CLOSE ×]
+          </button>
+        </div>
+
+        {/* Left column */}
+        <div>
+          <h3 className={styles.accordionTitle}>{project.title}</h3>
+          <p className={styles.accordionFullSummary}>{project.solution}</p>
+
+          <p className={styles.accordionSectionLabel}>Architecture</p>
+          <div className={styles.accordionArchRow}>
+            <span className={styles.accordionArchKey}>Frontend</span>
+            <span className={styles.accordionArchVal}>{project.architecture.frontend}</span>
           </div>
-        ))}
-        {step >= SPLASH_LINES.length && <span className={styles.splashBlink} />}
+          <div className={styles.accordionArchRow}>
+            <span className={styles.accordionArchKey}>Backend</span>
+            <span className={styles.accordionArchVal}>{project.architecture.backend}</span>
+          </div>
+          <div className={styles.accordionArchRow}>
+            <span className={styles.accordionArchKey}>Database</span>
+            <span className={styles.accordionArchVal}>{project.architecture.database}</span>
+          </div>
+
+          <p className={styles.accordionSectionLabel} style={{ marginTop: 20 }}>Tech Stack</p>
+          <div className={styles.accordionStackFull}>
+            {project.techStack.join(" // ")}
+          </div>
+        </div>
+
+        {/* Right column */}
+        <div>
+          <p className={styles.accordionSectionLabel}>Outcomes</p>
+          <ul className={styles.accordionOutcomes}>
+            {project.outcome.map((item, i) => (
+              <li key={i}>{item}</li>
+            ))}
+          </ul>
+
+          {project.metric && (
+            <p className={styles.accordionMetricBig}>{project.metric}</p>
+          )}
+
+          {project.githubUrl && (
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.accordionGithubLink}
+            >
+              ↗ Source on GitHub
+            </a>
+          )}
+        </div>
       </div>
     </div>
   )
 }
 
-// ─── Metric Card ───────────────────────────────────────────────
-function MetricCard({ value, label, delay = 0, isDark }: {
-  value: string; label: string; delay?: number; isDark: boolean
+// ─── Project card ───────────────────────────────────────────────
+function ProjectCard({
+  project,
+  isExpanded,
+  onToggle,
+}: {
+  project: Project
+  isExpanded: boolean
+  onToggle: () => void
 }) {
+  const filename = getFilename(project)
+  const badge = getBadgeLabel(project)
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -4, scale: 1.03 }}
-      transition={{ duration: 0.6, delay }}
-      style={{
-        background: isDark
-          ? "rgba(255,255,255,0.12)"
-          : "linear-gradient(135deg, rgba(255,255,255,0.82) 0%, rgba(255,235,140,0.55) 100%)",
-        backdropFilter: "blur(24px)",
-        WebkitBackdropFilter: "blur(24px)",
-        border: isDark
-          ? "1px solid rgba(201,169,110,0.38)"
-          : "1px solid rgba(255,190,50,0.55)",
-        borderRadius: "20px",
-        padding: "24px",
-        boxShadow: isDark
-          ? "0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,169,110,0.08), inset 0 1px 0 rgba(255,255,255,0.12)"
-          : "0 8px 32px rgba(180,120,10,0.2), 0 2px 8px rgba(255,160,30,0.15), inset 0 1px 0 rgba(255,255,255,0.95)",
-        cursor: "default",
-      }}
+    <div
+      className={styles.projectCard}
+      onClick={onToggle}
+      style={{ outline: isExpanded ? "1px solid rgba(201,169,110,0.4)" : "none" }}
     >
-      <div style={{
-        fontSize: "32px", fontWeight: "800",
-        background: "linear-gradient(135deg, #c9a96e 0%, #e8b84b 100%)",
-        WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-        backgroundClip: "text",
-        marginBottom: "6px", lineHeight: 1,
-      }}>
-        {value}
-      </div>
-      <div style={{ fontSize: "13px", color: isDark ? "rgba(240,235,226,0.7)" : "rgba(26,18,6,0.65)", fontWeight: "500", lineHeight: 1.4 }}>
-        {label}
-      </div>
-    </motion.div>
-  )
-}
-
-// ─── Tech Pill ─────────────────────────────────────────────────
-import { useAppStore } from "@/lib/store"
-
-function TechPill({ icon, label, delay = 0, isDark, projectSlug }: {
-  icon: React.ReactNode; label: string; delay?: number; isDark: boolean; projectSlug?: string
-}) {
-  const setActiveProject = useAppStore((state) => state.setActiveProject)
-
-  return (
-    <motion.div
-      className="interactive-hover"
-      initial={{ opacity: 0, scale: 0.85 }}
-      animate={{ opacity: 1, scale: 1 }}
-      whileHover={{ scale: 1.05, y: -2 }}
-      onMouseEnter={() => projectSlug && setActiveProject(projectSlug)}
-      onMouseLeave={() => projectSlug && setActiveProject(null)}
-      transition={{ duration: 0.3, delay }}
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: "7px",
-        background: isDark
-          ? "rgba(255,255,255,0.14)"
-          : "linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,230,120,0.45) 100%)",
-        backdropFilter: "blur(18px)",
-        WebkitBackdropFilter: "blur(18px)",
-        border: isDark
-          ? "1px solid rgba(201,169,110,0.38)"
-          : "1px solid rgba(255,185,40,0.5)",
-        borderRadius: "9999px",
-        padding: "9px 18px",
-        fontSize: "13px",
-        fontWeight: "600",
-        color: isDark ? "rgba(240,235,226,0.88)" : "rgba(22,14,2,0.78)",
-        boxShadow: isDark
-          ? "0 4px 16px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.1)"
-          : "0 4px 16px rgba(180,120,10,0.16), inset 0 1px 0 rgba(255,255,255,0.9)",
-        cursor: "pointer",
-      }}
-    >
-      {icon}
-      {label}
-    </motion.div>
-  )
-}
-
-// ─── Availability Badge ────────────────────────────────────────
-function AvailabilityBadge({ isDark }: { isDark: boolean }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.6, delay: 0.15 }}
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: "8px",
-        background: "rgba(34,197,94,0.1)",
-        backdropFilter: "blur(15px)",
-        WebkitBackdropFilter: "blur(15px)",
-        border: "1px solid rgba(34,197,94,0.32)",
-        borderRadius: "9999px",
-        padding: "7px 16px",
-        fontSize: "12px",
-        fontWeight: "600",
-        color: isDark ? "#4ade80" : "rgb(22,163,74)",
-      }}
-    >
-      <motion.div
-        animate={{ scale: [1, 1.35, 1], opacity: [1, 0.5, 1] }}
-        transition={{ duration: 2, repeat: Infinity }}
-        style={{
-          width: "7px", height: "7px", borderRadius: "50%",
-          background: "#22c55e",
-          boxShadow: "0 0 8px #22c55e",
-          flexShrink: 0,
-        }}
-      />
-      Available for Work
-    </motion.div>
-  )
-}
-
-// ─── Page ──────────────────────────────────────────────────────
-export default function Home() {
-  const [splashDone, setSplashDone]       = useState(false)
-  const [mousePos,   setMousePos]         = useState({ x: 0, y: 0 })
-  const [isDark,     setIsDark]           = useState(true)
-
-  useEffect(() => {
-    if (sessionStorage.getItem("splashShown")) setSplashDone(true)
-  }, [])
-
-  // Track theme toggle
-  useEffect(() => {
-    const check = () => setIsDark(document.documentElement.getAttribute("data-theme") !== "light")
-    check()
-    const obs = new MutationObserver(check)
-    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] })
-    return () => obs.disconnect()
-  }, [])
-
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => setMousePos({ x: e.clientX, y: e.clientY })
-    window.addEventListener("mousemove", onMove)
-    return () => window.removeEventListener("mousemove", onMove)
-  }, [])
-
-  const handleSplashDone = useCallback(() => {
-    sessionStorage.setItem("splashShown", "1")
-    setSplashDone(true)
-  }, [])
-
-  // ── Theme-aware design tokens ─────────────────────────────────
-  // Light: rich honey-amber mesh gradient — vibrant background makes glass POP
-  // Dark:  deep warm ink with dual amber + plum glow
-  const bg = isDark
-    ? `radial-gradient(ellipse at 20% 20%, rgba(201,169,110,0.28) 0%, transparent 52%),
-       radial-gradient(ellipse at 80% 80%, rgba(160,90,140,0.12) 0%, transparent 52%),
-       radial-gradient(ellipse at 60% 10%, rgba(201,169,110,0.10) 0%, transparent 40%),
-       #080706`
-    : `radial-gradient(ellipse at 10% 10%, #ffe5a0 0%, transparent 55%),
-       radial-gradient(ellipse at 90% 85%, #ffb347 0%, transparent 55%),
-       radial-gradient(ellipse at 55% 50%, rgba(255,210,100,0.55) 0%, transparent 60%),
-       linear-gradient(145deg, #fff8e7 0%, #ffecc4 40%, #ffd57a 75%, #ffbc3a 100%)`
-
-  // Panel glass — heavier opacity so it reads clearly on vibrant bg
-  const panelBg     = isDark ? "rgba(20,17,14,0.58)"          : "rgba(255,253,245,0.62)"
-  const panelShadow = isDark
-    ? "0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,169,110,0.1), inset 0 1px 0 rgba(255,255,255,0.08)"
-    : "0 32px 80px rgba(180,120,20,0.22), 0 8px 24px rgba(0,0,0,0.08), 0 0 0 1px rgba(255,200,80,0.3), inset 0 1px 0 rgba(255,255,255,0.95)"
-
-  const textPrimary   = isDark ? "#f0ebe2"                         : "#1a1209"
-  const textSecondary = isDark ? "rgba(240,235,226,0.65)"          : "rgba(30,20,8,0.65)"
-  const btnGlassBg    = isDark ? "rgba(255,255,255,0.10)"          : "rgba(255,255,255,0.62)"
-  const btnGlassBdr   = isDark ? "1px solid rgba(201,169,110,0.3)" : "1px solid rgba(255,255,255,0.8)"
-  const socialBg      = isDark ? "rgba(255,255,255,0.09)"          : "rgba(255,255,255,0.58)"
-
-  return (
-    <>
-      {!splashDone && <SplashTerminal onDone={handleSplashDone} />}
-
-      <div style={{ position: "relative", minHeight: "100vh", width: "100%", overflow: "hidden", background: bg }}>
-
-        {/* Noise texture handled globally by PortfolioShell */}
-
-        {/* Orb — top-left: vibrant amber */}
-        <motion.div
-          animate={{ x: [0, 90, 0], y: [0, -70, 0], scale: [1, 1.22, 1] }}
-          transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-          style={{
-            position: "absolute", width: "700px", height: "700px",
-            left: "-160px", top: "-5%", borderRadius: "50%",
-            background: isDark
-              ? "radial-gradient(circle, rgba(201,169,110,0.38) 0%, transparent 65%)"
-              : "radial-gradient(circle, rgba(255,185,40,0.65) 0%, transparent 65%)",
-            filter: "blur(72px)",
-          }}
-        />
-
-        {/* Orb — bottom-right: warm amber/orange */}
-        <motion.div
-          animate={{ x: [0, -110, 0], y: [0, 90, 0], scale: [1, 1.28, 1] }}
-          transition={{ duration: 28, repeat: Infinity, ease: "easeInOut" }}
-          style={{
-            position: "absolute", width: "580px", height: "580px",
-            right: "-80px", bottom: "5%", borderRadius: "50%",
-            background: isDark
-              ? "radial-gradient(circle, rgba(201,169,110,0.22) 0%, transparent 65%)"
-              : "radial-gradient(circle, rgba(255,145,30,0.5) 0%, transparent 65%)",
-            filter: "blur(85px)",
-          }}
-        />
-
-        {/* Orb — dark mode only: warm plum accent for depth */}
-        {isDark && (
-          <motion.div
-            animate={{ x: [0, 60, 0], y: [0, -40, 0] }}
-            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-            style={{
-              position: "absolute", width: "420px", height: "420px",
-              right: "20%", top: "10%", borderRadius: "50%",
-              background: "radial-gradient(circle, rgba(160,90,140,0.18) 0%, transparent 65%)",
-              filter: "blur(90px)",
-            }}
-          />
+      <div className={styles.projectFilename}>{filename}</div>
+      <hr className={styles.projectDivider} />
+      <div className={styles.projectCategory}>{project.category}</div>
+      <p className={styles.projectSummary}>{project.summary}</p>
+      <div className={styles.projectStack}>{project.techStack.join(" // ")}</div>
+      <div className={styles.projectFooter}>
+        <span className={styles.projectBadge}>{badge}</span>
+        {project.metric && (
+          <span className={styles.projectMetric}>
+            {project.metric.split("·")[0]?.trim()}
+          </span>
         )}
-
-        {/* Mouse-follow spotlight */}
-        <motion.div
-          animate={{ x: mousePos.x - 300, y: mousePos.y - 300 }}
-          transition={{ type: "spring", damping: 28, stiffness: 160 }}
-          style={{
-            position: "absolute", width: "600px", height: "600px",
-            borderRadius: "50%", pointerEvents: "none", zIndex: 1,
-            background: isDark
-              ? "radial-gradient(circle, rgba(201,169,110,0.12) 0%, transparent 65%)"
-              : "radial-gradient(circle, rgba(255,255,255,0.35) 0%, transparent 65%)",
-            filter: "blur(55px)",
-          }}
-        />
-
-        {/* Content wrapper */}
-        <div style={{
-          position: "relative", zIndex: 10,
-          minHeight: "100vh", display: "flex",
-          alignItems: "center", justifyContent: "center",
-          padding: "clamp(80px, 10vw, 120px) clamp(16px, 4vw, 40px) 48px",
-        }}>
-          {/* ── Animated border ring + Central Glass Panel ── */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className={styles.panelGlowRing}
-            style={{ maxWidth: "1080px", width: "100%", boxShadow: panelShadow }}
+        {project.githubUrl && (
+          <a
+            href={project.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.projectSourceLink}
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
           >
-          <div
-            style={{
-              background: panelBg,
-              backdropFilter: "blur(32px)",
-              WebkitBackdropFilter: "blur(32px)",
-              borderRadius: "32px",
-              padding: "clamp(36px, 5vw, 60px) clamp(28px, 5vw, 56px)",
-              position: "relative",
-            }}
+            ↗ Source
+          </a>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ─── Build the grid with accordion panels injected per row ───────
+function ProjectsGrid({
+  expandedSlug,
+  onToggle,
+  onClose,
+}: {
+  expandedSlug: string | null
+  onToggle: (slug: string) => void
+  onClose: () => void
+}) {
+  // 3-column grid on desktop. Accordion spans full row.
+  // We chunk into rows of 3 and inject the accordion after each row that contains the expanded project.
+  const COL_COUNT = 3
+  const rows: Project[][] = []
+  for (let i = 0; i < projects.length; i += COL_COUNT) {
+    rows.push(projects.slice(i, i + COL_COUNT))
+  }
+
+  return (
+    <div className={styles.projectsGrid}>
+      {rows.map((row, ri) => {
+        const expandedProject = row.find((p) => p.slug === expandedSlug) ?? null
+        return (
+          <React.Fragment key={`row-${ri}`}>
+            {row.map((project) => (
+              <ProjectCard
+                key={project.slug}
+                project={project}
+                isExpanded={expandedSlug === project.slug}
+                onToggle={() => onToggle(project.slug)}
+              />
+            ))}
+            {expandedProject && (
+              <AccordionDetail
+                key={`accordion-${expandedProject.slug}`}
+                project={expandedProject}
+                onClose={onClose}
+              />
+            )}
+          </React.Fragment>
+        )
+      })}
+    </div>
+  )
+}
+
+// ─── Page ────────────────────────────────────────────────────────
+export default function Home() {
+  const [scrolled, setScrolled] = useState(false)
+  const [expandedSlug, setExpandedSlug] = useState<string | null>(null)
+
+  // Track scroll for header background
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40)
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
+  function handleToggle(slug: string) {
+    setExpandedSlug((prev: string | null) => (prev === slug ? null : slug))
+  }
+
+  return (
+    <div className={styles.page}>
+      <PortfolioFrame />
+
+      {/* ── Header ── */}
+      <header className={`${styles.header} ${scrolled ? styles.headerScrolled : ""}`}>
+        <a href="#hero" className={styles.headerLogo}>M.H.</a>
+        <nav className={styles.headerLinks}>
+          <a
+            href={site.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.headerLink}
           >
-            {/* Inner gradient sheen */}
-            <div style={{
-              position: "absolute", inset: 0, borderRadius: "32px", pointerEvents: "none",
-              background: isDark
-                ? "linear-gradient(135deg, rgba(201,169,110,0.04) 0%, rgba(255,255,255,0.01) 100%)"
-                : "linear-gradient(135deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.08) 100%)",
-            }} />
+            GitHub ↗
+          </a>
+          <a
+            href={site.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.headerLink}
+          >
+            LinkedIn ↗
+          </a>
+          <a href={`mailto:${site.email}`} className={styles.headerLink}>
+            Email →
+          </a>
+        </nav>
+      </header>
 
-            <div style={{ position: "relative", zIndex: 1 }}>
+      {/* ── Section 1: Hero ── */}
+      <section id="hero" className={styles.hero}>
+        {/* Left column — warm off-white */}
+        <div className={styles.heroLeft}>
+          <p className={styles.eyebrow}>FULL-STACK · AI · SYSTEMS</p>
 
-              {/* Availability */}
-              <div style={{ marginBottom: "16px" }}>
-                <AvailabilityBadge isDark={isDark} />
-              </div>
+          <h1 className={styles.heroH1}>
+            I build complete web and mobile systems from scratch.
+          </h1>
 
-              {/* Name */}
-              <motion.h1
-                initial={{ opacity: 0, y: 28 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.65, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                style={{
-                  fontSize: "clamp(44px, 7vw, 78px)",
-                  fontWeight: "800",
-                  background: "linear-gradient(135deg, #c9a96e 0%, #d4a853 55%, #b8894a 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                  marginBottom: "12px",
-                  lineHeight: "1.08",
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                {site.name}
-              </motion.h1>
+          <p className={styles.heroSub}>
+            Full-stack developer specializing in CRM automation, AI workflows,
+            and internal operations platforms.
+          </p>
 
-              {/* Role */}
-              <motion.p
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                style={{
-                  fontSize: "clamp(18px, 2.5vw, 26px)",
-                  fontWeight: "600",
-                  color: textPrimary,
-                  marginBottom: "20px",
-                  opacity: 0.88,
-                }}
-              >
-                {site.role}
-              </motion.p>
+          <p className={styles.availabilityLine}>
+            <span className={styles.greenDot} />
+            AVAILABLE · Abu Dhabi, UAE · Remote worldwide
+          </p>
 
-              {/* Subtitle */}
-              <motion.p
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.38 }}
-                style={{
-                  fontSize: "clamp(15px, 1.6vw, 17px)",
-                  lineHeight: "1.75",
-                  color: textSecondary,
-                  marginBottom: "36px",
-                  maxWidth: "620px",
-                }}
-              >
-                I architect production AI systems, real-time platforms, and workflow automation
-                that turn operational chaos into reliable software. Custom internal tools built for scale.
-              </motion.p>
+          <div className={styles.ctaGroup}>
+            <a
+              href="/Malik_Hashir_CV.pdf"
+              download
+              className={styles.ctaPrimary}
+            >
+              Download CV →
+            </a>
+            <a href="#systems" className={styles.ctaSecondary}>
+              View Systems ↓
+            </a>
+          </div>
 
-              {/* Tech Pills */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.44 }}
-                style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "40px" }}
-              >
-                <TechPill icon={<CodeBlock size={16} weight="duotone" color="#c9a96e" />}     label="React & Next.js"  delay={0.5}  isDark={isDark} projectSlug="reactor" />
-                <TechPill icon={<Brain size={16} weight="duotone" color="#c9a96e" />}      label="AI / ML"          delay={0.54} isDark={isDark} projectSlug="mina-games" />
-                <TechPill icon={<RocketLaunch size={16} weight="duotone" color="#c9a96e" />}     label="Node.js"          delay={0.58} isDark={isDark} projectSlug="opsflow" />
-                <TechPill icon={<CheckCircle size={16} weight="duotone" color="#c9a96e"/>} label="TypeScript"      delay={0.62} isDark={isDark} projectSlug="reactor" />
-                <TechPill icon={<CodeBlock size={16} weight="duotone" color="#c9a96e" />}      label="Python"           delay={0.66} isDark={isDark} projectSlug="opsflow" />
-                <TechPill icon={<Database size={16} weight="duotone" color="#c9a96e" />}   label="PostgreSQL"       delay={0.7}  isDark={isDark} projectSlug="opsflow" />
-              </motion.div>
+          <p className={styles.heroMetrics}>
+            12 systems built · 4 domains · UAE based
+          </p>
+        </div>
 
-              {/* Metrics */}
-              <div style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gap: "16px",
-                marginBottom: "40px",
-              }}>
-                <MetricCard value="6"       label="Production systems shipped"  delay={0.62} isDark={isDark} />
-                <MetricCard value="15h+/wk" label="Operations time saved"        delay={0.72} isDark={isDark} />
-                <MetricCard value="90%"     label="Manual work eliminated"       delay={0.82} isDark={isDark} />
-              </div>
-
-              {/* CTAs */}
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.88 }}
-                style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "32px" }}
-              >
-                <Magnetic strength={15}>
-                  <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }}>
-                    <Link href="/work" style={{
-                      display: "inline-flex", alignItems: "center", gap: "8px",
-                      padding: "14px 30px", fontSize: "15px", fontWeight: "600",
-                      color: "#fff",
-                      background: "linear-gradient(135deg, #c9a96e 0%, #b8894a 100%)",
-                      border: "none", borderRadius: "12px", cursor: "pointer", textDecoration: "none",
-                      boxShadow: "0 8px 24px rgba(201,169,110,0.38), inset 0 1px 0 rgba(255,255,255,0.22)",
-                    }}>
-                      See the Work <ArrowRight size={16} weight="bold" />
-                    </Link>
-                  </motion.div>
-                </Magnetic>
-
-                <Magnetic strength={15}>
-                  <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }}>
-                    <Link href="/contact" style={{
-                      display: "inline-flex", alignItems: "center", gap: "8px",
-                      padding: "14px 30px", fontSize: "15px", fontWeight: "600",
-                      color: textPrimary,
-                      background: btnGlassBg,
-                      backdropFilter: "blur(10px)",
-                      WebkitBackdropFilter: "blur(10px)",
-                      border: btnGlassBdr,
-                      borderRadius: "12px", cursor: "pointer", textDecoration: "none",
-                      boxShadow: "0 4px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.3)",
-                    }}>
-                      Get in Touch
-                    </Link>
-                  </motion.div>
-                </Magnetic>
-              </motion.div>
-
-              {/* Social icons */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: 1.0 }}
-                style={{ display: "flex", gap: "10px" }}
-              >
-                {[
-                  { href: site.github,                    icon: <GithubLogo   size={22} weight="duotone" color="#c9a96e" />, label: "GitHub"   },
-                  { href: site.linkedin,                  icon: <LinkedinLogo size={22} weight="duotone" color="#c9a96e" />, label: "LinkedIn" },
-                  { href: `mailto:${site.email}`,         icon: <EnvelopeSimple     size={22} weight="duotone" color="#c9a96e" />, label: "Email"    },
-                ].map(({ href, icon, label }) => (
-                  <Magnetic strength={15} key={label}>
-                    <motion.a
-                      href={href}
-                      target={href.startsWith("http") ? "_blank" : undefined}
-                      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                      aria-label={label}
-                      whileHover={{ scale: 1.1, y: -2 }}
-                      style={{
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        width: "46px", height: "46px",
-                        background: socialBg,
-                        backdropFilter: "blur(10px)",
-                        WebkitBackdropFilter: "blur(10px)",
-                        border: isDark ? "1px solid rgba(201,169,110,0.18)" : "1px solid rgba(255,255,255,0.65)",
-                        borderRadius: "12px", cursor: "pointer",
-                        boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-                        minWidth: "46px", minHeight: "46px",
-                      }}
-                    >
-                      {icon}
-                    </motion.a>
-                  </Magnetic>
+        {/* Right column — obsidian with telemetry */}
+        <div className={styles.heroRight}>
+          <p className={styles.systemsLabel}>ACTIVE SYSTEMS // 12</p>
+          <div className={styles.telemetryCards}>
+            {TELEMETRY.map((card) => (
+              <div key={card.title} className={styles.telemetryCard}>
+                <div className={styles.telemetryCardHeader}>
+                  <span className={styles.telemetryCardTitle}>{card.title}</span>
+                  <span className={styles.telemetryCardBadge}>{card.badge}</span>
+                </div>
+                <hr className={styles.telemetryDivider} />
+                {card.rows.map((row) => (
+                  <div key={row.key} className={styles.telemetryRow}>
+                    <span className={styles.telemetryKey}>{row.key}</span>
+                    <span className={styles.telemetryVal}>{row.val}</span>
+                  </div>
                 ))}
-              </motion.div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
+      {/* ── Section 2: Work Gallery ── */}
+      <section id="systems" className={styles.systems}>
+        <p className={styles.sectionLabel}>02 // SYSTEMS</p>
+        <h2 className={styles.sectionH2}>Engineering Systems</h2>
+        <p className={styles.sectionSubtitle}>
+          Production-grade platforms, frameworks, and tools.
+        </p>
+
+        <ProjectsGrid
+          expandedSlug={expandedSlug}
+          onToggle={handleToggle}
+          onClose={() => setExpandedSlug(null)}
+        />
+      </section>
+
+      {/* ── Section 3: About ── */}
+      <section id="about" className={styles.about}>
+        <p className={styles.sectionLabel}>03 // ABOUT</p>
+        <h2 className={styles.sectionH2}>{site.name}</h2>
+        <p style={{ fontSize: "0.9rem", color: "rgba(11,11,12,0.45)", marginBottom: 0 }}>
+          {site.role} · {site.location}
+        </p>
+
+        <div className={styles.aboutGrid}>
+          <div>
+            <p className={styles.aboutBio}>{site.bio}</p>
+            <p className={styles.aboutAvailability}>{site.availability}</p>
+          </div>
+
+          <div>
+            <p className={styles.capabilitiesLabel}>Capabilities</p>
+            <div className={styles.capabilitiesGrid}>
+              {[
+                "CRM Systems",
+                "React / Next.js",
+                "Workflow Automation",
+                "Node.js / Fastify",
+                "AI Integrations",
+                "PostgreSQL / Redis",
+                "Operations Platforms",
+                "TypeScript",
+              ].map((cap) => (
+                <span key={cap} className={styles.capabilityItem}>{cap}</span>
+              ))}
             </div>
           </div>
-          </motion.div>
         </div>
-      </div>
-    </>
+      </section>
+
+      {/* ── Section 4: Contact ── */}
+      <section id="contact" className={styles.contact}>
+        <p className={styles.contactSectionLabel}>04 // CONTACT</p>
+        <h2 className={styles.contactH2}>Get in touch.</h2>
+
+        <div className={styles.contactRows}>
+          <a href={`mailto:${site.email}`} className={styles.contactRow}>
+            <span className={styles.contactRowLabel}>Email</span>
+            <span className={styles.contactRowValue}>{site.email}</span>
+            <span className={styles.contactRowArrow}>→</span>
+          </a>
+          <a
+            href={site.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.contactRow}
+          >
+            <span className={styles.contactRowLabel}>LinkedIn</span>
+            <span className={styles.contactRowValue}>{site.linkedinHandle}</span>
+            <span className={styles.contactRowArrow}>↗</span>
+          </a>
+          <a
+            href={site.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.contactRow}
+          >
+            <span className={styles.contactRowLabel}>GitHub</span>
+            <span className={styles.contactRowValue}>github.com/{site.githubHandle}</span>
+            <span className={styles.contactRowArrow}>↗</span>
+          </a>
+        </div>
+
+        <p className={styles.contactStatusBar}>
+          01 // Abu Dhabi, UAE &nbsp;·&nbsp; 02 // Available for Work &nbsp;·&nbsp; uptime: 99.98% &nbsp;·&nbsp; © 2025 Malik Hashir
+        </p>
+      </section>
+    </div>
   )
 }

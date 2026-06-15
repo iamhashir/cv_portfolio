@@ -1,0 +1,716 @@
+/* ── New editorial portfolio page ─────────────────────────────── */
+
+/* ── Global reset for page ───────────────────────────────────── */
+.page {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  background: #F4F0EA;
+  color: #0B0B0C;
+  min-height: 100svh;
+}
+
+/* ── Header ──────────────────────────────────────────────────── */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(20px, 4vw, 48px);
+  background: transparent;
+  transition: background 0.3s ease;
+}
+
+.headerScrolled {
+  background: #F4F0EA;
+  border-bottom: 1px solid rgba(24,24,27,0.08);
+}
+
+.headerLogo {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0B0B0C;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+}
+
+.headerLinks {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.headerLink {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 0.82rem;
+  color: #0B0B0C;
+  text-decoration: none;
+  opacity: 0.7;
+  transition: opacity 0.18s ease;
+}
+
+.headerLink:hover {
+  opacity: 1;
+}
+
+/* ── Hero ────────────────────────────────────────────────────── */
+.hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: row;
+  padding-top: 56px; /* header height */
+}
+
+.heroLeft {
+  width: 55%;
+  background: #F4F0EA;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(48px, 6vw, 80px) clamp(24px, 5vw, 64px);
+  border-right: 1px solid rgba(24,24,27,0.08);
+}
+
+.heroRight {
+  width: 45%;
+  background: #0B0B0C;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(40px, 5vw, 64px) clamp(24px, 4vw, 48px);
+  overflow: hidden;
+}
+
+.eyebrow {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(11,11,12,0.45);
+  margin-bottom: 20px;
+}
+
+.heroH1 {
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1.02;
+  color: #0B0B0C;
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
+}
+
+.heroSub {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: rgba(11,11,12,0.55);
+  max-width: 440px;
+  margin-bottom: 24px;
+}
+
+.availabilityLine {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  color: rgba(11,11,12,0.55);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 32px;
+}
+
+.greenDot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+  flex-shrink: 0;
+}
+
+.ctaGroup {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.ctaPrimary {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0B0B0C;
+  text-decoration: none;
+  border-bottom: 1px solid #0B0B0C;
+  padding-bottom: 1px;
+  transition: opacity 0.18s ease;
+}
+
+.ctaPrimary:hover {
+  opacity: 0.7;
+}
+
+.ctaSecondary {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(11,11,12,0.45);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(11,11,12,0.2);
+  padding-bottom: 1px;
+  transition: color 0.18s ease, border-color 0.18s ease;
+}
+
+.ctaSecondary:hover {
+  color: #0B0B0C;
+  border-color: #0B0B0C;
+}
+
+.heroMetrics {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  color: rgba(11,11,12,0.4);
+  letter-spacing: 0.04em;
+}
+
+/* ── Hero Right (dark panel) ─────────────────────────────────── */
+.systemsLabel {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #C9A96E;
+  margin-bottom: 24px;
+}
+
+.telemetryCards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+  justify-content: center;
+}
+
+.telemetryCard {
+  border: 1px solid rgba(201,169,110,0.25);
+  padding: 16px 18px;
+  background: rgba(255,255,255,0.02);
+}
+
+.telemetryCardHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.telemetryCardTitle {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #F4F0EA;
+  letter-spacing: 0.05em;
+}
+
+.telemetryCardBadge {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.6rem;
+  color: #C9A96E;
+  letter-spacing: 0.08em;
+}
+
+.telemetryDivider {
+  border: none;
+  border-top: 1px solid rgba(248,245,240,0.08);
+  margin-bottom: 10px;
+}
+
+.telemetryRow {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.telemetryKey {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.6rem;
+  color: rgba(244,240,234,0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  width: 52px;
+  flex-shrink: 0;
+}
+
+.telemetryVal {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.6rem;
+  color: rgba(244,240,234,0.75);
+}
+
+/* ── Work Gallery ─────────────────────────────────────────────── */
+.systems {
+  background: #FFFFFF;
+  padding: clamp(60px, 8vw, 100px) clamp(24px, 5vw, 64px);
+}
+
+.sectionLabel {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(11,11,12,0.4);
+  margin-bottom: 16px;
+}
+
+.sectionH2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #0B0B0C;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.sectionSubtitle {
+  font-size: 0.9rem;
+  color: rgba(11,11,12,0.45);
+  margin-bottom: 48px;
+  max-width: 480px;
+  line-height: 1.55;
+}
+
+.projectsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(24,24,27,0.08);
+  border: 1px solid rgba(24,24,27,0.08);
+  margin-bottom: 0;
+}
+
+.projectCard {
+  background: #FAFAFA;
+  padding: 28px 28px 24px;
+  cursor: pointer;
+  transition: background 0.18s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.projectCard:hover {
+  background: #F7F7F7;
+}
+
+.projectFilename {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #0B0B0C;
+  margin-bottom: 10px;
+  letter-spacing: 0.02em;
+}
+
+.projectDivider {
+  border: none;
+  border-top: 1px solid rgba(24,24,27,0.08);
+  margin-bottom: 12px;
+}
+
+.projectCategory {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(11,11,12,0.35);
+  margin-bottom: 10px;
+}
+
+.projectSummary {
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: rgba(11,11,12,0.65);
+  margin-bottom: 14px;
+  flex: 1;
+}
+
+.projectStack {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.62rem;
+  color: rgba(11,11,12,0.4);
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+
+.projectFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+
+.projectBadge {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.6rem;
+  color: rgba(11,11,12,0.45);
+  letter-spacing: 0.06em;
+}
+
+.projectMetric {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.6rem;
+  color: #C9A96E;
+  letter-spacing: 0.04em;
+}
+
+.projectSourceLink {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.62rem;
+  color: rgba(11,11,12,0.45);
+  text-decoration: none;
+  transition: color 0.18s ease;
+  white-space: nowrap;
+}
+
+.projectSourceLink:hover {
+  color: #0B0B0C;
+}
+
+/* ── Accordion expand panel ───────────────────────────────────── */
+.accordionRow {
+  grid-column: 1 / -1;
+  background: #F4F0EA;
+  border-top: 1px solid rgba(24,24,27,0.08);
+}
+
+.accordionInner {
+  padding: 40px 40px 44px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.accordionClose {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.accordionCloseBtn {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.7rem;
+  color: rgba(11,11,12,0.4);
+  background: none;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  transition: color 0.18s ease;
+  padding: 0;
+}
+
+.accordionCloseBtn:hover {
+  color: #0B0B0C;
+}
+
+.accordionTitle {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #0B0B0C;
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.accordionFullSummary {
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: rgba(11,11,12,0.65);
+  margin-bottom: 20px;
+}
+
+.accordionSectionLabel {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(11,11,12,0.35);
+  margin-bottom: 8px;
+  margin-top: 16px;
+}
+
+.accordionArchRow {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.accordionArchKey {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  color: rgba(11,11,12,0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.accordionArchVal {
+  font-size: 0.78rem;
+  color: rgba(11,11,12,0.7);
+  line-height: 1.5;
+}
+
+.accordionStackFull {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.7rem;
+  color: rgba(11,11,12,0.55);
+  line-height: 1.9;
+}
+
+.accordionOutcomes {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.accordionOutcomes li {
+  font-size: 0.82rem;
+  color: rgba(11,11,12,0.65);
+  line-height: 1.6;
+  margin-bottom: 6px;
+  padding-left: 14px;
+  position: relative;
+}
+
+.accordionOutcomes li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: #C9A96E;
+  font-size: 0.75rem;
+}
+
+.accordionMetricBig {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  color: #C9A96E;
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+.accordionGithubLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  color: rgba(11,11,12,0.55);
+  text-decoration: none;
+  margin-top: 16px;
+  border-bottom: 1px solid rgba(11,11,12,0.15);
+  padding-bottom: 1px;
+  transition: color 0.18s ease;
+}
+
+.accordionGithubLink:hover {
+  color: #0B0B0C;
+}
+
+/* ── About ───────────────────────────────────────────────────── */
+.about {
+  background: #F0ECE5;
+  padding: clamp(60px, 8vw, 100px) clamp(24px, 5vw, 64px);
+  border-top: 1px solid rgba(24,24,27,0.08);
+}
+
+.aboutGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(32px, 5vw, 80px);
+  margin-top: 40px;
+}
+
+.aboutBio {
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: rgba(11,11,12,0.65);
+  margin-bottom: 16px;
+}
+
+.aboutAvailability {
+  font-size: 0.85rem;
+  line-height: 1.65;
+  color: rgba(11,11,12,0.5);
+  margin-bottom: 0;
+}
+
+.capabilitiesLabel {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(11,11,12,0.35);
+  margin-bottom: 16px;
+}
+
+.capabilitiesGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 32px;
+}
+
+.capabilityItem {
+  font-size: 0.82rem;
+  color: rgba(11,11,12,0.65);
+  line-height: 1.7;
+  padding-left: 12px;
+  position: relative;
+}
+
+.capabilityItem::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  color: rgba(11,11,12,0.3);
+}
+
+/* ── Contact ─────────────────────────────────────────────────── */
+.contact {
+  background: #0B0B0C;
+  padding: clamp(60px, 8vw, 100px) clamp(24px, 5vw, 64px);
+}
+
+.contactSectionLabel {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #C9A96E;
+  margin-bottom: 16px;
+}
+
+.contactH2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #F4F0EA;
+  margin-bottom: 48px;
+  letter-spacing: -0.02em;
+}
+
+.contactRows {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid rgba(248,245,240,0.08);
+  max-width: 640px;
+}
+
+.contactRow {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(248,245,240,0.08);
+  text-decoration: none;
+  transition: opacity 0.18s ease;
+}
+
+.contactRow:hover {
+  opacity: 0.75;
+}
+
+.contactRowLabel {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(244,240,234,0.35);
+}
+
+.contactRowValue {
+  font-size: 0.88rem;
+  color: rgba(244,240,234,0.8);
+}
+
+.contactRowArrow {
+  font-size: 0.9rem;
+  color: rgba(244,240,234,0.3);
+}
+
+.contactStatusBar {
+  margin-top: 60px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(248,245,240,0.06);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.62rem;
+  color: rgba(244,240,234,0.3);
+  letter-spacing: 0.06em;
+  line-height: 1.8;
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .hero {
+    flex-direction: column;
+  }
+
+  .heroLeft {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid rgba(24,24,27,0.08);
+    min-height: 70svh;
+    justify-content: flex-end;
+    padding-bottom: 48px;
+  }
+
+  .heroRight {
+    width: 100%;
+    min-height: 240px;
+    padding: 32px clamp(20px, 4vw, 48px);
+  }
+
+  .telemetryCards {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 12px;
+    justify-content: flex-start;
+  }
+
+  .telemetryCard {
+    min-width: 220px;
+    flex-shrink: 0;
+  }
+
+  .projectsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .accordionInner {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 28px 24px 32px;
+  }
+
+  .aboutGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .projectsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .headerLinks {
+    gap: 16px;
+  }
+
+  .capabilitiesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .contactRow {
+    grid-template-columns: 70px 1fr auto;
+    gap: 12px;
+  }
+}
