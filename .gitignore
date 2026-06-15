@@ -34,6 +34,9 @@ yarn-error.log*
 .env*
 .claude/.env
 
+# Claude Code worktrees (temporary agent workspaces)
+.claude/worktrees/
+
 # vercel
 .vercel
 
