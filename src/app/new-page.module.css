@@ -96,11 +96,13 @@
 
 .heroRight {
   width: 33.333%;
-  background: #0B0B0C;
+  background: #4F46E5;
   display: flex;
-  flex-direction: column;
-  padding: clamp(40px, 5vw, 64px) clamp(24px, 4vw, 48px);
+  align-items: center;
+  justify-content: center;
+  position: relative;
   overflow: hidden;
+  min-height: 100svh;
 }
 
 .eyebrow {
@@ -684,20 +686,7 @@
 
   .heroRight {
     width: 100%;
-    min-height: 240px;
-    padding: 32px clamp(20px, 4vw, 48px);
-  }
-
-  .telemetryCards {
-    flex-direction: row;
-    overflow-x: auto;
-    gap: 12px;
-    justify-content: flex-start;
-  }
-
-  .telemetryCard {
-    min-width: 220px;
-    flex-shrink: 0;
+    min-height: 300px;
   }
 
   .projectsGrid {
@@ -732,4 +721,25 @@
     grid-template-columns: 70px 1fr auto;
     gap: 12px;
   }
+}
+
+/* ── Canvas placeholder (right hero panel) ───────────────────── */
+.canvasPlaceholder {
+  width: 80%;
+  max-width: 280px;
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.35);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.6;
+  padding: 24px;
+}
 }

@@ -7,7 +7,6 @@ import {
   Project,
   getFilename,
   getBadgeLabel,
-  TELEMETRY,
   CAPABILITIES,
 } from "@/data/portfolioData"
 import { PortfolioFrame } from "@/components/PortfolioFrame"
@@ -239,25 +238,15 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Right — 1/3 width: deep dark structural block with telemetry */}
+        {/* Right — 1/3 width: indigo visual canvas panel */}
         <div className={styles.heroRight}>
-          <p className={styles.systemsLabel}>ACTIVE SYSTEMS // {projects.length}</p>
-          <div className={styles.telemetryCards}>
-            {TELEMETRY.map((card) => (
-              <div key={card.title} className={styles.telemetryCard}>
-                <div className={styles.telemetryCardHeader}>
-                  <span className={styles.telemetryCardTitle}>{card.title}</span>
-                  <span className={styles.telemetryCardBadge}>{card.badge}</span>
-                </div>
-                <hr className={styles.telemetryDivider} />
-                {card.rows.map((row) => (
-                  <div key={row.key} className={styles.telemetryRow}>
-                    <span className={styles.telemetryKey}>{row.key}</span>
-                    <span className={styles.telemetryVal}>{row.val}</span>
-                  </div>
-                ))}
-              </div>
-            ))}
+          {/* GEOMETRIC ANIMATION CANVAS PLACEHOLDER */}
+          <div className={styles.canvasPlaceholder}>
+            3D Canvas
+            <br />
+            Component
+            <br />
+            Goes Here
           </div>
         </div>
       </section>
