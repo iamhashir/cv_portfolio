@@ -83,7 +83,7 @@ export default function PortfolioShell({ children }: { children: React.ReactNode
     <>
       <NoiseOverlay />
       <ProjectModal />
-      <Scene />
+      {isMobile !== true && <Scene />}
       <AuditToggle />
       <Navbar />
       <main className={isAudienceLanding ? "audience-main-content" : "main-content"}>

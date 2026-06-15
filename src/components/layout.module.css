@@ -142,6 +142,9 @@
   letter-spacing: 0;
 }
 
+.logoFull { display: inline; }
+.logoShort { display: none; }
+
 .logo:hover {
   color: var(--accent-color);
 }
@@ -398,13 +401,10 @@
   }
 
   .logo {
-    display: block;
-    max-width: 9ch;
-    overflow: hidden;
     font-size: 0.95rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
+  .logoFull { display: none; }
+  .logoShort { display: inline; }
 
   .navCenter {
     display: none;
@@ -434,6 +434,9 @@
     padding: 8px 0;
   }
 
+  .footer {
+    padding-bottom: 80px;
+  }
   .footerTop {
     flex-direction: column;
     gap: 32px;

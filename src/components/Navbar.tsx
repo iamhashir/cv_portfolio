@@ -77,7 +77,10 @@ export default function Navbar() {
       <div className={`container ${styles.navContainer}`}>
         <div className={styles.brand}>
           <Magnetic strength={5}>
-            <Link href="/" className={styles.logo}>{site.name}</Link>
+            <Link href="/" className={styles.logo}>
+                <span className={styles.logoFull}>{site.name}</span>
+                <span className={styles.logoShort}>MH.</span>
+              </Link>
           </Magnetic>
         </div>
 
