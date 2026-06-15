@@ -190,8 +190,7 @@ export default function Home() {
   return (
     <div className={styles.page}>
       <PortfolioFrame />
-
-      {/* ── Spec 1: Global Frame — rendered inside PortfolioFrame ── */}
+      <ArtisticCanvas />
 
       {/* ── Spec 2: Floating Minimalist Header ── */}
       <header className={`${styles.header} ${scrolled ? styles.headerScrolled : ""}`}>
@@ -244,10 +243,6 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Right — 1/3 width: indigo panel with artistic 3D canvas */}
-        <div className={styles.heroRight}>
-          <ArtisticCanvas />
-        </div>
       </section>
 
       {/* ── Spec 4: Scrollable Work Gallery — bg-white, plain-text metadata ── */}

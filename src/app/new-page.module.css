@@ -3,7 +3,7 @@
 /* ── Global reset for page ───────────────────────────────────── */
 .page {
   font-family: var(--font-sans, 'Inter', sans-serif);
-  background: #F4F0EA;
+  background: transparent;
   color: #0B0B0C;
   min-height: 100svh;
 }
@@ -25,7 +25,9 @@
 }
 
 .headerScrolled {
-  background: #F4F0EA;
+  background: rgba(244,240,234,0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(24,24,27,0.08);
 }
 
@@ -81,28 +83,22 @@
   min-height: 100svh;
   display: flex;
   flex-direction: row;
+  align-items: stretch;
   padding-top: 56px; /* header height */
+  background: transparent;
 }
 
 .heroLeft {
-  width: 66.666%;
-  background: #F4F0EA;
+  width: 58%;
+  max-width: 680px;
+  background: rgba(244,240,234,0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: clamp(48px, 6vw, 80px) clamp(24px, 5vw, 64px);
-  border-right: 1px solid rgba(24,24,27,0.08);
-}
-
-.heroRight {
-  width: 33.333%;
-  background: #18181B;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  min-height: 100svh;
+  border-right: 1px solid rgba(24,24,27,0.07);
 }
 
 .eyebrow {
@@ -270,7 +266,9 @@
 
 /* ── Work Gallery ─────────────────────────────────────────────── */
 .systems {
-  background: #FFFFFF;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   padding: clamp(60px, 8vw, 100px) clamp(24px, 5vw, 64px);
 }
 
@@ -309,7 +307,9 @@
 }
 
 .projectCard {
-  background: #FAFAFA;
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   padding: 28px 28px 24px;
   cursor: pointer;
   transition: background 0.18s ease;
@@ -318,7 +318,7 @@
 }
 
 .projectCard:hover {
-  background: #F7F7F7;
+  background: rgba(248,248,248,0.95);
 }
 
 .projectFilename {
@@ -400,7 +400,9 @@
 /* ── Accordion expand panel ───────────────────────────────────── */
 .accordionRow {
   grid-column: 1 / -1;
-  background: #F4F0EA;
+  background: rgba(244,240,234,0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-top: 1px solid rgba(24,24,27,0.08);
 }
 
@@ -538,7 +540,9 @@
 
 /* ── About ───────────────────────────────────────────────────── */
 .about {
-  background: #F0ECE5;
+  background: rgba(240,236,229,0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   padding: clamp(60px, 8vw, 100px) clamp(24px, 5vw, 64px);
   border-top: 1px solid rgba(24,24,27,0.08);
 }
@@ -596,7 +600,9 @@
 
 /* ── Contact ─────────────────────────────────────────────────── */
 .contact {
-  background: #0B0B0C;
+  background: rgba(11,11,12,0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   padding: clamp(60px, 8vw, 100px) clamp(24px, 5vw, 64px);
 }
 
@@ -677,16 +683,11 @@
 
   .heroLeft {
     width: 100%;
+    max-width: none;
+    background: rgba(244,240,234,0.88);
     border-right: none;
     border-bottom: 1px solid rgba(24,24,27,0.08);
-    min-height: 70svh;
-    justify-content: flex-end;
-    padding-bottom: 48px;
-  }
-
-  .heroRight {
-    width: 100%;
-    min-height: 300px;
+    min-height: 100svh;
   }
 
   .projectsGrid {
