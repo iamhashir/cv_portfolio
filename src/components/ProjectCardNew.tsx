@@ -16,9 +16,16 @@ export function ProjectCardNew({ project, isExpanded, onToggle, index }: Project
   const [isHovered, setIsHovered] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+  const lastUpdateRef = useRef(0)
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return
+
+    // Throttle mouse position updates to every 16ms (~60fps)
+    const now = Date.now()
+    if (now - lastUpdateRef.current < 16) return
+    lastUpdateRef.current = now
+
     const rect = cardRef.current.getBoundingClientRect()
     const x = (e.clientX - rect.left) / rect.width - 0.5
     const y = (e.clientY - rect.top) / rect.height - 0.5
