@@ -1,31 +1,33 @@
 /* Custom Reset & Typography Tokens */
 :root {
-  /* Colors — Rich Warm Parchment Palette */
-  --bg-primary: #0f0c08;       /* Deep espresso ink — amber-tinted */
-  --bg-secondary: #171209;     /* Darker coffee layer */
-  --bg-tertiary: #201912;      /* Rich warm tertiary */
+  /* Colors — High Contrast Dark + Electric Accents */
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #111111;
+  --bg-tertiary: #181818;
 
-  --border-muted: #2e2618;     /* Amber-tinted border */
-  --border-focus: #4a3e28;     /* Rich amber focus border */
+  --border-muted: #222222;
+  --border-focus: #444444;
 
-  --navbar-scrolled-bg: linear-gradient(180deg, rgba(8, 6, 4, 0.92) 0%, rgba(12, 9, 5, 0.86) 100%);
+  --navbar-scrolled-bg: linear-gradient(180deg, rgba(8, 8, 8, 0.95) 0%, rgba(10, 10, 10, 0.90) 100%);
 
-  /* Rich Amber Accent */
-  --accent-color: #c9a96e;
-  --accent-muted: #a8874e;
-  --accent-glow: rgba(201, 169, 110, 0.1);
-  --accent-glow-hover: rgba(201, 169, 110, 0.22);
+  /* Electric Accents */
+  --accent-color: #c8ff00;        /* electric lime */
+  --accent-muted: #99cc00;
+  --accent-glow: rgba(200, 255, 0, 0.1);
+  --accent-glow-hover: rgba(200, 255, 0, 0.22);
+  --accent-coral: #ff4d3b;
+  --accent-cyan: #00e5ff;
 
   /* Status */
-  --status-active: #6ee7b7;
-  --status-active-glow: rgba(110, 231, 183, 0.12);
+  --status-active: #c8ff00;
+  --status-active-glow: rgba(200, 255, 0, 0.2);
 
-  /* Rich Cream Text Neutrals */
-  --text-primary: #f8f0dc;     /* Warm thick cream */
-  --text-secondary: #b5a48a;   /* Warm parchment stone */
-  --text-muted: #7a6d5a;       /* Warm muted */
-  --text-accent: #d4b896;
-  --text-gold: #c9a96e;
+  /* Text Neutrals */
+  --text-primary: #f0f0f0;
+  --text-secondary: #888888;
+  --text-muted: #555555;
+  --text-accent: #c8ff00;
+  --text-gold: #c8ff00;
 
   /* Font Families */
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
@@ -38,21 +40,21 @@
   --transition-fast: 0.18s ease;
   --transition-normal: 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* Glassmorphism — amber-tinted glass surfaces */
-  --glass-bg: rgba(15, 11, 6, 0.66);
-  --glass-bg-medium: rgba(18, 13, 7, 0.78);
-  --glass-bg-heavy: rgba(12, 9, 5, 0.90);
-  --glass-border: rgba(201, 169, 110, 0.22);
-  --glass-border-strong: rgba(201, 169, 110, 0.40);
+  /* Glass surfaces — dark */
+  --glass-bg: rgba(10, 10, 10, 0.75);
+  --glass-bg-medium: rgba(14, 14, 14, 0.85);
+  --glass-bg-heavy: rgba(8, 8, 8, 0.94);
+  --glass-border: rgba(200, 255, 0, 0.15);
+  --glass-border-strong: rgba(200, 255, 0, 0.30);
   --glass-blur: 20px;
-  --glass-shine: inset 0 1px 0 rgba(220, 180, 100, 0.12);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.52), 0 2px 8px rgba(0, 0, 0, 0.32);
+  --glass-shine: inset 0 1px 0 rgba(200, 255, 0, 0.06);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.5);
 
-  /* Rich ambient orbs */
-  --orb-amber: rgba(201, 169, 110, 0.15);
-  --orb-warm:  rgba(180, 130, 55, 0.07);
-  --orb-depth: rgba(140, 90, 30, 0.04);
-  --cursor-bg: rgba(201, 169, 110, 0.12);
+  /* Ambient orbs */
+  --orb-amber: rgba(200, 255, 0, 0.06);
+  --orb-warm:  rgba(0, 229, 255, 0.04);
+  --orb-depth: rgba(255, 77, 59, 0.03);
+  --cursor-bg: rgba(200, 255, 0, 0.08);
 }
 /* Light Theme — Rich Butter Cream */
 [data-theme="light"] {
