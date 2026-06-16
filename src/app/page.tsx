@@ -1,6 +1,7 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
+import { motion, useScroll, useTransform } from "framer-motion"
 import {
   site,
   projects,
@@ -13,10 +14,9 @@ import { PortfolioFrame } from "@/components/PortfolioFrame"
 import dynamic from "next/dynamic"
 import styles from "./new-page.module.css"
 
-// Three.js needs the browser — load the canvas client-side only
-const ArtisticCanvas = dynamic(() => import("@/components/ArtisticCanvas"), {
-  ssr: false,
-})
+const ArtisticCanvas = dynamic(() => import("@/components/ArtisticCanvas"), { ssr: false })
+
+const ease = [0.25, 0.46, 0.45, 0.94] as const
 
 // ─── Accordion detail panel ─────────────────────────────────────
 function AccordionDetail({ project, onClose }: { project: Project; onClose: () => void }) {
@@ -24,15 +24,11 @@ function AccordionDetail({ project, onClose }: { project: Project; onClose: () =
     <div className={styles.accordionRow}>
       <div className={styles.accordionInner}>
         <div className={styles.accordionClose}>
-          <button className={styles.accordionCloseBtn} onClick={onClose}>
-            [CLOSE ×]
-          </button>
+          <button className={styles.accordionCloseBtn} onClick={onClose}>[CLOSE ×]</button>
         </div>
-
         <div>
           <h3 className={styles.accordionTitle}>{project.title}</h3>
           <p className={styles.accordionFullSummary}>{project.solution}</p>
-
           <p className={styles.accordionSectionLabel}>Architecture</p>
           <div className={styles.accordionArchRow}>
             <span className={styles.accordionArchKey}>Frontend</span>
@@ -46,25 +42,15 @@ function AccordionDetail({ project, onClose }: { project: Project; onClose: () =
             <span className={styles.accordionArchKey}>Database</span>
             <span className={styles.accordionArchVal}>{project.architecture.database}</span>
           </div>
-
           <p className={styles.accordionSectionLabel} style={{ marginTop: 20 }}>Tech Stack</p>
-          <div className={styles.accordionStackFull}>
-            {project.techStack.join(" // ")}
-          </div>
+          <div className={styles.accordionStackFull}>{project.techStack.join(" // ")}</div>
         </div>
-
         <div>
           <p className={styles.accordionSectionLabel}>Outcomes</p>
           <ul className={styles.accordionOutcomes}>
-            {project.outcome.map((item, i) => (
-              <li key={i}>{item}</li>
-            ))}
+            {project.outcome.map((item, i) => <li key={i}>{item}</li>)}
           </ul>
-
-          {project.metric && (
-            <p className={styles.accordionMetricBig}>{project.metric}</p>
-          )}
-
+          {project.metric && <p className={styles.accordionMetricBig}>{project.metric}</p>}
           {project.githubUrl && (
             <a
               href={project.githubUrl}
@@ -86,19 +72,25 @@ function ProjectCard({
   project,
   isExpanded,
   onToggle,
+  index,
 }: {
   project: Project
   isExpanded: boolean
   onToggle: () => void
+  index: number
 }) {
   const filename = getFilename(project.slug)
   const badge = getBadgeLabel(project.status, project.githubUrl)
 
   return (
-    <div
+    <motion.div
       className={styles.projectCard}
       onClick={onToggle}
-      style={{ outline: isExpanded ? "1px solid rgba(201,169,110,0.4)" : "none" }}
+      style={{ outline: isExpanded ? "1px solid rgba(79,70,229,0.35)" : "none" }}
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.55, delay: (index % 3) * 0.09, ease }}
     >
       <div className={styles.projectFilename}>{filename}</div>
       <hr className={styles.projectDivider} />
@@ -108,9 +100,7 @@ function ProjectCard({
       <div className={styles.projectFooter}>
         <span className={styles.projectBadge}>{badge}</span>
         {project.metric && (
-          <span className={styles.projectMetric}>
-            {project.metric.split("·")[0]?.trim()}
-          </span>
+          <span className={styles.projectMetric}>{project.metric.split("·")[0]?.trim()}</span>
         )}
         {project.githubUrl && (
           <a
@@ -124,7 +114,7 @@ function ProjectCard({
           </a>
         )}
       </div>
-    </div>
+    </motion.div>
   )
 }
 
@@ -144,20 +134,25 @@ function ProjectsGrid({
     rows.push(projects.slice(i, i + COL_COUNT))
   }
 
+  let cardIndex = 0
   return (
     <div className={styles.projectsGrid}>
       {rows.map((row, ri) => {
         const expandedProject = row.find((p) => p.slug === expandedSlug) ?? null
         return (
           <React.Fragment key={`row-${ri}`}>
-            {row.map((project) => (
-              <ProjectCard
-                key={project.slug}
-                project={project}
-                isExpanded={expandedSlug === project.slug}
-                onToggle={() => onToggle(project.slug)}
-              />
-            ))}
+            {row.map((project) => {
+              const idx = cardIndex++
+              return (
+                <ProjectCard
+                  key={project.slug}
+                  project={project}
+                  isExpanded={expandedSlug === project.slug}
+                  onToggle={() => onToggle(project.slug)}
+                  index={idx}
+                />
+              )
+            })}
             {expandedProject && (
               <AccordionDetail
                 key={`accordion-${expandedProject.slug}`}
@@ -176,6 +171,15 @@ function ProjectsGrid({
 export default function Home() {
   const [scrolled, setScrolled] = useState(false)
   const [expandedSlug, setExpandedSlug] = useState<string | null>(null)
+  const heroRef = useRef<HTMLElement>(null)
+
+  // Scroll-driven parallax for hero
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  })
+  const heroY       = useTransform(scrollYProgress, [0, 1], ["0%", "38%"])
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.65], [1, 0])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -192,7 +196,7 @@ export default function Home() {
       <PortfolioFrame />
       <ArtisticCanvas />
 
-      {/* ── Spec 2: Floating Minimalist Header ── */}
+      {/* ── Header ── */}
       <header className={`${styles.header} ${scrolled ? styles.headerScrolled : ""}`}>
         <a href="#hero" className={styles.headerLogo}>M.H.</a>
         <nav className={styles.headerLinks}>
@@ -208,50 +212,99 @@ export default function Home() {
         </nav>
       </header>
 
-      {/* ── Spec 3: Asymmetric Split Hero — flex col on mobile, row on desktop ── */}
-      <section id="hero" className={styles.hero}>
+      {/* ── Hero — full-width with parallax scroll ── */}
+      <section ref={heroRef} id="hero" className={styles.hero}>
+        <motion.div className={styles.heroContent} style={{ y: heroY, opacity: heroOpacity }}>
+          <motion.p
+            className={styles.eyebrow}
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.15, ease }}
+          >
+            FULL-STACK · AI · SYSTEMS
+          </motion.p>
 
-        {/* Left — 2/3 width: clean off-white #F4F0EA */}
-        <div className={styles.heroLeft}>
-          <p className={styles.eyebrow}>FULL-STACK · AI · SYSTEMS</p>
-
-          <h1 className={styles.heroH1}>
+          <motion.h1
+            className={styles.heroH1}
+            initial={{ opacity: 0, y: 44 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.85, delay: 0.3, ease }}
+          >
             I build complete web and mobile systems from scratch.
-          </h1>
+          </motion.h1>
 
-          <p className={styles.heroSub}>
+          <motion.p
+            className={styles.heroSub}
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.5, ease }}
+          >
             Full-stack developer specializing in CRM automation, AI workflows,
             and internal operations platforms across the JavaScript ecosystem.
-          </p>
+          </motion.p>
 
-          <p className={styles.availabilityLine}>
+          <motion.p
+            className={styles.availabilityLine}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.55, delay: 0.65 }}
+          >
             <span className={styles.greenDot} />
             AVAILABLE · Abu Dhabi, UAE · Remote worldwide
-          </p>
+          </motion.p>
 
-          <div className={styles.ctaGroup}>
+          <motion.div
+            className={styles.ctaGroup}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.75, ease }}
+          >
             <a href="/Malik_Hashir_CV.pdf" download className={styles.ctaPrimary}>
               Download CV →
             </a>
             <a href="#systems" className={styles.ctaSecondary}>
               View Systems ↓
             </a>
-          </div>
+          </motion.div>
 
-          <p className={styles.heroMetrics}>
+          <motion.p
+            className={styles.heroMetrics}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.9 }}
+          >
             {projects.length} systems built · 4 domains · UAE based
-          </p>
-        </div>
-
+          </motion.p>
+        </motion.div>
       </section>
 
-      {/* ── Spec 4: Scrollable Work Gallery — bg-white, plain-text metadata ── */}
+      {/* ── Marquee strip ── */}
+      <div className={styles.marqueeStrip} aria-hidden="true">
+        <div className={styles.marqueeTrack}>
+          <span className={styles.marqueeContent}>
+            Full-Stack Development&nbsp;·&nbsp;AI Integrations&nbsp;·&nbsp;Next.js&nbsp;·&nbsp;Node.js&nbsp;·&nbsp;React&nbsp;·&nbsp;TypeScript&nbsp;·&nbsp;PostgreSQL&nbsp;·&nbsp;Abu Dhabi UAE&nbsp;·&nbsp;Available for Work&nbsp;·&nbsp;
+          </span>
+          <span className={styles.marqueeContent} aria-hidden="true">
+            Full-Stack Development&nbsp;·&nbsp;AI Integrations&nbsp;·&nbsp;Next.js&nbsp;·&nbsp;Node.js&nbsp;·&nbsp;React&nbsp;·&nbsp;TypeScript&nbsp;·&nbsp;PostgreSQL&nbsp;·&nbsp;Abu Dhabi UAE&nbsp;·&nbsp;Available for Work&nbsp;·&nbsp;
+          </span>
+        </div>
+      </div>
+
+      {/* ── Systems ── */}
       <section id="systems" className={styles.systems}>
-        <p className={styles.sectionLabel}>02 // SYSTEMS</p>
-        <h2 className={styles.sectionH2}>Engineering Systems</h2>
-        <p className={styles.sectionSubtitle}>
-          Production-grade platforms, frameworks, and tools.
-        </p>
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.65, ease }}
+        >
+          <p className={styles.sectionLabel}>02 // SYSTEMS</p>
+          <span aria-hidden="true" className={styles.sectionDecorNum}>02</span>
+          <h2 className={styles.sectionH2}>Engineering Systems</h2>
+          <p className={styles.sectionSubtitle}>
+            Production-grade platforms, frameworks, and tools.
+          </p>
+        </motion.div>
         <ProjectsGrid
           expandedSlug={expandedSlug}
           onToggle={handleToggle}
@@ -259,51 +312,92 @@ export default function Home() {
         />
       </section>
 
-      {/* ── Spec 5: About — no separate /about route ── */}
+      {/* ── About ── */}
       <section id="about" className={styles.about}>
-        <p className={styles.sectionLabel}>03 // ABOUT</p>
-        <h2 className={styles.sectionH2}>{site.name}</h2>
-        <p style={{ fontSize: "0.9rem", color: "rgba(11,11,12,0.45)", marginBottom: 0 }}>
-          {site.role} · {site.location}
-        </p>
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.65, ease }}
+        >
+          <p className={styles.sectionLabel}>03 // ABOUT</p>
+          <span aria-hidden="true" className={styles.sectionDecorNum}>03</span>
+          <h2 className={styles.sectionH2}>{site.name}</h2>
+          <p style={{ fontSize: "0.9rem", color: "rgba(11,11,12,0.45)", marginBottom: 0 }}>
+            {site.role} · {site.location}
+          </p>
+        </motion.div>
 
         <div className={styles.aboutGrid}>
-          <div>
+          <motion.div
+            initial={{ opacity: 0, x: -24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.65, delay: 0.1, ease }}
+          >
             <p className={styles.aboutBio}>{site.bio}</p>
             <p className={styles.aboutAvailability}>{site.availability}</p>
-          </div>
-          <div>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, x: 24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.65, delay: 0.2, ease }}
+          >
             <p className={styles.capabilitiesLabel}>Capabilities</p>
             <div className={styles.capabilitiesGrid}>
-              {CAPABILITIES.map((cap) => (
-                <span key={cap} className={styles.capabilityItem}>{cap}</span>
+              {CAPABILITIES.map((cap, i) => (
+                <motion.span
+                  key={cap}
+                  className={styles.capabilityItem}
+                  initial={{ opacity: 0, scale: 0.88 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.35, delay: i * 0.045 }}
+                >
+                  {cap}
+                </motion.span>
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* ── Spec 5: Contact — no separate /contact route ── */}
+      {/* ── Contact ── */}
       <section id="contact" className={styles.contact}>
-        <p className={styles.contactSectionLabel}>04 // CONTACT</p>
-        <h2 className={styles.contactH2}>Get in touch.</h2>
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.65, ease }}
+        >
+          <p className={styles.contactSectionLabel}>04 // CONTACT</p>
+          <span aria-hidden="true" className={styles.sectionDecorNumLight}>04</span>
+          <h2 className={styles.contactH2}>Get in touch.</h2>
+        </motion.div>
 
         <div className={styles.contactRows}>
-          <a href={`mailto:${site.email}`} className={styles.contactRow}>
-            <span className={styles.contactRowLabel}>Email</span>
-            <span className={styles.contactRowValue}>{site.email}</span>
-            <span className={styles.contactRowArrow}>→</span>
-          </a>
-          <a href={site.linkedin} target="_blank" rel="noopener noreferrer" className={styles.contactRow}>
-            <span className={styles.contactRowLabel}>LinkedIn</span>
-            <span className={styles.contactRowValue}>{site.linkedinHandle}</span>
-            <span className={styles.contactRowArrow}>↗</span>
-          </a>
-          <a href={site.github} target="_blank" rel="noopener noreferrer" className={styles.contactRow}>
-            <span className={styles.contactRowLabel}>GitHub</span>
-            <span className={styles.contactRowValue}>github.com/{site.githubHandle}</span>
-            <span className={styles.contactRowArrow}>↗</span>
-          </a>
+          {([
+            { label: "Email",    value: site.email,                      href: `mailto:${site.email}`, arrow: "→", ext: false },
+            { label: "LinkedIn", value: site.linkedinHandle,             href: site.linkedin,          arrow: "↗", ext: true  },
+            { label: "GitHub",   value: `github.com/${site.githubHandle}`, href: site.github,          arrow: "↗", ext: true  },
+          ] as const).map(({ label, value, href, arrow, ext }, i) => (
+            <motion.a
+              key={label}
+              href={href}
+              target={ext ? "_blank" : undefined}
+              rel={ext ? "noopener noreferrer" : undefined}
+              className={styles.contactRow}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.45, delay: i * 0.08, ease }}
+            >
+              <span className={styles.contactRowLabel}>{label}</span>
+              <span className={styles.contactRowValue}>{value}</span>
+              <span className={styles.contactRowArrow}>{arrow}</span>
+            </motion.a>
+          ))}
         </div>
 
         <p className={styles.contactStatusBar}>
