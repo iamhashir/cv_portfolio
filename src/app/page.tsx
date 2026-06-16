@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from "react"
-import Image from "next/image"
 import { motion, useScroll, useTransform } from "framer-motion"
 import { Menu, X } from "lucide-react"
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
@@ -152,39 +151,27 @@ function ProjectCard({
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.55, delay: (index % 3) * 0.09, ease }}
     >
-      {project.imageUrl && (
-        <div className={styles.projectCardImage}>
-          <Image
-            src={project.imageUrl}
-            alt={`${project.title} screenshot`}
-            fill
-            sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
-          />
-        </div>
-      )}
-      <div className={styles.projectCardBody}>
-        <div className={styles.projectFilename}>{filename}</div>
-        <hr className={styles.projectDivider} />
-        <div className={styles.projectCategory}>{project.category}</div>
-        <p className={styles.projectSummary}>{project.summary}</p>
-        <div className={styles.projectStack}>{project.techStack.join(" // ")}</div>
-        <div className={styles.projectFooter}>
-          <span className={styles.projectBadge}>{badge}</span>
-          {project.metric && (
-            <span className={styles.projectMetric}>{project.metric.split("·")[0]?.trim()}</span>
-          )}
-          {project.githubUrl && (
-            <a
-              href={project.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.projectSourceLink}
-              onClick={(e: React.MouseEvent) => e.stopPropagation()}
-            >
-              ↗ Source
-            </a>
-          )}
-        </div>
+      <div className={styles.projectFilename}>{filename}</div>
+      <hr className={styles.projectDivider} />
+      <div className={styles.projectCategory}>{project.category}</div>
+      <p className={styles.projectSummary}>{project.summary}</p>
+      <div className={styles.projectStack}>{project.techStack.join(" // ")}</div>
+      <div className={styles.projectFooter}>
+        <span className={styles.projectBadge}>{badge}</span>
+        {project.metric && (
+          <span className={styles.projectMetric}>{project.metric.split("·")[0]?.trim()}</span>
+        )}
+        {project.githubUrl && (
+          <a
+            href={project.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.projectSourceLink}
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+          >
+            ↗ Source
+          </a>
+        )}
       </div>
     </motion.div>
   )
