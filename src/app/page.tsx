@@ -192,9 +192,12 @@ export default function Home() {
   }
 
   return (
-    <div className={styles.page}>
-      <PortfolioFrame />
+    <>
+      {/* Canvas sits OUTSIDE .page so it's in the ROOT stacking context.
+          z-index:0 (canvas) < z-index:1 (.page) — text is always on top. */}
       <ArtisticCanvas />
+      <div className={styles.page}>
+      <PortfolioFrame />
 
       {/* ── Header ── */}
       <header className={`${styles.header} ${scrolled ? styles.headerScrolled : ""}`}>
@@ -406,5 +409,6 @@ export default function Home() {
         </p>
       </section>
     </div>
+    </>
   )
 }

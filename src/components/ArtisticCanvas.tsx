@@ -1,78 +1,15 @@
 "use client"
 
-import { Suspense, useRef, useMemo, useEffect } from "react"
+import { Suspense, useRef } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
-import { Outlines, Environment } from "@react-three/drei"
+import { Float, Outlines, Environment } from "@react-three/drei"
 import * as THREE from "three"
 
-const INDIGO = "#4F46E5"
+const INDIGO       = "#4F46E5"
 const INDIGO_LIGHT = "#818CF8"
-const WHITE = "#FFFFFF"
-const CHARCOAL = "#18181B"
+const CHARCOAL     = "#18181B"
 
-// Six colors cycling. WHITE replaces former CREAM (#F4F0EA) which matched the
-// canvas background and made those shapes invisible.
-const COLORS = [INDIGO, INDIGO_LIGHT, CHARCOAL, INDIGO, INDIGO_LIGHT, WHITE]
-
-type GeomKey = "torusKnot" | "ico" | "box" | "capsule" | "sphere" | "torus"
-const GEOMS: GeomKey[] = ["torusKnot", "ico", "box", "capsule", "sphere", "torus"]
-
-const COLS = 5
-const ROWS = 4
-const N = COLS * ROWS // 20 shapes
-
-interface ShapeData {
-  geom: GeomKey
-  color: string
-  gScale: number        // assembled (grid) scale
-  sScale: number        // scatter scale — 45% larger than assembled
-  sPos: [number, number, number]
-  sRot: [number, number, number]
-  gPos: [number, number, number]
-  gRot: [number, number] // per-shape assembled tilt (x, y)
-}
-
-function buildShapes(): ShapeData[] {
-  return Array.from({ length: N }, (_, i) => {
-    const col = i % COLS
-    const row = Math.floor(i / COLS)
-
-    // Grid target: 5 × 4, centered, 1.35-unit spacing
-    const gx = (col - (COLS - 1) / 2) * 1.35  // −2.7 … 2.7
-    const gy = (row - (ROWS - 1) / 2) * 1.35  // −2.025 … 2.025
-
-    // Scatter: golden-angle spiral keeps all shapes inside the camera frustum.
-    // Camera z=9, fov=52 → half-height at z=0 ≈ ±4.4 units.
-    // Max scatter radius ≈ 3.6 → comfortably on-screen.
-    const a = i * 2.399963           // golden angle ≈ 137.5°
-    const r = 0.7 + (i % 5) * 0.58  // 0.70, 1.28, 1.86, 2.44, 3.02
-    const sx = Math.cos(a) * r + Math.sin(i * 2.1) * 0.55
-    const sy = Math.sin(a) * r * 0.75 + Math.cos(i * 1.9) * 0.40
-    const sz = Math.sin(i * 1.3) * 1.8 - 0.6  // −2.4 … +1.2
-
-    const gScale = 0.28 + Math.abs(Math.sin(i * 2.3)) * 0.22
-
-    return {
-      geom: GEOMS[i % GEOMS.length],
-      color: COLORS[i % COLORS.length],
-      gScale,
-      sScale: gScale * 1.45,
-      sPos: [sx, sy, sz],
-      sRot: [
-        Math.sin(i * 1.1) * Math.PI * 1.5,
-        Math.cos(i * 0.7) * Math.PI * 1.5,
-        Math.sin(i * 1.9) * Math.PI,
-      ],
-      gPos: [gx, gy, 0],
-      gRot: [
-        0.25 + Math.sin(i * 0.83) * 0.18,  // per-shape assembled tilt X
-        Math.cos(i * 0.61) * 0.22,          // per-shape assembled tilt Y
-      ],
-    }
-  })
-}
-
-function ShapeGeom({ geom }: { geom: GeomKey }) {
+function ShapeGeom({ geom }: { geom: string }) {
   switch (geom) {
     case "torusKnot": return <torusKnotGeometry args={[0.65, 0.2, 72, 10]} />
     case "ico":       return <icosahedronGeometry args={[0.85, 0]} />
@@ -80,142 +17,85 @@ function ShapeGeom({ geom }: { geom: GeomKey }) {
     case "capsule":   return <capsuleGeometry args={[0.38, 0.65, 6, 12]} />
     case "sphere":    return <sphereGeometry args={[0.75, 18, 18]} />
     case "torus":     return <torusGeometry args={[0.65, 0.26, 10, 30]} />
+    default: return null
   }
 }
 
-function SystemAssembly() {
-  const shapes = useMemo(buildShapes, [])
-  const meshRefs = useRef<(THREE.Mesh | null)[]>(Array(N).fill(null))
+// All shapes have x > 1.8 — left side (text zone, x < 0) is completely clear.
+// Camera z=9, fov=52 → half-width at z=0 ≈ 7.8 world-units.
+// x=1.8 ≈ 62% from the left edge of the viewport.
+const SHAPES = [
+  { geom: "torusKnot", color: INDIGO,       pos: [2.5,  0.8,  0.2] as const, scale: 0.55, speed: 1.4, rot: 0.8 },
+  { geom: "ico",       color: INDIGO_LIGHT, pos: [4.2, -0.6, -0.3] as const, scale: 0.50, speed: 1.1, rot: 0.5 },
+  { geom: "box",       color: CHARCOAL,     pos: [1.8, -2.0,  0.3] as const, scale: 0.45, speed: 0.9, rot: 0.6 },
+  { geom: "torus",     color: INDIGO,       pos: [5.0,  0.4, -0.5] as const, scale: 0.48, speed: 1.6, rot: 0.4 },
+  { geom: "sphere",    color: INDIGO_LIGHT, pos: [3.5, -2.8,  0.1] as const, scale: 0.42, speed: 1.2, rot: 0.7 },
+  { geom: "capsule",   color: CHARCOAL,     pos: [4.8,  2.5, -0.6] as const, scale: 0.40, speed: 0.8, rot: 0.5 },
+  { geom: "ico",       color: INDIGO,       pos: [2.0,  2.2, -0.2] as const, scale: 0.35, speed: 1.3, rot: 0.6 },
+]
+
+// Shapes float gently on the right side and drift up slightly with scroll.
+function RightSideShapes() {
   const groupRef = useRef<THREE.Group>(null)
-  const pointer = useRef({ x: 0, y: 0 })
 
-  // Track pointer via window so tilt works even when mouse is over HTML content
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      pointer.current.x = (e.clientX / window.innerWidth) * 2 - 1
-      pointer.current.y = -((e.clientY / window.innerHeight) * 2 - 1)
-    }
-    window.addEventListener("mousemove", onMove, { passive: true })
-    return () => window.removeEventListener("mousemove", onMove)
-  }, [])
-
-  useFrame((state) => {
+  useFrame(() => {
+    if (!groupRef.current) return
     const scrollY = typeof window !== "undefined" ? window.scrollY : 0
-    const raw = Math.min(scrollY / 900, 1)
-    const eased = THREE.MathUtils.smoothstep(raw, 0, 1)
-    const t = state.clock.elapsedTime
-
-    shapes.forEach((shape, i) => {
-      const mesh = meshRefs.current[i]
-      if (!mesh) return
-
-      // Position: visible cluster → clean grid
-      const floatAmt = (1 - eased) * 0.08
-      mesh.position.x =
-        THREE.MathUtils.lerp(shape.sPos[0], shape.gPos[0], eased) +
-        Math.cos(t * 0.6 + i * 0.9) * floatAmt
-      mesh.position.y =
-        THREE.MathUtils.lerp(shape.sPos[1], shape.gPos[1], eased) +
-        Math.sin(t * 0.5 + i * 1.1) * floatAmt
-      mesh.position.z = THREE.MathUtils.lerp(shape.sPos[2], shape.gPos[2], eased)
-
-      // Scale: bigger in scatter, target size in grid
-      mesh.scale.setScalar(THREE.MathUtils.lerp(shape.sScale, shape.gScale, eased))
-
-      // Rotation:
-      // • Scatter phase — chaotic spin fades out as assembly completes
-      // • Assembled phase — gentle per-shape idle oscillation fades in
-      const chaosX = THREE.MathUtils.lerp(shape.sRot[0], shape.gRot[0], eased) + t * 0.22 * (1 - eased)
-      const chaosY = THREE.MathUtils.lerp(shape.sRot[1], shape.gRot[1], eased) + t * 0.16 * (1 - eased)
-      const chaosZ = THREE.MathUtils.lerp(shape.sRot[2], 0, eased)
-      const idleX  = Math.sin(t * 0.35 + i * 0.52) * 0.07 * eased
-      const idleY  = Math.cos(t * 0.28 + i * 0.67) * 0.06 * eased
-
-      mesh.rotation.x = chaosX + idleX
-      mesh.rotation.y = chaosY + idleY
-      mesh.rotation.z = chaosZ
-    })
-
-    // Subtle mouse-driven group tilt
-    if (groupRef.current) {
-      const tx = pointer.current.x * 0.28
-      const ty = -pointer.current.y * 0.18
-      groupRef.current.rotation.y += (tx - groupRef.current.rotation.y) * 0.04
-      groupRef.current.rotation.x += (ty - groupRef.current.rotation.x) * 0.04
-    }
+    // Move group up as user scrolls (parallax drift)
+    groupRef.current.position.y = -scrollY * 0.0015
   })
 
   return (
     <group ref={groupRef}>
-      {shapes.map((shape, i) => (
-        <mesh
+      {SHAPES.map((s, i) => (
+        <Float
           key={i}
-          ref={(el) => { meshRefs.current[i] = el }}
-          position={shape.sPos}
-          rotation={shape.sRot}
-          scale={shape.sScale}
+          speed={s.speed}
+          rotationIntensity={s.rot}
+          floatIntensity={0.55}
+          floatingRange={[-0.18, 0.18]}
         >
-          <ShapeGeom geom={shape.geom} />
-          <meshStandardMaterial color={shape.color} roughness={0.22} metalness={0.12} />
-          <Outlines
-            thickness={0.045}
-            color={CHARCOAL}
-            opacity={shape.color === WHITE ? 0.6 : 0.85}
-            transparent
-          />
-        </mesh>
+          <mesh position={s.pos} scale={s.scale}>
+            <ShapeGeom geom={s.geom} />
+            <meshStandardMaterial color={s.color} roughness={0.22} metalness={0.12} />
+            <Outlines thickness={0.045} color={CHARCOAL} opacity={0.8} transparent />
+          </mesh>
+        </Float>
       ))}
     </group>
   )
 }
 
-// ── Next.js "N" logo — capsule-based, squishy rubber material ────────────────
-// Geometry: two vertical bars + one diagonal (rotation z = atan2(0.68,1.45) ≈ 0.436 rad)
-// which places the diagonal from upper-left inner to lower-right inner of the N.
+// Next.js "N" logo — squishy capsule geometry, right-side position.
 function NextJsNLogo() {
   const groupRef = useRef<THREE.Group>(null)
 
   useFrame((state) => {
     if (!groupRef.current) return
-    const scrollY = typeof window !== "undefined" ? window.scrollY : 0
-    const raw  = Math.min(scrollY / 900, 1)
-    const eased = THREE.MathUtils.smoothstep(raw, 0, 1)
     const t = state.clock.elapsedTime
+    const scrollY = typeof window !== "undefined" ? window.scrollY : 0
 
-    // Spring overshoot: peaks ~15% above final size then settles
-    const spring = eased + Math.sin(eased * Math.PI) * 0.15
-    const base   = spring * 1.15
-
-    // Squash-and-stretch idle (fades in with assembly)
-    const sq = Math.sin(t * 1.6) * 0.09 * eased
+    const sq = Math.sin(t * 1.6) * 0.06
     groupRef.current.scale.set(
-      base * (1 - sq * 0.4),
-      base * (1 + sq),
-      base * (1 - sq * 0.25),
+      1.1 * (1 - sq * 0.4),
+      1.1 * (1 + sq),
+      1.1 * (1 - sq * 0.25),
     )
-
-    // Emerge from z-depth + idle float
-    groupRef.current.position.z = THREE.MathUtils.lerp(-3.5, 0.3, eased)
-    groupRef.current.position.y = -2.9 + Math.sin(t * 0.4) * 0.12 * eased
-
-    // Slow y-spin + subtle x tilt
-    groupRef.current.rotation.y = Math.sin(t * 0.3) * 0.4 * eased
-    groupRef.current.rotation.x = Math.sin(t * 0.22) * 0.09 * eased
+    groupRef.current.position.y = -3.0 + Math.sin(t * 0.4) * 0.1 - scrollY * 0.001
+    groupRef.current.rotation.y = Math.sin(t * 0.3) * 0.35
+    groupRef.current.rotation.x = Math.sin(t * 0.22) * 0.08
   })
 
   return (
-    <group ref={groupRef} position={[0, -2.9, 0]}>
-      {/* Left vertical bar */}
+    <group ref={groupRef} position={[3.8, -3.0, 0]}>
       <mesh position={[-0.46, 0, 0]}>
         <capsuleGeometry args={[0.12, 1.45, 10, 20]} />
         <meshPhysicalMaterial color="#0B0B0C" roughness={0.68} metalness={0} clearcoat={0.45} clearcoatRoughness={0.5} />
       </mesh>
-      {/* Right vertical bar */}
       <mesh position={[0.46, 0, 0]}>
         <capsuleGeometry args={[0.12, 1.45, 10, 20]} />
         <meshPhysicalMaterial color="#0B0B0C" roughness={0.68} metalness={0} clearcoat={0.45} clearcoatRoughness={0.5} />
       </mesh>
-      {/* Diagonal: ≈ 25° CCW tilt so top end points upper-left, bottom end lower-right */}
       <mesh rotation={[0, 0, 0.436]}>
         <capsuleGeometry args={[0.12, 1.72, 10, 20]} />
         <meshPhysicalMaterial color="#0B0B0C" roughness={0.68} metalness={0} clearcoat={0.45} clearcoatRoughness={0.5} />
@@ -225,19 +105,18 @@ function NextJsNLogo() {
 }
 
 export default function ArtisticCanvas() {
-  // Client-only (loaded via ssr:false). Skip on mobile to protect frame rate.
+  // Skip on mobile — protects frame rate and the layout is single-column there
   if (typeof window !== "undefined" && window.innerWidth <= 768) return null
 
   return (
+    // This component is rendered OUTSIDE .page in the DOM so the canvas
+    // participates in the ROOT stacking context (not .page's).
+    // z-index: 0 → painted at root step 6, above body background (step 3).
+    // .page has z-index: 1 (root step 7), so all HTML is always on top.
     <Canvas
       dpr={[1, 2]}
       camera={{ position: [0, 0, 9], fov: 52 }}
-      // z-index 0 places the canvas above the body's block-level background
-      // (which paints at stacking step 3) but below .page (z-index: 1, step 7).
-      // zIndex: -1 = step 2 within .page's stacking context (z-index 1 in root).
-      // Sections (steps 3–6 in .page) paint ABOVE the canvas, so text is never
-      // obscured. .page is still above root body background, so cream bg shows.
-      style={{ position: "fixed", inset: 0, zIndex: -1, pointerEvents: "none" }}
+      style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }}
       gl={{ antialias: true, alpha: false }}
     >
       <color attach="background" args={["#F4F0EA"]} />
@@ -245,7 +124,7 @@ export default function ArtisticCanvas() {
       <directionalLight position={[5, 8, 5]} intensity={1.8} />
       <directionalLight position={[-4, -2, -4]} intensity={0.45} color={INDIGO_LIGHT} />
       <Suspense fallback={null}>
-        <SystemAssembly />
+        <RightSideShapes />
         <NextJsNLogo />
         <Environment preset="city" />
       </Suspense>
