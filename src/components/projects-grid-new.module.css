@@ -1,0 +1,336 @@
+/* ── Projects Grid Layout ────────────────────────────────────── */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ── Accordion Row (Expanded Detail) ──────────────────────────── */
+.accordionRow {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, rgba(232, 220, 200, 0.5) 0%, rgba(245, 241, 232, 0.3) 100%);
+  border: 2px solid rgba(193, 122, 95, 0.2);
+  border-radius: 16px;
+  padding: 32px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: inset 0 0 40px rgba(193, 122, 95, 0.05);
+}
+
+.accordionInner {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.accordionClose {
+  align-self: flex-end;
+  background: none;
+  border: none;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: rgba(193, 122, 95, 0.6);
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: all 0.3s ease;
+  letter-spacing: 0.05em;
+}
+
+.accordionClose:hover {
+  color: #C17A5F;
+  transform: scale(1.1);
+}
+
+/* ── Accordion Title ─────────────────────────────────────────── */
+.accordionTitle {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(1.6rem, 4vw, 2rem);
+  font-weight: 700;
+  color: #2A2620;
+  margin: 0 0 12px 0;
+  line-height: 1.2;
+}
+
+.accordionSummary {
+  font-family: 'Lora', serif;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: rgba(42, 38, 32, 0.7);
+  margin: 0 0 24px 0;
+}
+
+/* ── Section Labels ──────────────────────────────────────────── */
+.sectionLabel {
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #C17A5F;
+  margin: 20px 0 12px 0;
+  opacity: 0.8;
+}
+
+.accordionSection {
+  margin-bottom: 24px;
+}
+
+/* ── Architecture Rows ───────────────────────────────────────── */
+.archRow {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(193, 122, 95, 0.1);
+  font-family: 'Lora', serif;
+  font-size: 0.95rem;
+}
+
+.archRow span:first-child {
+  font-weight: 600;
+  color: #C17A5F;
+}
+
+.archRow span:last-child {
+  color: rgba(42, 38, 32, 0.75);
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+}
+
+.archRow:last-child {
+  border-bottom: none;
+}
+
+/* ── Tech Stack Display ──────────────────────────────────────── */
+.stackFull {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  background: rgba(193, 122, 95, 0.08);
+  border-left: 3px solid #C17A5F;
+  padding: 12px 16px;
+  border-radius: 4px;
+  color: #C17A5F;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+
+/* ── Outcomes List ───────────────────────────────────────────── */
+.outcomesList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.outcomesList li {
+  font-family: 'Lora', serif;
+  font-size: 0.95rem;
+  color: rgba(42, 38, 32, 0.7);
+  padding-left: 24px;
+  position: relative;
+}
+
+.outcomesList li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: #6B8E71;
+  font-weight: 700;
+}
+
+/* ── Metric Display ──────────────────────────────────────────── */
+.metricBig {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #6B8E71;
+  margin: 24px 0 0 0;
+  padding: 16px;
+  background: rgba(107, 142, 113, 0.08);
+  border-radius: 8px;
+  border-left: 4px solid #6B8E71;
+}
+
+/* ── GitHub Link ─────────────────────────────────────────────── */
+.githubLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #C17A5F;
+  text-decoration: none;
+  padding: 10px 14px;
+  border: 2px solid #C17A5F;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  letter-spacing: 0.02em;
+}
+
+.githubLink:hover {
+  background: #C17A5F;
+  color: #F5F1E8;
+  transform: translateY(-2px);
+}
+
+/* ── Responsive Grid ─────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .accordionRow {
+    padding: 24px;
+  }
+
+  .accordionTitle {
+    font-size: 1.4rem;
+  }
+
+  .archRow {
+    grid-template-columns: 100px 1fr;
+    gap: 12px;
+    font-size: 0.9rem;
+  }
+
+  .archRow span:first-child {
+    font-size: 0.85rem;
+  }
+
+  .sectionLabel {
+    font-size: 0.7rem;
+  }
+
+  .stackFull {
+    font-size: 0.8rem;
+  }
+
+  .outcomesList li {
+    font-size: 0.9rem;
+  }
+
+  .metricBig {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    gap: 12px;
+  }
+
+  .accordionRow {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .accordionTitle {
+    font-size: 1.2rem;
+  }
+
+  .accordionSummary {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .archRow {
+    grid-template-columns: 80px 1fr;
+    gap: 8px;
+    padding: 8px 0;
+    font-size: 0.8rem;
+  }
+
+  .sectionLabel {
+    font-size: 0.65rem;
+    margin: 16px 0 8px 0;
+  }
+
+  .outcomesList li {
+    font-size: 0.85rem;
+    padding-left: 20px;
+  }
+
+  .githubLink {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+  }
+}
+
+/* ── Reduced Motion ──────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .accordionRow {
+    animation: none;
+  }
+
+  .accordionClose {
+    transition: none;
+  }
+
+  .githubLink {
+    transition: none;
+  }
+}
+
+/* ── Dark Mode ───────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  .accordionRow {
+    background: linear-gradient(135deg, rgba(42, 38, 32, 0.5) 0%, rgba(26, 26, 30, 0.3) 100%);
+    border-color: rgba(193, 122, 95, 0.15);
+    box-shadow: inset 0 0 40px rgba(193, 122, 95, 0.02);
+  }
+
+  .accordionTitle {
+    color: #F5F1E8;
+  }
+
+  .accordionSummary {
+    color: rgba(245, 241, 232, 0.7);
+  }
+
+  .archRow span:last-child {
+    color: rgba(245, 241, 232, 0.75);
+  }
+
+  .outcomesList li {
+    color: rgba(245, 241, 232, 0.7);
+  }
+
+  .stackFull {
+    background: rgba(255, 157, 111, 0.08);
+    border-left-color: #FF9D6F;
+    color: #FF9D6F;
+  }
+
+  .metricBig {
+    color: #8BA899;
+    background: rgba(139, 168, 153, 0.08);
+    border-left-color: #8BA899;
+  }
+
+  .githubLink {
+    color: #FF9D6F;
+    border-color: #FF9D6F;
+  }
+
+  .githubLink:hover {
+    background: #FF9D6F;
+    color: #1A1A1E;
+  }
+}

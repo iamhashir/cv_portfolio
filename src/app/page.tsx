@@ -19,6 +19,8 @@ import {
 import { PortfolioFrame } from "@/components/PortfolioFrame"
 import dynamic from "next/dynamic"
 import styles from "./new-page.module.css"
+import { GeometricHero } from "@/components/GeometricHero"
+import { ProjectsGridNew } from "@/components/ProjectsGridNew"
 
 const ArtisticCanvas = dynamic(() => import("@/components/ArtisticCanvas"), {
   ssr: false,
@@ -177,68 +179,12 @@ function ProjectCard({
   )
 }
 
-// ─── 3-column grid with inline accordion rows ────────────────────
-function ProjectsGrid({
-  expandedSlug,
-  onToggle,
-  onClose,
-}: {
-  expandedSlug: string | null
-  onToggle: (slug: string) => void
-  onClose: () => void
-}) {
-  const COL_COUNT = 3
-  const rows: Project[][] = []
-  for (let i = 0; i < projects.length; i += COL_COUNT) {
-    rows.push(projects.slice(i, i + COL_COUNT))
-  }
-
-  let cardIndex = 0
-  return (
-    <div className={styles.projectsGrid}>
-      {rows.map((row, ri) => {
-        const expandedProject = row.find((p) => p.slug === expandedSlug) ?? null
-        return (
-          <React.Fragment key={`row-${ri}`}>
-            {row.map((project) => {
-              const idx = cardIndex++
-              return (
-                <ProjectCard
-                  key={project.slug}
-                  project={project}
-                  isExpanded={expandedSlug === project.slug}
-                  onToggle={() => onToggle(project.slug)}
-                  index={idx}
-                />
-              )
-            })}
-            {expandedProject && (
-              <AccordionDetail
-                key={`accordion-${expandedProject.slug}`}
-                project={expandedProject}
-                onClose={onClose}
-              />
-            )}
-          </React.Fragment>
-        )
-      })}
-    </div>
-  )
-}
 
 // ─── Page ────────────────────────────────────────────────────────
 export default function Home() {
   const [scrolled,     setScrolled]     = useState(false)
   const [menuOpen,     setMenuOpen]     = useState(false)
   const [expandedSlug, setExpandedSlug] = useState<string | null>(null)
-  const heroRef = useRef<HTMLElement>(null)
-
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  })
-  const heroY       = useTransform(scrollYProgress, [0, 1], ["0%", "22%"])
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -296,7 +242,7 @@ export default function Home() {
               {label}
             </a>
           ))}
-          <a href="/Malik_Hashir_CV.pdf" download className={styles.ctaPrimary} style={{ marginTop: 8 }}>
+          <a href={site.cvPath} download className={styles.ctaPrimary} style={{ marginTop: 8 }}>
             Download CV →
           </a>
         </nav>
@@ -311,7 +257,7 @@ export default function Home() {
             <a href={site.linkedin} target="_blank" rel="noopener noreferrer" className={styles.headerLink}>
               LinkedIn ↗
             </a>
-            <a href="/Malik_Hashir_CV.pdf" download className={styles.headerCvBtn}>
+            <a href={site.cvPath} download className={styles.headerCvBtn}>
               Download CV →
             </a>
           </nav>
@@ -320,82 +266,8 @@ export default function Home() {
           </button>
         </header>
 
-        {/* ── Hero ── */}
-        <section ref={heroRef} id="hero" className={styles.hero}>
-          <motion.div className={styles.heroContent} style={{ y: heroY, opacity: heroOpacity }}>
-            <motion.p
-              className={styles.eyebrow}
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.15, ease }}
-            >
-              FULL-STACK · AI · SYSTEMS
-            </motion.p>
-
-            <motion.h1
-              className={styles.heroH1}
-              initial={{ opacity: 0, y: 44 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.85, delay: 0.3, ease }}
-            >
-              I build complete web and mobile systems from scratch.
-            </motion.h1>
-
-            <motion.p
-              className={styles.heroSub}
-              initial={{ opacity: 0, y: 22 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.65, delay: 0.5, ease }}
-            >
-              Full-stack developer specializing in CRM automation, AI workflows,
-              and internal operations platforms across the JavaScript ecosystem.
-            </motion.p>
-
-            <motion.p
-              className={styles.availabilityLine}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.55, delay: 0.65 }}
-            >
-              <span className={styles.greenDot} />
-              AVAILABLE · {site.location} · Remote worldwide
-            </motion.p>
-
-            <motion.div
-              className={styles.ctaGroup}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.75, ease }}
-            >
-              <a href="/Malik_Hashir_CV.pdf" download className={styles.ctaPrimary}>
-                Download CV →
-              </a>
-              <a href="#systems" className={styles.ctaSecondary}>
-                View Systems ↓
-              </a>
-            </motion.div>
-
-            <motion.p
-              className={styles.heroMetrics}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.9 }}
-            >
-              {projects.length} systems built · {projectCategoryGroups.length} domains · {site.location}
-            </motion.p>
-          </motion.div>
-
-          <motion.div
-            className={styles.scrollIndicator}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 1.2 }}
-            aria-hidden="true"
-          >
-            <span className={styles.scrollArrow} />
-            <span>Scroll</span>
-          </motion.div>
-        </section>
+        {/* ── Geometric Hero ── */}
+        <GeometricHero />
 
         {/* ── Marquee strip (driven from site.seo.keywords) ── */}
         <div className={styles.marqueeStrip} aria-hidden="true">
@@ -420,7 +292,7 @@ export default function Home() {
               Production-grade platforms, frameworks, and tools. Click any card for full details.
             </p>
           </motion.div>
-          <ProjectsGrid
+          <ProjectsGridNew
             expandedSlug={expandedSlug}
             onToggle={handleToggle}
             onClose={() => setExpandedSlug(null)}

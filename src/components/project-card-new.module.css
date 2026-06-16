@@ -1,0 +1,431 @@
+/* ── Squishy Fun Project Card System ────────────────────────── */
+
+.card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(232, 220, 200, 0.8) 100%);
+  border: 2px solid rgba(193, 122, 95, 0.25);
+  border-radius: 16px;
+  padding: 28px;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  perspective: 1000px;
+  will-change: transform;
+  box-shadow: 0 4px 12px rgba(42, 38, 32, 0.08);
+}
+
+.card:hover,
+.card:focus-visible {
+  border-color: rgba(193, 122, 95, 0.5);
+  box-shadow: 0 16px 48px rgba(193, 122, 95, 0.2),
+    inset 0 0 40px rgba(193, 122, 95, 0.05);
+  transform: translateY(-8px) scale(1.02);
+  background: linear-gradient(135deg, rgba(245, 241, 232, 0.98) 0%, rgba(232, 220, 200, 0.9) 100%);
+  outline: 2px solid rgba(193, 122, 95, 0.6);
+  outline-offset: 2px;
+}
+
+.cardExpanded {
+  border-color: rgba(193, 122, 95, 0.6);
+  background: rgba(245, 241, 232, 0.99);
+  box-shadow: 0 12px 36px rgba(193, 122, 95, 0.25);
+}
+
+/* ── Blob Overlay ────────────────────────────────────────────── */
+.cardBlob {
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 250px;
+  height: 250px;
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(12px);
+}
+
+/* ── Corner Geometric Accent ─────────────────────────────────── */
+.cornerAccent {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, rgba(193, 122, 95, 0.15) 50%, transparent 50%);
+  clip-path: polygon(100% 0%, 0% 0%, 100% 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ── Card Content ────────────────────────────────────────────── */
+.cardContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Card Header (Tag + Category) ────────────────────────────── */
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cardTag {
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: rgba(193, 122, 95, 0.7);
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border: 1px solid rgba(193, 122, 95, 0.2);
+  border-radius: 4px;
+  background: rgba(193, 122, 95, 0.06);
+  transition: all 0.3s ease;
+}
+
+.card:hover .cardTag {
+  background: rgba(193, 122, 95, 0.12);
+  border-color: rgba(193, 122, 95, 0.4);
+  transform: scale(1.08);
+}
+
+.cardCategory {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #C17A5F;
+  transition: color 0.3s ease;
+}
+
+/* ── Card Title ──────────────────────────────────────────────── */
+.cardTitle {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  font-weight: 700;
+  line-height: 1.3;
+  color: #2A2620;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.card:hover .cardTitle {
+  background: linear-gradient(135deg, #C17A5F 0%, #D97936 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Summary ─────────────────────────────────────────────────── */
+.cardSummary {
+  font-family: 'Lora', serif;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(42, 38, 32, 0.7);
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.card:hover .cardSummary {
+  color: rgba(42, 38, 32, 0.85);
+}
+
+/* ── Metric Display (Always Visible) ────────────────────────── */
+.cardMetric {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(107, 142, 113, 0.08);
+  border-left: 3px solid #6B8E71;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.card:hover .cardMetric {
+  background: rgba(107, 142, 113, 0.15);
+  border-left-color: #6B8E71;
+  transform: translateX(4px);
+}
+
+.metricLabel {
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #6B8E71;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.metricValue {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #6B8E71;
+}
+
+/* ── Tech Tags ───────────────────────────────────────────────── */
+.cardTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.techTag {
+  font-family: 'Courier New', monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #C17A5F;
+  padding: 6px 10px;
+  border: 1px solid rgba(193, 122, 95, 0.3);
+  border-radius: 6px;
+  background: rgba(193, 122, 95, 0.08);
+  text-transform: uppercase;
+  transition: all 0.25s ease;
+  cursor: default;
+}
+
+.card:hover .techTag {
+  background: rgba(193, 122, 95, 0.15);
+  border-color: rgba(193, 122, 95, 0.5);
+  box-shadow: 0 2px 8px rgba(193, 122, 95, 0.1);
+}
+
+.techTagMore {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(193, 122, 95, 0.5);
+  padding: 6px 10px;
+}
+
+/* ── Interactive CTA ─────────────────────────────────────────── */
+.cardCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 16px;
+  margin-top: 8px;
+  border: 2px solid #C17A5F;
+  border-radius: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+  width: 100%;
+  justify-content: center;
+}
+
+.cardCta span:last-child {
+  display: inline-block;
+  transition: transform 0.4s ease;
+}
+
+.card:hover .cardCta {
+  box-shadow: 0 8px 20px rgba(193, 122, 95, 0.25);
+  transform: translateY(-2px);
+}
+
+.card:active .cardCta {
+  transform: translateY(0);
+}
+
+/* ── Hover Glow Effect ───────────────────────────────────────── */
+.cardGlow {
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(circle, rgba(193, 122, 95, 0.3) 0%, transparent 70%);
+  border-radius: 16px;
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(20px);
+}
+
+/* ── Mobile Optimization ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  .card {
+    padding: 20px;
+    border-radius: 12px;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .cardTitle {
+    font-size: 1.15rem;
+  }
+
+  .cardSummary {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .cardBlob {
+    width: 180px;
+    height: 180px;
+  }
+
+  .cardCta {
+    padding: 14px 16px;
+    font-size: 0.8rem;
+  }
+
+  /* Remove hover effects on touch devices */
+  @media (hover: none) and (pointer: coarse) {
+    .card:hover {
+      transform: translateY(-4px) scale(1);
+      background: linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(232, 220, 200, 0.8) 100%);
+    }
+
+    .card:active {
+      transform: translateY(-4px) scale(1.01);
+      border-color: rgba(193, 122, 95, 0.4);
+    }
+
+    .cardTitle {
+      background: none;
+      -webkit-text-fill-color: unset;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 16px;
+    border-radius: 10px;
+  }
+
+  .cardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cardTag,
+  .cardCategory {
+    font-size: 0.7rem;
+  }
+
+  .cardTitle {
+    font-size: 1rem;
+  }
+
+  .cardSummary {
+    font-size: 0.85rem;
+  }
+
+  .cardTags {
+    gap: 6px;
+  }
+
+  .techTag {
+    font-size: 0.65rem;
+    padding: 5px 8px;
+  }
+
+  .cornerAccent {
+    width: 40px;
+    height: 40px;
+  }
+
+  .cardBlob {
+    display: none;
+  }
+}
+
+/* ── Reduced Motion ──────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .cardTag,
+  .cardCta,
+  .cardMetric {
+    transition: none;
+  }
+
+  .cardBlob {
+    animation: none;
+  }
+
+  .card:hover {
+    transform: none;
+  }
+
+  .card:hover .cardTitle {
+    background: none;
+    color: #2A2620;
+  }
+}
+
+/* ── Dark Mode Support ───────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  .card {
+    background: linear-gradient(135deg, rgba(26, 26, 30, 0.95) 0%, rgba(42, 38, 32, 0.9) 100%);
+    border-color: rgba(193, 122, 95, 0.2);
+  }
+
+  .card:hover {
+    background: linear-gradient(135deg, rgba(26, 26, 30, 0.98) 0%, rgba(42, 38, 32, 0.95) 100%);
+    border-color: rgba(193, 122, 95, 0.4);
+  }
+
+  .cardTitle {
+    color: #F5F1E8;
+  }
+
+  .cardSummary {
+    color: rgba(245, 241, 232, 0.7);
+  }
+
+  .card:hover .cardSummary {
+    color: rgba(245, 241, 232, 0.85);
+  }
+
+  .cardCategory {
+    color: #FF9D6F;
+  }
+
+  .cardTag {
+    color: rgba(255, 157, 111, 0.7);
+    background: rgba(255, 157, 111, 0.08);
+    border-color: rgba(255, 157, 111, 0.2);
+  }
+
+  .card:hover .cardTag {
+    background: rgba(255, 157, 111, 0.12);
+    border-color: rgba(255, 157, 111, 0.4);
+  }
+
+  .metricLabel,
+  .metricValue {
+    color: #8BA899;
+  }
+
+  .cardMetric {
+    background: rgba(139, 168, 153, 0.08);
+    border-left-color: #8BA899;
+  }
+
+  .techTag {
+    color: #FF9D6F;
+    background: rgba(255, 157, 111, 0.08);
+    border-color: rgba(255, 157, 111, 0.3);
+  }
+
+  .cardCta {
+    border-color: #FF9D6F;
+    color: #FF9D6F;
+  }
+}

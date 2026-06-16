@@ -1,0 +1,384 @@
+/* ── Warm + Earthy Geometric Hero ────────────────────────────── */
+
+:root {
+  /* Warm + Earthy Color Palette */
+  --clay: #C17A5F;              /* Primary: warm terracotta/rust */
+  --sage: #6B8E71;              /* Secondary: muted sage green */
+  --cream: #F5F1E8;             /* Background: warm cream */
+  --charcoal: #2A2620;          /* Text: warm dark grey */
+  --burnt-orange: #D97936;      /* Accent warmth */
+  --pale-sand: #E8DCC8;         /* Tertiary neutral */
+  --clay-light: rgba(193, 122, 95, 0.15);
+  --sage-light: rgba(107, 142, 113, 0.15);
+}
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: var(--cream);
+  padding-top: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ── Grid Background ────────────────────────────────────────── */
+.gridBackground {
+  position: absolute;
+  inset: 0;
+  opacity: 1;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.gridSvg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* ── Squishy Blob ──────────────────────────────────────────── */
+.blob {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  top: 15%;
+  right: 8%;
+  z-index: 1;
+  filter: drop-shadow(0 40px 80px rgba(193, 122, 95, 0.25));
+  will-change: transform;
+}
+
+/* ── Content Container ─────────────────────────────────────── */
+.content {
+  position: relative;
+  z-index: 10;
+  max-width: 700px;
+  padding: 0 32px;
+  text-align: left;
+  margin-left: 0;
+}
+
+/* ── Eyebrow ───────────────────────────────────────────────── */
+.eyebrow {
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--clay);
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  opacity: 0.8;
+}
+
+/* ── Main Heading ──────────────────────────────────────────── */
+.heading {
+  font-family: 'Outfit', 'Aeonik', sans-serif;
+  font-size: clamp(2.5rem, 8vw, 4.2rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--charcoal);
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+}
+
+.accentWord {
+  background: linear-gradient(135deg, var(--clay) 0%, var(--burnt-orange) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+/* ── Subtitle ──────────────────────────────────────────────── */
+.subtitle {
+  font-family: 'Lora', serif;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--charcoal);
+  opacity: 0.75;
+  margin-bottom: 36px;
+  max-width: 500px;
+  font-weight: 400;
+}
+
+/* ── Availability Status ───────────────────────────────────── */
+.availability {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--charcoal);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 40px;
+}
+
+.statusDot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--sage);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ── CTA Group ─────────────────────────────────────────────── */
+.ctaGroup {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+
+.ctaPrimary,
+.ctaSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  letter-spacing: 0.02em;
+  position: relative;
+  overflow: hidden;
+}
+
+.ctaPrimary {
+  background: linear-gradient(135deg, var(--clay) 0%, var(--burnt-orange) 100%);
+  color: var(--cream);
+  border: 2px solid transparent;
+  box-shadow: 0 12px 24px rgba(193, 122, 95, 0.25);
+}
+
+.ctaPrimary:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(193, 122, 95, 0.35);
+}
+
+.ctaPrimary:active {
+  transform: translateY(-2px);
+}
+
+.ctaSecondary {
+  background: transparent;
+  color: var(--charcoal);
+  border: 2px solid var(--clay);
+  transition: all 0.3s ease;
+}
+
+.ctaSecondary:hover {
+  background: var(--clay-light);
+  transform: translateY(-2px);
+}
+
+.ctaArrow {
+  display: inline-block;
+  animation: bounce 2s infinite;
+}
+
+.ctaPrimary:hover .ctaArrow,
+.ctaSecondary:hover .ctaArrow {
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+/* ── Metrics Line ──────────────────────────────────────────── */
+.metrics {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--sage);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+}
+
+/* ── Scroll Indicator ──────────────────────────────────────── */
+.scrollIndicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  font-size: 1.5rem;
+  color: var(--clay);
+  opacity: 0.6;
+  animation: fadeInOut 3s infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .hero {
+    padding-top: 60px;
+    min-height: 90vh;
+  }
+
+  .content {
+    max-width: 100%;
+    padding: 0 24px;
+  }
+
+  .heading {
+    font-size: clamp(1.8rem, 6vw, 2.8rem);
+    margin-bottom: 20px;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 28px;
+  }
+
+  .blob {
+    width: 220px;
+    height: 220px;
+    top: 20%;
+    right: 5%;
+  }
+
+  .ctaGroup {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .ctaPrimary,
+  .ctaSecondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .scrollIndicator {
+    bottom: 20px;
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    min-height: 85vh;
+    padding-top: 50px;
+  }
+
+  .eyebrow {
+    font-size: 0.7rem;
+    margin-bottom: 20px;
+  }
+
+  .heading {
+    font-size: clamp(1.4rem, 5vw, 2rem);
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+  }
+
+  .blob {
+    width: 160px;
+    height: 160px;
+    top: 25%;
+    right: 2%;
+    filter: drop-shadow(0 20px 40px rgba(193, 122, 95, 0.2));
+  }
+
+  .ctaPrimary,
+  .ctaSecondary {
+    padding: 14px 24px;
+    font-size: 0.9rem;
+  }
+
+  .availability {
+    font-size: 0.75rem;
+    margin-bottom: 24px;
+  }
+
+  .metrics {
+    font-size: 0.75rem;
+  }
+}
+
+/* ── Dark mode support (optional) ──────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  .hero {
+    background: #1A1A1E;
+  }
+
+  .charcoal {
+    color: #F5F1E8;
+  }
+
+  .heading {
+    color: #F5F1E8;
+  }
+
+  .subtitle {
+    color: #D9D5CC;
+  }
+
+  .availability {
+    color: #D9D5CC;
+  }
+
+  .metrics {
+    color: #8BA899;
+  }
+}
+
+/* ── Reduced motion ────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .blob {
+    animation: none;
+  }
+
+  .statusDot {
+    animation: none;
+  }
+
+  .scrollIndicator {
+    animation: none;
+  }
+
+  .ctaArrow {
+    animation: none;
+  }
+
+  .ctaPrimary,
+  .ctaSecondary {
+    transition: none;
+  }
+}

@@ -22,6 +22,7 @@ export const site = {
   githubHandle:   "ihashirr",
   linkedin:       "https://linkedin.com/in/malikhashir",
   linkedinHandle: "linkedin.com/in/malikhashir",
+  cvPath:         "/Malik_Hashir_CV.pdf",
 
   // ── SEO ───────────────────────────────────────────────────────
   seo: {
