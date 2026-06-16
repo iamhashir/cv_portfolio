@@ -11,10 +11,7 @@ import {
   CAPABILITIES,
 } from "@/data/portfolioData"
 import { PortfolioFrame } from "@/components/PortfolioFrame"
-import dynamic from "next/dynamic"
 import styles from "./new-page.module.css"
-
-const ArtisticCanvas = dynamic(() => import("@/components/ArtisticCanvas"), { ssr: false })
 
 const ease = [0.25, 0.46, 0.45, 0.94] as const
 
@@ -193,9 +190,9 @@ export default function Home() {
 
   return (
     <>
-      {/* Canvas sits OUTSIDE .page so it's in the ROOT stacking context.
-          z-index:0 (canvas) < z-index:1 (.page) — text is always on top. */}
-      <ArtisticCanvas />
+      {/* Fixed background stage — always behind all content.
+          z-index:-10 keeps it below every scrolling section. */}
+      <div className={styles.backgroundStage} aria-hidden="true" />
       <div className={styles.page}>
       <PortfolioFrame />
 
