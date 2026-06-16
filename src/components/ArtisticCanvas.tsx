@@ -21,17 +21,17 @@ function ShapeGeom({ geom }: { geom: string }) {
   }
 }
 
-// All shapes have x > 1.8 — left side (text zone, x < 0) is completely clear.
-// Camera z=9, fov=52 → half-width at z=0 ≈ 7.8 world-units.
-// x=1.8 ≈ 62% from the left edge of the viewport.
+// Camera z=9, fov=52 (vertical) → half-height ≈ 4.39, half-width ≈ 7.8 (16:9).
+// x range [-7.8, +7.8]. x=0 = center, x=3.5 ≈ 72% from left (right zone, visible on all screens).
+// Shapes kept at x=0.8–3.5 so they appear in the right ~17-22% of a 16:9 viewport.
 const SHAPES = [
-  { geom: "torusKnot", color: INDIGO,       pos: [2.5,  0.8,  0.2] as const, scale: 0.55, speed: 1.4, rot: 0.8 },
-  { geom: "ico",       color: INDIGO_LIGHT, pos: [4.2, -0.6, -0.3] as const, scale: 0.50, speed: 1.1, rot: 0.5 },
-  { geom: "box",       color: CHARCOAL,     pos: [1.8, -2.0,  0.3] as const, scale: 0.45, speed: 0.9, rot: 0.6 },
-  { geom: "torus",     color: INDIGO,       pos: [5.0,  0.4, -0.5] as const, scale: 0.48, speed: 1.6, rot: 0.4 },
-  { geom: "sphere",    color: INDIGO_LIGHT, pos: [3.5, -2.8,  0.1] as const, scale: 0.42, speed: 1.2, rot: 0.7 },
-  { geom: "capsule",   color: CHARCOAL,     pos: [4.8,  2.5, -0.6] as const, scale: 0.40, speed: 0.8, rot: 0.5 },
-  { geom: "ico",       color: INDIGO,       pos: [2.0,  2.2, -0.2] as const, scale: 0.35, speed: 1.3, rot: 0.6 },
+  { geom: "torusKnot", color: INDIGO,       pos: [1.0,  0.8,  0.2] as const, scale: 0.55, speed: 1.4, rot: 0.8 },
+  { geom: "ico",       color: INDIGO_LIGHT, pos: [2.6, -0.6, -0.3] as const, scale: 0.50, speed: 1.1, rot: 0.5 },
+  { geom: "box",       color: CHARCOAL,     pos: [0.8, -2.0,  0.3] as const, scale: 0.45, speed: 0.9, rot: 0.6 },
+  { geom: "torus",     color: INDIGO,       pos: [3.5,  0.4, -0.5] as const, scale: 0.48, speed: 1.6, rot: 0.4 },
+  { geom: "sphere",    color: INDIGO_LIGHT, pos: [2.0, -2.8,  0.1] as const, scale: 0.42, speed: 1.2, rot: 0.7 },
+  { geom: "capsule",   color: CHARCOAL,     pos: [3.2,  2.5, -0.6] as const, scale: 0.40, speed: 0.8, rot: 0.5 },
+  { geom: "ico",       color: INDIGO,       pos: [1.4,  2.2, -0.2] as const, scale: 0.35, speed: 1.3, rot: 0.6 },
 ]
 
 // Shapes float gently on the right side and drift up slightly with scroll.
@@ -87,7 +87,7 @@ function NextJsNLogo() {
   })
 
   return (
-    <group ref={groupRef} position={[3.8, -3.0, 0]}>
+    <group ref={groupRef} position={[2.5, -3.0, 0]}>
       <mesh position={[-0.46, 0, 0]}>
         <capsuleGeometry args={[0.12, 1.45, 10, 20]} />
         <meshPhysicalMaterial color="#0B0B0C" roughness={0.68} metalness={0} clearcoat={0.45} clearcoatRoughness={0.5} />

@@ -178,8 +178,8 @@ export default function Home() {
     target: heroRef,
     offset: ["start start", "end start"],
   })
-  const heroY       = useTransform(scrollYProgress, [0, 1], ["0%", "38%"])
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.65], [1, 0])
+  const heroY       = useTransform(scrollYProgress, [0, 1], ["0%", "22%"])
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -278,6 +278,17 @@ export default function Home() {
           >
             {projects.length} systems built · 4 domains · UAE based
           </motion.p>
+        </motion.div>
+
+        <motion.div
+          className={styles.scrollIndicator}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 1.2 }}
+          aria-hidden="true"
+        >
+          <span className={styles.scrollArrow} />
+          <span>Scroll</span>
         </motion.div>
       </section>
 
