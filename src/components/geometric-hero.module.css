@@ -1,20 +1,10 @@
 /* ── Squishy + Geometric Hero — High Contrast Brutalist ──── */
 
-:root {
-  --hero-bg: #0a0a0a;
-  --hero-ink: #f0f0f0;
-  --hero-lime: #c8ff00;
-  --hero-coral: #ff4d3b;
-  --hero-cyan: #00e5ff;
-  --hero-muted: #555555;
-  --hero-border: #222222;
-}
-
 .hero {
   position: relative;
   min-height: 100vh;
   overflow: hidden;
-  background: #0a0a0a;
+  background: var(--bg-primary);
   padding-top: 80px;
   display: flex;
   flex-direction: column;
@@ -38,6 +28,22 @@
   left: 0;
 }
 
+/* ── Grid lines ──────────────────────────────────────────── */
+.gridLine {
+  stroke: var(--accent-color);
+  opacity: 0.06;
+}
+
+.accentLineH {
+  stroke: var(--accent-color);
+  opacity: 0.08;
+}
+
+.accentLineV {
+  stroke: var(--accent-cyan);
+  opacity: 0.06;
+}
+
 /* ── Decorative geometric shapes ─────────────────────────── */
 .geoShapes {
   position: absolute;
@@ -54,7 +60,7 @@
   height: 0;
   border-left: 44px solid transparent;
   border-right: 44px solid transparent;
-  border-bottom: 76px solid #c8ff00;
+  border-bottom: 76px solid var(--accent-color);
   opacity: 0.18;
 }
 
@@ -64,7 +70,7 @@
   left: 6%;
   width: 64px;
   height: 64px;
-  border: 3px solid #ff4d3b;
+  border: 3px solid var(--accent-coral);
   opacity: 0.22;
   transform: rotate(18deg);
 }
@@ -76,7 +82,7 @@
   width: 110px;
   height: 110px;
   border-radius: 50%;
-  border: 3px solid #00e5ff;
+  border: 3px solid var(--accent-cyan);
   opacity: 0.15;
 }
 
@@ -95,7 +101,7 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #c8ff00;
+  background: var(--accent-color);
 }
 
 /* ── Squishy Blob ─────────────────────────────────────────── */
@@ -125,7 +131,7 @@
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.22em;
-  color: #c8ff00;
+  color: var(--accent-color);
   text-transform: uppercase;
   margin-bottom: 24px;
   display: flex;
@@ -138,7 +144,7 @@
   display: inline-block;
   width: 28px;
   height: 2px;
-  background: #c8ff00;
+  background: var(--accent-color);
 }
 
 /* ── Main Heading ─────────────────────────────────────────── */
@@ -147,14 +153,14 @@
   font-size: clamp(2.8rem, 8vw, 5.5rem);
   font-weight: 900;
   line-height: 1.0;
-  color: #f0f0f0;
+  color: var(--text-primary);
   margin-bottom: 28px;
   letter-spacing: -0.04em;
   text-transform: uppercase;
 }
 
 .accentWord {
-  color: #c8ff00;
+  color: var(--accent-color);
   text-shadow: 0 0 40px rgba(200, 255, 0, 0.35);
   position: relative;
   font-weight: 900;
@@ -165,11 +171,11 @@
   font-family: 'Inter', sans-serif;
   font-size: 1.05rem;
   line-height: 1.65;
-  color: #888888;
+  color: var(--text-secondary);
   margin-bottom: 36px;
   max-width: 480px;
   font-weight: 400;
-  border-left: 3px solid #ff4d3b;
+  border-left: 3px solid var(--accent-coral);
   padding-left: 16px;
 }
 
@@ -181,12 +187,12 @@
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.78rem;
   font-weight: 600;
-  color: #f0f0f0;
+  color: var(--text-primary);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: 40px;
-  background: #141414;
-  border: 1.5px solid #2a2a2a;
+  background: var(--bg-secondary);
+  border: 1.5px solid var(--border-muted);
   padding: 8px 16px;
   border-radius: 4px;
 }
@@ -196,7 +202,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #c8ff00;
+  background: var(--accent-color);
   box-shadow: 0 0 8px rgba(200, 255, 0, 0.8);
   animation: pulse 2s infinite;
 }
@@ -232,39 +238,39 @@
 }
 
 .ctaPrimary {
-  background: #c8ff00;
-  color: #0a0a0a;
-  border: 2px solid #c8ff00;
-  box-shadow: 4px 4px 0px #888800;
+  background: var(--accent-color);
+  color: var(--bg-primary);
+  border: 2px solid var(--accent-color);
+  box-shadow: 4px 4px 0px var(--accent-muted);
 }
 
 .ctaPrimary:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px #888800;
+  box-shadow: 6px 6px 0px var(--accent-muted);
 }
 
 .ctaPrimary:active {
   transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px #888800;
+  box-shadow: 2px 2px 0px var(--accent-muted);
 }
 
 .ctaSecondary {
   background: transparent;
-  color: #f0f0f0;
-  border: 2px solid #f0f0f0;
-  box-shadow: 4px 4px 0px #333333;
+  color: var(--text-primary);
+  border: 2px solid var(--text-primary);
+  box-shadow: 4px 4px 0px var(--border-focus);
 }
 
 .ctaSecondary:hover {
-  background: #f0f0f0;
-  color: #0a0a0a;
+  background: var(--text-primary);
+  color: var(--bg-primary);
   transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px #333333;
+  box-shadow: 6px 6px 0px var(--border-focus);
 }
 
 .ctaSecondary:active {
   transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px #333333;
+  box-shadow: 2px 2px 0px var(--border-focus);
 }
 
 .ctaArrow {
@@ -282,7 +288,7 @@
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.78rem;
   font-weight: 600;
-  color: #444444;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.12em;
 }
@@ -295,7 +301,7 @@
   transform: translateX(-50%);
   z-index: 10;
   font-size: 1.4rem;
-  color: #c8ff00;
+  color: var(--accent-color);
   opacity: 0.5;
 }
 

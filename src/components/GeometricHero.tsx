@@ -74,15 +74,14 @@ export function GeometricHero() {
               <path
                 d="M 60 0 L 0 0 0 60"
                 fill="none"
-                stroke="rgba(200,255,0,0.06)"
+                className={styles.gridLine}
                 strokeWidth="1"
               />
             </pattern>
           </defs>
           <rect width="1200" height="800" fill="url(#grid)" />
-          {/* thick accent lines */}
-          <line x1="0" y1="200" x2="400" y2="200" stroke="rgba(200,255,0,0.08)" strokeWidth="2"/>
-          <line x1="900" y1="0" x2="900" y2="800" stroke="rgba(0,229,255,0.06)" strokeWidth="2"/>
+          <line x1="0" y1="200" x2="400" y2="200" className={styles.accentLineH} strokeWidth="2"/>
+          <line x1="900" y1="0" x2="900" y2="800" className={styles.accentLineV} strokeWidth="2"/>
         </svg>
       </div>
 
@@ -111,9 +110,9 @@ export function GeometricHero() {
       >
         <defs>
           <linearGradient id="blobGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="rgba(200, 255, 0, 0.35)" />
-            <stop offset="50%" stopColor="rgba(0, 229, 255, 0.25)" />
-            <stop offset="100%" stopColor="rgba(255, 77, 59, 0.3)" />
+            <stop offset="0%" stopColor="var(--accent-color)" stopOpacity="0.35" />
+            <stop offset="50%" stopColor="var(--accent-cyan)" stopOpacity="0.25" />
+            <stop offset="100%" stopColor="var(--accent-coral)" stopOpacity="0.3" />
           </linearGradient>
           <filter id="blobBlur">
             <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
