@@ -87,11 +87,12 @@
 }
 
 .accentWord {
-  background: linear-gradient(135deg, var(--clay) 0%, var(--burnt-orange) 100%);
+  background: linear-gradient(135deg, #8B5A3C 0%, #A95E2F 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   position: relative;
+  font-weight: 800;
 }
 
 /* ── Subtitle ──────────────────────────────────────────────── */
