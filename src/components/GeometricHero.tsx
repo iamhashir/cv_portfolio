@@ -70,17 +70,29 @@ export function GeometricHero() {
       <div className={styles.gridBackground} aria-hidden="true">
         <svg className={styles.gridSvg} viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
           <defs>
-            <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+            <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
               <path
-                d="M 80 0 L 0 0 0 80"
+                d="M 60 0 L 0 0 0 60"
                 fill="none"
-                stroke="rgba(193, 122, 95, 0.12)"
-                strokeWidth="1.5"
+                className={styles.gridLine}
+                strokeWidth="1"
               />
             </pattern>
           </defs>
           <rect width="1200" height="800" fill="url(#grid)" />
+          <line x1="0" y1="200" x2="400" y2="200" className={styles.accentLineH} strokeWidth="2"/>
+          <line x1="900" y1="0" x2="900" y2="800" className={styles.accentLineV} strokeWidth="2"/>
         </svg>
+      </div>
+
+      {/* Decorative geometric shapes */}
+      <div className={styles.geoShapes} aria-hidden="true">
+        <div className={styles.triTopRight} />
+        <div className={styles.rectBottomLeft} />
+        <div className={styles.circleAccent} />
+        <div className={styles.dotGrid}>
+          {Array.from({ length: 25 }).map((_, i) => <span key={i} />)}
+        </div>
       </div>
 
       {/* Squishy morphing blob */}
@@ -98,9 +110,13 @@ export function GeometricHero() {
       >
         <defs>
           <linearGradient id="blobGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="rgba(193, 122, 95, 0.4)" />
-            <stop offset="100%" stopColor="rgba(107, 142, 113, 0.4)" />
+            <stop offset="0%" stopColor="var(--accent-color)" stopOpacity="0.35" />
+            <stop offset="50%" stopColor="var(--accent-cyan)" stopOpacity="0.25" />
+            <stop offset="100%" stopColor="var(--accent-coral)" stopOpacity="0.3" />
           </linearGradient>
+          <filter id="blobBlur">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
+          </filter>
         </defs>
         <motion.path
           d="M100,20 C120,20 140,30 150,50 C160,70 155,90 145,110 C140,125 130,140 110,150 C90,160 70,160 50,150 C30,140 20,125 15,110 C5,90 10,70 20,50 C30,30 80,20 100,20"
