@@ -3,8 +3,8 @@
 // one import path and zero knowledge of the underlying files.
 
 export { site } from "./site"
-export { projects } from "./projects"
-export type { Project } from "./projects"
+export { projects, projectCategoryGroups } from "./projects"
+export type { Project, WorkflowStep, DemoSnippet } from "./projects"
 
 // ─── Display filename for each project slug ──────────────────────
 export const PROJECT_FILENAMES: Record<string, string> = {
