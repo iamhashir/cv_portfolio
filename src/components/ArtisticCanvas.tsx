@@ -2,7 +2,7 @@
 
 import { Suspense, useRef, useMemo, useEffect } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
-import { Outlines, Environment } from "@react-three/drei"
+import { Outlines, Environment, Text3D, Center } from "@react-three/drei"
 import * as THREE from "three"
 
 const INDIGO = "#4F46E5"
@@ -169,6 +169,47 @@ function SystemAssembly() {
   )
 }
 
+// ── Next.js skill badge ──────────────────────────────────────────────────────
+function NextJsMesh() {
+  const groupRef = useRef<THREE.Group>(null)
+
+  useFrame((state) => {
+    if (!groupRef.current) return
+    const scrollY = typeof window !== "undefined" ? window.scrollY : 0
+    const raw = Math.min(scrollY / 900, 1)
+    const eased = THREE.MathUtils.smoothstep(raw, 0, 1)
+    const t = state.clock.elapsedTime
+
+    // Emerge from behind and scale in as assembly completes
+    groupRef.current.scale.setScalar(eased)
+    groupRef.current.position.z = THREE.MathUtils.lerp(-2.5, 0.2, eased)
+
+    // Idle float + tilt once assembled
+    groupRef.current.position.y = -3.6 + Math.sin(t * 0.38) * 0.1 * eased
+    groupRef.current.rotation.x = Math.sin(t * 0.22) * 0.06
+  })
+
+  return (
+    <group ref={groupRef} position={[0, -3.6, 0]}>
+      <Center>
+        <Text3D
+          font="/fonts/helvetiker_bold.typeface.json"
+          size={0.68}
+          height={0.16}
+          curveSegments={8}
+          bevelEnabled
+          bevelThickness={0.025}
+          bevelSize={0.012}
+          bevelSegments={3}
+        >
+          {"Next.js"}
+          <meshStandardMaterial color={CHARCOAL} metalness={0.35} roughness={0.1} />
+        </Text3D>
+      </Center>
+    </group>
+  )
+}
+
 export default function ArtisticCanvas() {
   // Client-only (loaded via ssr:false). Skip on mobile to protect frame rate.
   if (typeof window !== "undefined" && window.innerWidth <= 768) return null
@@ -188,6 +229,7 @@ export default function ArtisticCanvas() {
       <directionalLight position={[-4, -2, -4]} intensity={0.45} color={INDIGO_LIGHT} />
       <Suspense fallback={null}>
         <SystemAssembly />
+        <NextJsMesh />
         <Environment preset="city" />
       </Suspense>
     </Canvas>
