@@ -1,131 +1,91 @@
 "use client"
 
-import { Suspense, useRef } from "react"
-import { Canvas, useFrame } from "@react-three/fiber"
+import { Suspense, useState, useEffect } from "react"
+import { Canvas } from "@react-three/fiber"
 import { Float, Outlines, Environment } from "@react-three/drei"
-import * as THREE from "three"
 
 const INDIGO       = "#4F46E5"
 const INDIGO_LIGHT = "#818CF8"
 const CHARCOAL     = "#18181B"
 
-function ShapeGeom({ geom }: { geom: string }) {
-  switch (geom) {
-    case "torusKnot": return <torusKnotGeometry args={[0.65, 0.2, 72, 10]} />
-    case "ico":       return <icosahedronGeometry args={[0.85, 0]} />
-    case "box":       return <boxGeometry args={[1.15, 1.15, 1.15]} />
-    case "capsule":   return <capsuleGeometry args={[0.38, 0.65, 6, 12]} />
-    case "sphere":    return <sphereGeometry args={[0.75, 18, 18]} />
-    case "torus":     return <torusGeometry args={[0.65, 0.26, 10, 30]} />
-    default: return null
-  }
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 768)
+    check()
+    window.addEventListener("resize", check)
+    return () => window.removeEventListener("resize", check)
+  }, [])
+  return isMobile
 }
 
-// Camera z=9, fov=52 (vertical) → half-height ≈ 4.39, half-width ≈ 7.8 (16:9).
-// x range [-7.8, +7.8]. x=0 = center, x=3.5 ≈ 72% from left (right zone, visible on all screens).
-// Shapes kept at x=0.8–3.5 so they appear in the right ~17-22% of a 16:9 viewport.
-const SHAPES = [
-  { geom: "torusKnot", color: INDIGO,       pos: [1.0,  0.8,  0.2] as const, scale: 0.55, speed: 1.4, rot: 0.8 },
-  { geom: "ico",       color: INDIGO_LIGHT, pos: [2.6, -0.6, -0.3] as const, scale: 0.50, speed: 1.1, rot: 0.5 },
-  { geom: "box",       color: CHARCOAL,     pos: [0.8, -2.0,  0.3] as const, scale: 0.45, speed: 0.9, rot: 0.6 },
-  { geom: "torus",     color: INDIGO,       pos: [3.5,  0.4, -0.5] as const, scale: 0.48, speed: 1.6, rot: 0.4 },
-  { geom: "sphere",    color: INDIGO_LIGHT, pos: [2.0, -2.8,  0.1] as const, scale: 0.42, speed: 1.2, rot: 0.7 },
-  { geom: "capsule",   color: CHARCOAL,     pos: [3.2,  2.5, -0.6] as const, scale: 0.40, speed: 0.8, rot: 0.5 },
-  { geom: "ico",       color: INDIGO,       pos: [1.4,  2.2, -0.2] as const, scale: 0.35, speed: 1.3, rot: 0.6 },
-]
-
-// Shapes float gently on the right side and drift up slightly with scroll.
-function RightSideShapes() {
-  const groupRef = useRef<THREE.Group>(null)
-
-  useFrame(() => {
-    if (!groupRef.current) return
-    const scrollY = typeof window !== "undefined" ? window.scrollY : 0
-    // Move group up as user scrolls (parallax drift)
-    groupRef.current.position.y = -scrollY * 0.0015
-  })
+// Desktop: group sits on the right (x=4), text zone left is clear.
+// Mobile:  scale 50%, shift down-right so it frames the bottom of the screen.
+function ShapeGroup({ isMobile }: { isMobile: boolean }) {
+  const px = isMobile ? 1   : 4
+  const py = isMobile ? -2  : 0
+  const sc = isMobile ? 0.5 : 1
 
   return (
-    <group ref={groupRef}>
-      {SHAPES.map((s, i) => (
-        <Float
-          key={i}
-          speed={s.speed}
-          rotationIntensity={s.rot}
-          floatIntensity={0.55}
-          floatingRange={[-0.18, 0.18]}
-        >
-          <mesh position={s.pos} scale={s.scale}>
-            <ShapeGeom geom={s.geom} />
-            <meshStandardMaterial color={s.color} roughness={0.22} metalness={0.12} />
-            <Outlines thickness={0.045} color={CHARCOAL} opacity={0.8} transparent />
-          </mesh>
-        </Float>
-      ))}
-    </group>
-  )
-}
+    <group position={[px, py, 0]} scale={sc}>
+      <Float speed={1.4} rotationIntensity={0.8} floatIntensity={0.5} floatingRange={[-0.15, 0.15]}>
+        <mesh position={[0, 0.6, 0]}>
+          <torusGeometry args={[0.9, 0.32, 12, 40]} />
+          <meshStandardMaterial color={INDIGO} roughness={0.2} metalness={0.15} />
+          <Outlines thickness={0.05} color={CHARCOAL} opacity={0.8} transparent />
+        </mesh>
+      </Float>
 
-// Next.js "N" logo — squishy capsule geometry, right-side position.
-function NextJsNLogo() {
-  const groupRef = useRef<THREE.Group>(null)
+      <Float speed={1.1} rotationIntensity={0.5} floatIntensity={0.5} floatingRange={[-0.15, 0.15]}>
+        <mesh position={[-0.8, -0.8, 0.2]}>
+          <sphereGeometry args={[0.6, 20, 20]} />
+          <meshStandardMaterial color={INDIGO_LIGHT} roughness={0.25} metalness={0.1} />
+          <Outlines thickness={0.05} color={CHARCOAL} opacity={0.8} transparent />
+        </mesh>
+      </Float>
 
-  useFrame((state) => {
-    if (!groupRef.current) return
-    const t = state.clock.elapsedTime
-    const scrollY = typeof window !== "undefined" ? window.scrollY : 0
+      <Float speed={0.9} rotationIntensity={0.6} floatIntensity={0.4} floatingRange={[-0.12, 0.12]}>
+        <mesh position={[0.9, -1.2, -0.3]}>
+          <icosahedronGeometry args={[0.55, 0]} />
+          <meshStandardMaterial color={INDIGO} roughness={0.18} metalness={0.2} />
+          <Outlines thickness={0.05} color={CHARCOAL} opacity={0.8} transparent />
+        </mesh>
+      </Float>
 
-    const sq = Math.sin(t * 1.6) * 0.06
-    groupRef.current.scale.set(
-      1.1 * (1 - sq * 0.4),
-      1.1 * (1 + sq),
-      1.1 * (1 - sq * 0.25),
-    )
-    groupRef.current.position.y = -3.0 + Math.sin(t * 0.4) * 0.1 - scrollY * 0.001
-    groupRef.current.rotation.y = Math.sin(t * 0.3) * 0.35
-    groupRef.current.rotation.x = Math.sin(t * 0.22) * 0.08
-  })
+      <Float speed={1.6} rotationIntensity={0.4} floatIntensity={0.55} floatingRange={[-0.18, 0.18]}>
+        <mesh position={[-0.3, 1.5, -0.2]}>
+          <torusKnotGeometry args={[0.45, 0.15, 80, 10]} />
+          <meshStandardMaterial color={CHARCOAL} roughness={0.22} metalness={0.12} />
+          <Outlines thickness={0.05} color={INDIGO} opacity={0.5} transparent />
+        </mesh>
+      </Float>
 
-  return (
-    <group ref={groupRef} position={[2.5, -3.0, 0]}>
-      <mesh position={[-0.46, 0, 0]}>
-        <capsuleGeometry args={[0.12, 1.45, 10, 20]} />
-        <meshPhysicalMaterial color="#0B0B0C" roughness={0.68} metalness={0} clearcoat={0.45} clearcoatRoughness={0.5} />
-      </mesh>
-      <mesh position={[0.46, 0, 0]}>
-        <capsuleGeometry args={[0.12, 1.45, 10, 20]} />
-        <meshPhysicalMaterial color="#0B0B0C" roughness={0.68} metalness={0} clearcoat={0.45} clearcoatRoughness={0.5} />
-      </mesh>
-      <mesh rotation={[0, 0, 0.436]}>
-        <capsuleGeometry args={[0.12, 1.72, 10, 20]} />
-        <meshPhysicalMaterial color="#0B0B0C" roughness={0.68} metalness={0} clearcoat={0.45} clearcoatRoughness={0.5} />
-      </mesh>
+      <Float speed={1.2} rotationIntensity={0.7} floatIntensity={0.45} floatingRange={[-0.14, 0.14]}>
+        <mesh position={[1.2, 1.0, 0.1]}>
+          <boxGeometry args={[0.75, 0.75, 0.75]} />
+          <meshStandardMaterial color={INDIGO_LIGHT} roughness={0.3} metalness={0.08} />
+          <Outlines thickness={0.05} color={CHARCOAL} opacity={0.8} transparent />
+        </mesh>
+      </Float>
     </group>
   )
 }
 
 export default function ArtisticCanvas() {
-  // Skip on mobile — protects frame rate and the layout is single-column there
-  if (typeof window !== "undefined" && window.innerWidth <= 768) return null
+  const isMobile = useIsMobile()
 
   return (
-    // This component is rendered OUTSIDE .page in the DOM so the canvas
-    // participates in the ROOT stacking context (not .page's).
-    // z-index: 0 → painted at root step 6, above body background (step 3).
-    // .page has z-index: 1 (root step 7), so all HTML is always on top.
     <Canvas
       dpr={[1, 2]}
       camera={{ position: [0, 0, 9], fov: 52 }}
-      style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }}
-      gl={{ antialias: true, alpha: false }}
+      style={{ width: "100%", height: "100%" }}
+      gl={{ antialias: true, alpha: true }}
     >
-      <color attach="background" args={["#F4F0EA"]} />
       <ambientLight intensity={1.0} />
       <directionalLight position={[5, 8, 5]} intensity={1.8} />
       <directionalLight position={[-4, -2, -4]} intensity={0.45} color={INDIGO_LIGHT} />
       <Suspense fallback={null}>
-        <RightSideShapes />
-        <NextJsNLogo />
+        <ShapeGroup isMobile={isMobile} />
         <Environment preset="city" />
       </Suspense>
     </Canvas>

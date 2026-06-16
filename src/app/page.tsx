@@ -11,7 +11,10 @@ import {
   CAPABILITIES,
 } from "@/data/portfolioData"
 import { PortfolioFrame } from "@/components/PortfolioFrame"
+import dynamic from "next/dynamic"
 import styles from "./new-page.module.css"
+
+const ArtisticCanvas = dynamic(() => import("@/components/ArtisticCanvas"), { ssr: false })
 
 const ease = [0.25, 0.46, 0.45, 0.94] as const
 
@@ -190,9 +193,11 @@ export default function Home() {
 
   return (
     <>
-      {/* Fixed background stage — always behind all content.
-          z-index:-10 keeps it below every scrolling section. */}
-      <div className={styles.backgroundStage} aria-hidden="true" />
+      {/* Fixed background stage — canvas fills it, z-index:-10 keeps it
+          behind all scrolling content. */}
+      <div className={styles.backgroundStage} aria-hidden="true">
+        <ArtisticCanvas />
+      </div>
       <div className={styles.page}>
       <PortfolioFrame />
 

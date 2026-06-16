@@ -1,7 +1,7 @@
 /* ── New editorial portfolio page ─────────────────────────────── */
 
 /* ── Fixed background stage ──────────────────────────────────── */
-/* Sits behind everything. 3D canvas will replace this once layering is verified. */
+/* Canvas fills this div. z-index:-10 keeps it behind all scrolling content. */
 .backgroundStage {
   position: fixed;
   top: 0;
@@ -10,11 +10,7 @@
   height: 100vh;
   z-index: -10;
   background: #F4F0EA;
-  /* Temporary: subtle grid to visually confirm it stays pinned while scrolling */
-  background-image:
-    linear-gradient(rgba(79,70,229,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(79,70,229,0.04) 1px, transparent 1px);
-  background-size: 48px 48px;
+  /* Canvas uses alpha:true so empty areas show this cream colour through */
 }
 
 /* ── Global reset for page ───────────────────────────────────── */
