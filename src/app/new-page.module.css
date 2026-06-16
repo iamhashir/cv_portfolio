@@ -471,7 +471,7 @@
 }
 
 .sectionH2 {
-  font-size: clamp(2.8rem, 5vw, 4.5rem);
+  font-size: clamp(1.6rem, 5vw, 4.5rem);
   font-weight: 800;
   color: #0B0B0C;
   margin-bottom: 12px;
