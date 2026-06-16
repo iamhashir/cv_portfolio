@@ -2,7 +2,7 @@
 
 import { Suspense, useRef, useMemo, useEffect } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
-import { Outlines, Environment, Text3D, Center } from "@react-three/drei"
+import { Outlines, Environment } from "@react-three/drei"
 import * as THREE from "three"
 
 const INDIGO = "#4F46E5"
@@ -169,43 +169,57 @@ function SystemAssembly() {
   )
 }
 
-// ── Next.js skill badge ──────────────────────────────────────────────────────
-function NextJsMesh() {
+// ── Next.js "N" logo — capsule-based, squishy rubber material ────────────────
+// Geometry: two vertical bars + one diagonal (rotation z = atan2(0.68,1.45) ≈ 0.436 rad)
+// which places the diagonal from upper-left inner to lower-right inner of the N.
+function NextJsNLogo() {
   const groupRef = useRef<THREE.Group>(null)
 
   useFrame((state) => {
     if (!groupRef.current) return
     const scrollY = typeof window !== "undefined" ? window.scrollY : 0
-    const raw = Math.min(scrollY / 900, 1)
+    const raw  = Math.min(scrollY / 900, 1)
     const eased = THREE.MathUtils.smoothstep(raw, 0, 1)
     const t = state.clock.elapsedTime
 
-    // Emerge from behind and scale in as assembly completes
-    groupRef.current.scale.setScalar(eased)
-    groupRef.current.position.z = THREE.MathUtils.lerp(-2.5, 0.2, eased)
+    // Spring overshoot: peaks ~15% above final size then settles
+    const spring = eased + Math.sin(eased * Math.PI) * 0.15
+    const base   = spring * 1.15
 
-    // Idle float + tilt once assembled
-    groupRef.current.position.y = -3.6 + Math.sin(t * 0.38) * 0.1 * eased
-    groupRef.current.rotation.x = Math.sin(t * 0.22) * 0.06
+    // Squash-and-stretch idle (fades in with assembly)
+    const sq = Math.sin(t * 1.6) * 0.09 * eased
+    groupRef.current.scale.set(
+      base * (1 - sq * 0.4),
+      base * (1 + sq),
+      base * (1 - sq * 0.25),
+    )
+
+    // Emerge from z-depth + idle float
+    groupRef.current.position.z = THREE.MathUtils.lerp(-3.5, 0.3, eased)
+    groupRef.current.position.y = -2.9 + Math.sin(t * 0.4) * 0.12 * eased
+
+    // Slow y-spin + subtle x tilt
+    groupRef.current.rotation.y = Math.sin(t * 0.3) * 0.4 * eased
+    groupRef.current.rotation.x = Math.sin(t * 0.22) * 0.09 * eased
   })
 
   return (
-    <group ref={groupRef} position={[0, -3.6, 0]}>
-      <Center>
-        <Text3D
-          font="/fonts/helvetiker_bold.typeface.json"
-          size={0.68}
-          height={0.16}
-          curveSegments={8}
-          bevelEnabled
-          bevelThickness={0.025}
-          bevelSize={0.012}
-          bevelSegments={3}
-        >
-          {"Next.js"}
-          <meshStandardMaterial color={CHARCOAL} metalness={0.35} roughness={0.1} />
-        </Text3D>
-      </Center>
+    <group ref={groupRef} position={[0, -2.9, 0]}>
+      {/* Left vertical bar */}
+      <mesh position={[-0.46, 0, 0]}>
+        <capsuleGeometry args={[0.12, 1.45, 10, 20]} />
+        <meshPhysicalMaterial color="#0B0B0C" roughness={0.68} metalness={0} clearcoat={0.45} clearcoatRoughness={0.5} />
+      </mesh>
+      {/* Right vertical bar */}
+      <mesh position={[0.46, 0, 0]}>
+        <capsuleGeometry args={[0.12, 1.45, 10, 20]} />
+        <meshPhysicalMaterial color="#0B0B0C" roughness={0.68} metalness={0} clearcoat={0.45} clearcoatRoughness={0.5} />
+      </mesh>
+      {/* Diagonal: ≈ 25° CCW tilt so top end points upper-left, bottom end lower-right */}
+      <mesh rotation={[0, 0, 0.436]}>
+        <capsuleGeometry args={[0.12, 1.72, 10, 20]} />
+        <meshPhysicalMaterial color="#0B0B0C" roughness={0.68} metalness={0} clearcoat={0.45} clearcoatRoughness={0.5} />
+      </mesh>
     </group>
   )
 }
@@ -220,7 +234,10 @@ export default function ArtisticCanvas() {
       camera={{ position: [0, 0, 9], fov: 52 }}
       // z-index 0 places the canvas above the body's block-level background
       // (which paints at stacking step 3) but below .page (z-index: 1, step 7).
-      style={{ position: "fixed", inset: 0, zIndex: 0 }}
+      // zIndex: -1 = step 2 within .page's stacking context (z-index 1 in root).
+      // Sections (steps 3–6 in .page) paint ABOVE the canvas, so text is never
+      // obscured. .page is still above root body background, so cream bg shows.
+      style={{ position: "fixed", inset: 0, zIndex: -1, pointerEvents: "none" }}
       gl={{ antialias: true, alpha: false }}
     >
       <color attach="background" args={["#F4F0EA"]} />
@@ -229,7 +246,7 @@ export default function ArtisticCanvas() {
       <directionalLight position={[-4, -2, -4]} intensity={0.45} color={INDIGO_LIGHT} />
       <Suspense fallback={null}>
         <SystemAssembly />
-        <NextJsMesh />
+        <NextJsNLogo />
         <Environment preset="city" />
       </Suspense>
     </Canvas>
