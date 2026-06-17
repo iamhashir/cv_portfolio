@@ -1,9 +1,11 @@
 /* ── Squishy Fun Project Card System ────────────────────────── */
+/* Colors centralized via globals.css tokens (--accent-coral primary,
+   --accent-cyan for metrics). Translucent variants use color-mix. */
 
 .card {
   position: relative;
-  background: linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(232, 220, 200, 0.8) 100%);
-  border: 2px solid rgba(193, 122, 95, 0.25);
+  background: var(--glass-bg);
+  border: 2px solid color-mix(in srgb, var(--accent-coral) 25%, transparent);
   border-radius: 16px;
   padding: 28px;
   cursor: pointer;
@@ -13,24 +15,24 @@
   -webkit-backdrop-filter: blur(8px);
   perspective: 1000px;
   will-change: transform;
-  box-shadow: 0 4px 12px rgba(42, 38, 32, 0.08);
+  box-shadow: var(--glass-shadow);
 }
 
 .card:hover,
 .card:focus-visible {
-  border-color: rgba(193, 122, 95, 0.5);
-  box-shadow: 0 16px 48px rgba(193, 122, 95, 0.2),
-    inset 0 0 40px rgba(193, 122, 95, 0.05);
+  border-color: color-mix(in srgb, var(--accent-coral) 50%, transparent);
+  box-shadow: 0 16px 48px color-mix(in srgb, var(--accent-coral) 20%, transparent),
+    inset 0 0 40px color-mix(in srgb, var(--accent-coral) 5%, transparent);
   transform: translateY(-8px) scale(1.02);
-  background: linear-gradient(135deg, rgba(245, 241, 232, 0.98) 0%, rgba(232, 220, 200, 0.9) 100%);
-  outline: 2px solid rgba(193, 122, 95, 0.6);
+  background: var(--glass-bg-medium);
+  outline: 2px solid color-mix(in srgb, var(--accent-coral) 60%, transparent);
   outline-offset: 2px;
 }
 
 .cardExpanded {
-  border-color: rgba(193, 122, 95, 0.6);
-  background: rgba(245, 241, 232, 0.99);
-  box-shadow: 0 12px 36px rgba(193, 122, 95, 0.25);
+  border-color: color-mix(in srgb, var(--accent-coral) 60%, transparent);
+  background: var(--glass-bg-heavy);
+  box-shadow: 0 12px 36px color-mix(in srgb, var(--accent-coral) 25%, transparent);
 }
 
 /* ── Blob Overlay ────────────────────────────────────────────── */
@@ -52,7 +54,7 @@
   right: 0;
   width: 60px;
   height: 60px;
-  background: linear-gradient(135deg, rgba(193, 122, 95, 0.15) 50%, transparent 50%);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent-coral) 15%, transparent) 50%, transparent 50%);
   clip-path: polygon(100% 0%, 0% 0%, 100% 100%);
   z-index: 1;
   pointer-events: none;
@@ -76,66 +78,63 @@
 }
 
 .cardTag {
-  font-family: 'Courier New', monospace;
+  font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.15em;
-  color: rgba(193, 122, 95, 0.7);
+  color: color-mix(in srgb, var(--accent-coral) 80%, var(--text-primary));
   text-transform: uppercase;
   padding: 4px 8px;
-  border: 1px solid rgba(193, 122, 95, 0.2);
+  border: 1px solid color-mix(in srgb, var(--accent-coral) 20%, transparent);
   border-radius: 4px;
-  background: rgba(193, 122, 95, 0.06);
+  background: color-mix(in srgb, var(--accent-coral) 8%, transparent);
   transition: all 0.3s ease;
 }
 
 .card:hover .cardTag {
-  background: rgba(193, 122, 95, 0.12);
-  border-color: rgba(193, 122, 95, 0.4);
+  background: color-mix(in srgb, var(--accent-coral) 14%, transparent);
+  border-color: color-mix(in srgb, var(--accent-coral) 40%, transparent);
   transform: scale(1.08);
 }
 
 .cardCategory {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #C17A5F;
+  color: var(--accent-coral);
   transition: color 0.3s ease;
 }
 
 /* ── Card Title ──────────────────────────────────────────────── */
 .cardTitle {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: clamp(1.1rem, 3vw, 1.4rem);
-  font-weight: 700;
+  font-weight: 800;
   line-height: 1.3;
-  color: #2A2620;
+  color: var(--text-primary);
   margin: 0;
   letter-spacing: -0.01em;
 }
 
 .card:hover .cardTitle {
-  background: linear-gradient(135deg, #7D4A36 0%, #8F5A2F 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent-coral);
   font-weight: 800;
 }
 
 /* ── Summary ─────────────────────────────────────────────────── */
 .cardSummary {
-  font-family: 'Lora', serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.95rem;
   line-height: 1.6;
-  color: rgba(42, 38, 32, 0.7);
+  color: var(--text-secondary);
   margin: 0;
   transition: color 0.3s ease;
 }
 
 .card:hover .cardSummary {
-  color: rgba(42, 38, 32, 0.85);
+  color: var(--text-primary);
 }
 
 /* ── Metric Display (Always Visible) ────────────────────────── */
@@ -144,32 +143,32 @@
   align-items: baseline;
   gap: 8px;
   padding: 12px;
-  background: rgba(107, 142, 113, 0.08);
-  border-left: 3px solid #6B8E71;
+  background: color-mix(in srgb, var(--accent-cyan) 8%, transparent);
+  border-left: 3px solid var(--accent-cyan);
   border-radius: 4px;
   transition: all 0.3s ease;
 }
 
 .card:hover .cardMetric {
-  background: rgba(107, 142, 113, 0.15);
-  border-left-color: #6B8E71;
+  background: color-mix(in srgb, var(--accent-cyan) 15%, transparent);
+  border-left-color: var(--accent-cyan);
   transform: translateX(4px);
 }
 
 .metricLabel {
-  font-family: 'Courier New', monospace;
+  font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 700;
-  color: #6B8E71;
+  color: var(--accent-cyan);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
 .metricValue {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.95rem;
   font-weight: 700;
-  color: #6B8E71;
+  color: var(--accent-cyan);
 }
 
 /* ── Tech Tags ───────────────────────────────────────────────── */
@@ -181,31 +180,31 @@
 }
 
 .techTag {
-  font-family: 'Courier New', monospace;
+  font-family: var(--font-mono);
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.05em;
-  color: #C17A5F;
+  color: var(--accent-coral);
   padding: 6px 10px;
-  border: 1px solid rgba(193, 122, 95, 0.3);
+  border: 1px solid color-mix(in srgb, var(--accent-coral) 30%, transparent);
   border-radius: 6px;
-  background: rgba(193, 122, 95, 0.08);
+  background: color-mix(in srgb, var(--accent-coral) 8%, transparent);
   text-transform: uppercase;
   transition: all 0.25s ease;
   cursor: default;
 }
 
 .card:hover .techTag {
-  background: rgba(193, 122, 95, 0.15);
-  border-color: rgba(193, 122, 95, 0.5);
-  box-shadow: 0 2px 8px rgba(193, 122, 95, 0.1);
+  background: color-mix(in srgb, var(--accent-coral) 15%, transparent);
+  border-color: color-mix(in srgb, var(--accent-coral) 50%, transparent);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--accent-coral) 10%, transparent);
 }
 
 .techTagMore {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
-  color: rgba(193, 122, 95, 0.5);
+  color: color-mix(in srgb, var(--accent-coral) 50%, transparent);
   padding: 6px 10px;
 }
 
@@ -217,13 +216,14 @@
   gap: 8px;
   padding: 12px 16px;
   margin-top: 8px;
-  border: 2px solid #C17A5F;
+  border: 2px solid var(--accent-coral);
   border-radius: 8px;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  color: var(--accent-coral);
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   cursor: pointer;
   width: 100%;
@@ -236,7 +236,7 @@
 }
 
 .card:hover .cardCta {
-  box-shadow: 0 8px 20px rgba(193, 122, 95, 0.25);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--accent-coral) 25%, transparent);
   transform: translateY(-2px);
 }
 
@@ -248,7 +248,7 @@
 .cardGlow {
   position: absolute;
   inset: -20px;
-  background: radial-gradient(circle, rgba(193, 122, 95, 0.3) 0%, transparent 70%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent-coral) 30%, transparent) 0%, transparent 70%);
   border-radius: 16px;
   z-index: 0;
   pointer-events: none;
@@ -280,6 +280,11 @@
     height: 180px;
   }
 
+  .cornerAccent {
+    width: 48px;
+    height: 48px;
+  }
+
   .cardCta {
     padding: 14px 16px;
     font-size: 0.8rem;
@@ -289,17 +294,16 @@
   @media (hover: none) and (pointer: coarse) {
     .card:hover {
       transform: translateY(-4px) scale(1);
-      background: linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(232, 220, 200, 0.8) 100%);
+      background: var(--glass-bg);
     }
 
     .card:active {
       transform: translateY(-4px) scale(1.01);
-      border-color: rgba(193, 122, 95, 0.4);
+      border-color: color-mix(in srgb, var(--accent-coral) 40%, transparent);
     }
 
-    .cardTitle {
-      background: none;
-      -webkit-text-fill-color: unset;
+    .card:hover .cardTitle {
+      color: var(--text-primary);
     }
   }
 }
@@ -365,68 +369,6 @@
   }
 
   .card:hover .cardTitle {
-    background: none;
-    color: #2A2620;
-  }
-}
-
-/* ── Dark Mode Support ───────────────────────────────────────── */
-@media (prefers-color-scheme: dark) {
-  .card {
-    background: linear-gradient(135deg, rgba(26, 26, 30, 0.95) 0%, rgba(42, 38, 32, 0.9) 100%);
-    border-color: rgba(193, 122, 95, 0.2);
-  }
-
-  .card:hover {
-    background: linear-gradient(135deg, rgba(26, 26, 30, 0.98) 0%, rgba(42, 38, 32, 0.95) 100%);
-    border-color: rgba(193, 122, 95, 0.4);
-  }
-
-  .cardTitle {
-    color: #F5F1E8;
-  }
-
-  .cardSummary {
-    color: rgba(245, 241, 232, 0.7);
-  }
-
-  .card:hover .cardSummary {
-    color: rgba(245, 241, 232, 0.85);
-  }
-
-  .cardCategory {
-    color: #FF9D6F;
-  }
-
-  .cardTag {
-    color: rgba(255, 157, 111, 0.7);
-    background: rgba(255, 157, 111, 0.08);
-    border-color: rgba(255, 157, 111, 0.2);
-  }
-
-  .card:hover .cardTag {
-    background: rgba(255, 157, 111, 0.12);
-    border-color: rgba(255, 157, 111, 0.4);
-  }
-
-  .metricLabel,
-  .metricValue {
-    color: #8BA899;
-  }
-
-  .cardMetric {
-    background: rgba(139, 168, 153, 0.08);
-    border-left-color: #8BA899;
-  }
-
-  .techTag {
-    color: #FF9D6F;
-    background: rgba(255, 157, 111, 0.08);
-    border-color: rgba(255, 157, 111, 0.3);
-  }
-
-  .cardCta {
-    border-color: #FF9D6F;
-    color: #FF9D6F;
+    color: var(--text-primary);
   }
 }

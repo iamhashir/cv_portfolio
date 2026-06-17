@@ -65,8 +65,8 @@ export function ProjectCardNew({ project, isExpanded, onToggle, index }: Project
       >
         <defs>
           <linearGradient id={`blobGrad-${project.slug}`} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="rgba(193, 122, 95, 0.2)" />
-            <stop offset="100%" stopColor="rgba(107, 142, 113, 0.2)" />
+            <stop offset="0%" stopColor="var(--accent-coral)" stopOpacity="0.2" />
+            <stop offset="100%" stopColor="var(--accent-cyan)" stopOpacity="0.2" />
           </linearGradient>
         </defs>
         <motion.path
