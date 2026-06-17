@@ -1,9 +1,19 @@
 "use client"
 
 import React, { useRef, useState } from "react"
-import { motion } from "framer-motion"
+import { motion, useMotionValue, useSpring } from "framer-motion"
 import { Project } from "@/data/portfolioData"
 import styles from "./project-card-new.module.css"
+
+const SPRING = { damping: 30, stiffness: 100, mass: 2 }
+const TOOLTIP_SPRING = { stiffness: 350, damping: 30, mass: 1 }
+
+const CATEGORY_ACCENT: Record<string, string> = {
+  "AI":                  "#A78BFA",
+  "CRM / Ops":           "#F59E0B",
+  "Realtime":            "#22D3EE",
+  "Framework / Systems": "#34D399",
+}
 
 interface ProjectCardNewProps {
   project: Project
@@ -13,46 +23,72 @@ interface ProjectCardNewProps {
 }
 
 export function ProjectCardNew({ project, isExpanded, onToggle, index }: ProjectCardNewProps) {
+  const ref = useRef<HTMLDivElement>(null)
   const [isHovered, setIsHovered] = useState(false)
-  const cardRef = useRef<HTMLDivElement>(null)
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
-  const lastUpdateRef = useRef(0)
+  const [lastOffsetY, setLastOffsetY] = useState(0)
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return
+  const rotateX = useSpring(useMotionValue(0), SPRING)
+  const rotateY = useSpring(useMotionValue(0), SPRING)
+  const scale = useSpring(1, SPRING)
+  const glowOpacity = useSpring(0, SPRING)
+  const tooltipX = useMotionValue(0)
+  const tooltipY = useMotionValue(0)
+  const tooltipOpacity = useSpring(0)
+  const tooltipRotate = useSpring(0, TOOLTIP_SPRING)
 
-    // Throttle mouse position updates to every 16ms (~60fps)
-    const now = Date.now()
-    if (now - lastUpdateRef.current < 16) return
-    lastUpdateRef.current = now
+  const accentColor = CATEGORY_ACCENT[project.categoryGroup] ?? "#C17A5F"
 
-    const rect = cardRef.current.getBoundingClientRect()
-    const x = (e.clientX - rect.left) / rect.width - 0.5
-    const y = (e.clientY - rect.top) / rect.height - 0.5
-    setMousePos({ x: x * 10, y: y * 10 })
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    if (!ref.current) return
+    const rect = ref.current.getBoundingClientRect()
+    const offsetX = e.clientX - rect.left - rect.width / 2
+    const offsetY = e.clientY - rect.top - rect.height / 2
+    rotateX.set((offsetY / (rect.height / 2)) * -12)
+    rotateY.set((offsetX / (rect.width / 2)) * 12)
+    tooltipX.set(e.clientX - rect.left)
+    tooltipY.set(e.clientY - rect.top)
+    tooltipRotate.set(-(offsetY - lastOffsetY) * 0.6)
+    setLastOffsetY(offsetY)
   }
 
-  const handleMouseLeave = () => {
-    setMousePos({ x: 0, y: 0 })
+  function handleMouseEnter() {
+    setIsHovered(true)
+    scale.set(1.04)
+    glowOpacity.set(0.35)
+    tooltipOpacity.set(1)
+  }
+
+  function handleMouseLeave() {
     setIsHovered(false)
+    scale.set(1)
+    glowOpacity.set(0)
+    rotateX.set(0)
+    rotateY.set(0)
+    tooltipOpacity.set(0)
+    tooltipRotate.set(0)
   }
 
   return (
     <motion.div
-      ref={cardRef}
+      ref={ref}
       className={`${styles.card} ${isExpanded ? styles.cardExpanded : ""}`}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={handleMouseLeave}
+      data-category={project.categoryGroup}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      style={{
+        rotateX,
+        rotateY,
+        scale,
+        transformStyle: "preserve-3d",
+        "--card-accent": accentColor,
+      } as any}
       onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       onClick={onToggle}
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.55, delay: (index % 3) * 0.08 }}
-      style={{
-        rotateX: isHovered ? mousePos.y * 0.5 : 0,
-        rotateY: isHovered ? mousePos.x * 0.5 : 0,
-      }}
     >
       {/* Background Blob Overlay */}
       <motion.svg
@@ -62,11 +98,12 @@ export function ProjectCardNew({ project, isExpanded, onToggle, index }: Project
         initial={{ opacity: 0 }}
         animate={{ opacity: isHovered ? 0.6 : 0 }}
         transition={{ duration: 0.4 }}
+        aria-hidden="true"
       >
         <defs>
           <linearGradient id={`blobGrad-${project.slug}`} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="var(--accent-coral)" stopOpacity="0.2" />
-            <stop offset="100%" stopColor="var(--accent-cyan)" stopOpacity="0.2" />
+            <stop offset="0%" stopColor={accentColor} stopOpacity="0.25" />
+            <stop offset="100%" stopColor="var(--accent-cyan)" stopOpacity="0.15" />
           </linearGradient>
         </defs>
         <motion.path
@@ -94,13 +131,7 @@ export function ProjectCardNew({ project, isExpanded, onToggle, index }: Project
           >
             PRJ-{String(index + 1).padStart(2, "0")}
           </motion.span>
-          <motion.span
-            className={styles.cardCategory}
-            animate={{ color: isHovered ? "#D97936" : "#C17A5F" }}
-            transition={{ duration: 0.3 }}
-          >
-            {project.category}
-          </motion.span>
+          <span className={styles.cardCategory}>{project.category}</span>
         </div>
 
         <h3 className={styles.cardTitle}>{project.title}</h3>
@@ -143,8 +174,9 @@ export function ProjectCardNew({ project, isExpanded, onToggle, index }: Project
         <motion.div
           className={styles.cardCta}
           animate={{
-            backgroundColor: isHovered ? "#C17A5F" : "transparent",
-            color: isHovered ? "#F5F1E8" : "#C17A5F",
+            backgroundColor: isHovered ? accentColor : "transparent",
+            color: isHovered ? "#0d0d0d" : accentColor,
+            borderColor: accentColor,
           }}
           transition={{ duration: 0.3 }}
         >
@@ -160,16 +192,26 @@ export function ProjectCardNew({ project, isExpanded, onToggle, index }: Project
         </motion.div>
       </div>
 
-      {/* Hover Glow Effect */}
+      {/* Hover Glow */}
       <motion.div
         className={styles.cardGlow}
-        animate={{
-          opacity: isHovered ? 0.3 : 0,
-          scale: isHovered ? 1 : 0.8,
-        }}
-        transition={{ duration: 0.4 }}
+        style={{ opacity: glowOpacity }}
         aria-hidden="true"
       />
+
+      {/* Floating tooltip — TiltedCard style */}
+      <motion.div
+        className={styles.cardTooltip}
+        style={{
+          x: tooltipX,
+          y: tooltipY,
+          opacity: tooltipOpacity,
+          rotate: tooltipRotate,
+        }}
+        aria-hidden="true"
+      >
+        {project.categoryGroup}
+      </motion.div>
     </motion.div>
   )
 }
