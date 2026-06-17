@@ -576,3 +576,218 @@ input:focus ~ label, textarea:focus ~ label {
   }
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* VISIBILITY ENHANCEMENTS - Navigation & UI Elements */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Navigation elements: ensure minimum 14px font size for readability */
+nav,
+[role="navigation"] {
+  font-size: 14px;
+}
+
+nav a,
+nav span,
+[role="navigation"] a,
+[role="navigation"] span {
+  font-size: 14px;
+  min-height: 1.5em;
+}
+
+/* Breadcrumb visibility improvements */
+.breadcrumb,
+[class*="breadcrumb"],
+.breadcrumb a,
+[class*="breadcrumb"] a {
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.breadcrumb a:hover,
+[class*="breadcrumb"] a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+/* Social links visibility and interactivity */
+a[href*="github"],
+a[href*="linkedin"],
+a[href*="twitter"],
+a[href*="instagram"],
+[class*="social"] a {
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+a[href*="github"]:hover,
+a[href*="linkedin"]:hover,
+a[href*="twitter"]:hover,
+a[href*="instagram"]:hover,
+[class*="social"] a:hover {
+  opacity: 0.85;
+  background-color: rgba(200, 255, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+a[href*="github"]:focus-visible,
+a[href*="linkedin"]:focus-visible,
+a[href*="twitter"]:focus-visible,
+a[href*="instagram"]:focus-visible,
+[class*="social"] a:focus-visible {
+  outline: 3px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* Skip-to-main link enhanced visibility */
+.skip-to-main,
+[href="#main"],
+[href="#content"],
+.skip-content {
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 16px;
+  position: relative;
+  z-index: 9999;
+  transition: all 0.2s ease;
+}
+
+.skip-to-main:focus,
+[href="#main"]:focus,
+[href="#content"]:focus,
+.skip-content:focus {
+  top: 10px;
+  left: 10px;
+  outline: 3px solid;
+  outline-offset: 2px;
+}
+
+/* Hamburger/menu button clarity and accessibility */
+.hamburger,
+[aria-label*="menu"],
+[aria-label*="Menu"],
+[aria-label*="navigation"],
+button[aria-expanded],
+button[aria-label*="toggle"] {
+  min-height: 48px;
+  min-width: 48px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  background-color: transparent;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.hamburger:hover,
+[aria-label*="menu"]:hover,
+[aria-label*="Menu"]:hover,
+[aria-label*="navigation"]:hover,
+button[aria-expanded]:hover,
+button[aria-label*="toggle"]:hover {
+  background-color: rgba(200, 255, 0, 0.08);
+  border-color: var(--border-muted);
+  transform: scale(1.05);
+}
+
+.hamburger:focus-visible,
+[aria-label*="menu"]:focus-visible,
+[aria-label*="Menu"]:focus-visible,
+[aria-label*="navigation"]:focus-visible,
+button[aria-expanded]:focus-visible,
+button[aria-label*="toggle"]:focus-visible {
+  outline: 3px solid var(--accent-color);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(200, 255, 0, 0.1);
+}
+
+/* Icon button labels visibility */
+button[aria-label],
+a[aria-label],
+[role="button"][aria-label] {
+  position: relative;
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Ensure all button text is visible and readable */
+button,
+a[role="button"],
+.btn-primary,
+.btn-secondary,
+[role="button"] {
+  text-shadow: none;
+  background-clip: padding-box;
+  color: inherit;
+  line-height: 1.4;
+}
+
+/* Section spacing improvements for visual breathing room */
+section,
+[role="region"],
+article,
+main > div {
+  min-height: auto; /* Remove any min-height constraints */
+}
+
+section:not(:first-child),
+[role="region"]:not(:first-child) {
+  margin-top: 20px;
+}
+
+/* Footer/content-info spacing */
+footer,
+[role="contentinfo"] {
+  padding: 40px 24px;
+  margin-top: 80px;
+  border-top: 1px solid var(--border-muted);
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  footer,
+  [role="contentinfo"] {
+    padding: 32px 16px;
+    margin-top: 60px;
+  }
+
+  nav a,
+  nav span,
+  [role="navigation"] a,
+  [role="navigation"] span {
+    font-size: 14px;
+  }
+}
+
+/* List items visibility */
+li,
+dd,
+dt {
+  line-height: 1.6;
+  min-height: 1.5em;
+}
+
+/* Table cell visibility */
+th,
+td {
+  padding: 12px;
+  line-height: 1.5;
+}
+
