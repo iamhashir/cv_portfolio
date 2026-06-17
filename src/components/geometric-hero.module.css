@@ -235,6 +235,7 @@
   text-transform: uppercase;
   position: relative;
   border-radius: 0;
+  outline: none;
 }
 
 .ctaPrimary {
@@ -247,6 +248,12 @@
 .ctaPrimary:hover {
   transform: translate(-2px, -2px);
   box-shadow: 6px 6px 0px var(--accent-muted);
+  background: #d4ff1a;
+}
+
+.ctaPrimary:focus-visible {
+  outline: 3px solid var(--text-primary);
+  outline-offset: 4px;
 }
 
 .ctaPrimary:active {
@@ -266,6 +273,11 @@
   color: var(--bg-primary);
   transform: translate(-2px, -2px);
   box-shadow: 6px 6px 0px var(--border-focus);
+}
+
+.ctaSecondary:focus-visible {
+  outline: 3px solid var(--accent-color);
+  outline-offset: 4px;
 }
 
 .ctaSecondary:active {
