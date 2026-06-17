@@ -47,7 +47,7 @@ function SplashCursor({
 
     let isActive = true;
 
-    function pointerPrototype() {
+    function pointerPrototype(this: any) {
       this.id = -1;
       this.texcoordX = 0;
       this.texcoordY = 0;

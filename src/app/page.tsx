@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
-import { X } from "lucide-react"
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism"
 import {
@@ -17,7 +16,7 @@ import {
   CAPABILITIES,
 } from "@/data/portfolioData"
 import { PortfolioFrame } from "@/components/PortfolioFrame"
-import { AnimatedHamburger } from "@/components/AnimatedHamburger"
+import PillNav from "@/components/PillNav"
 import dynamic from "next/dynamic"
 import styles from "./new-page.module.css"
 import { GeometricHero } from "@/components/GeometricHero"
@@ -189,21 +188,17 @@ function ProjectCard({
 // ─── Page ────────────────────────────────────────────────────────
 export default function Home() {
   const [scrolled,     setScrolled]     = useState(false)
-  const [menuOpen,     setMenuOpen]     = useState(false)
   const [expandedSlug, setExpandedSlug] = useState<string | null>(null)
   const [systemsInView, setSystemsInView] = useState(false)
+  const [activeNav, setActiveNav] = useState("")
   const systemsRef = useRef<HTMLElement>(null)
+  const aboutRef = useRef<HTMLElement>(null)
+  const contactRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
-  }, [])
-
-  useEffect(() => {
-    const onResize = () => { if (window.innerWidth > 768) setMenuOpen(false) }
-    window.addEventListener("resize", onResize)
-    return () => window.removeEventListener("resize", onResize)
   }, [])
 
   useEffect(() => {
@@ -215,11 +210,22 @@ export default function Home() {
     return () => observer.disconnect()
   }, [])
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : ""
-    return () => { document.body.style.overflow = "" }
-  }, [menuOpen])
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveNav(entry.target.id)
+          }
+        })
+      },
+      { threshold: 0.3 }
+    )
+    if (systemsRef.current) observer.observe(systemsRef.current)
+    if (aboutRef.current) observer.observe(aboutRef.current)
+    if (contactRef.current) observer.observe(contactRef.current)
+    return () => observer.disconnect()
+  }, [])
 
   function handleToggle(slug: string) {
     setExpandedSlug((prev) => (prev === slug ? null : slug))
@@ -233,76 +239,24 @@ export default function Home() {
       <div className={styles.page}>
         <PortfolioFrame />
 
-        {/* ── Mobile menu backdrop ── */}
-        {menuOpen && (
-          <div
-            className={styles.mobileBackdrop}
-            onClick={(e) => {
-              e.stopPropagation()
-              setMenuOpen(false)
-            }}
-            aria-hidden="true"
-          />
-        )}
-
-        {/* ── Mobile nav overlay ── */}
-        <nav
-          className={`${styles.mobileNav} ${menuOpen ? styles.mobileNavOpen : ""}`}
-          aria-label="Mobile navigation"
-          aria-hidden={!menuOpen}
-        >
-          <button
-            className={styles.mobileNavClose}
-            onClick={(e) => {
-              e.stopPropagation()
-              setMenuOpen(false)
-            }}
-            aria-label="Close menu"
-            title="Close menu"
-          >
-            <X size={24} />
-          </button>
-          {[
-            { label: "Systems", href: "#systems"  },
-            { label: "About",   href: "#about"    },
-            { label: "Contact", href: "#contact"  },
-            { label: "GitHub ↗", href: site.github, ext: true },
-          ].map(({ label, href, ext }) => (
-            <a
-              key={label}
-              href={href}
-              target={ext ? "_blank" : undefined}
-              rel={ext ? "noopener noreferrer" : undefined}
-              className={styles.mobileNavLink}
-              onClick={(e) => {
-                e.stopPropagation()
-                setMenuOpen(false)
-              }}
-            >
-              {label}
-            </a>
-          ))}
-          <a href={site.cvPath} download className={styles.ctaPrimary} style={{ marginTop: 8 }}>
-            Download CV →
-          </a>
-        </nav>
-
         {/* ── Header ── */}
-        <header className={`${styles.header} ${scrolled ? styles.headerScrolled : ""}`}>
-          <a href="#hero" className={styles.headerLogo}>M.H.</a>
-          <nav className={styles.headerLinks} aria-label="Primary navigation">
-            <a href={site.github} target="_blank" rel="noopener noreferrer" className={styles.headerLink}>
-              GitHub ↗
-            </a>
-            <a href={site.linkedin} target="_blank" rel="noopener noreferrer" className={styles.headerLink}>
-              LinkedIn ↗
-            </a>
-            <a href={site.cvPath} download className={styles.headerCvBtn}>
-              Download CV →
-            </a>
-          </nav>
-          <AnimatedHamburger isOpen={menuOpen} onClick={() => setMenuOpen(!menuOpen)} />
-        </header>
+        <PillNav
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Systems", href: "#systems" },
+            { label: "About", href: "#about" },
+            { label: "Contact", href: "#contact" },
+            { label: "GitHub ↗", href: site.github },
+            { label: "LinkedIn ↗", href: site.linkedin },
+            { label: "CV →", href: site.cvPath },
+          ]}
+          activeHref={`#${activeNav}`}
+          baseColor="#0f0c08"
+          pillColor="#f8f0dc"
+          hoveredPillTextColor="#0f0c08"
+          pillTextColor="#0f0c08"
+          ease="power2.easeOut"
+        />
 
         {/* ── Geometric Hero ── */}
         <GeometricHero />
@@ -338,7 +292,7 @@ export default function Home() {
         </section>
 
         {/* ── About ── */}
-        <section id="about" className={styles.about}>
+        <section id="about" className={styles.about} ref={aboutRef}>
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -389,7 +343,7 @@ export default function Home() {
         </section>
 
         {/* ── Contact ── */}
-        <section id="contact" className={styles.contact}>
+        <section id="contact" className={styles.contact} ref={contactRef}>
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
