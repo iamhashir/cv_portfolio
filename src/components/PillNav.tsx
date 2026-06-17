@@ -14,6 +14,7 @@ interface PillNavItem {
 interface PillNavProps {
   logo?: string
   logoAlt?: string
+  logoText?: string
   items: PillNavItem[]
   activeHref?: string
   className?: string
@@ -28,6 +29,7 @@ interface PillNavProps {
 const PillNav = ({
   logo,
   logoAlt = "Logo",
+  logoText,
   items,
   activeHref,
   className = "",
@@ -43,8 +45,6 @@ const PillNav = ({
   const circleRefs = useRef<(HTMLElement | null)[]>([])
   const tlRefs = useRef<gsap.core.Timeline[]>([])
   const activeTweenRefs = useRef<gsap.core.Tween[]>([])
-  const logoImgRef = useRef<HTMLImageElement>(null)
-  const logoTweenRef = useRef<gsap.core.Tween | null>(null)
   const hamburgerRef = useRef<HTMLButtonElement>(null)
   const mobileMenuRef = useRef<HTMLDivElement>(null)
   const navItemsRef = useRef<HTMLDivElement>(null)
@@ -129,19 +129,6 @@ const PillNav = ({
     })
   }
 
-  const handleLogoEnter = () => {
-    const img = logoImgRef.current
-    if (!img) return
-    logoTweenRef.current?.kill()
-    gsap.set(img, { rotate: 0 })
-    logoTweenRef.current = gsap.to(img, {
-      rotate: 360,
-      duration: 0.8,
-      ease,
-      overwrite: "auto",
-    })
-  }
-
   const toggleMobileMenu = () => {
     const newState = !isMobileMenuOpen
     setIsMobileMenuOpen(newState)
@@ -214,14 +201,17 @@ const PillNav = ({
     <div className="pill-nav-container">
       <nav className={`pill-nav ${className}`} aria-label="Primary" style={cssVars}>
         <Link
-          className="pill-logo"
+          className={`pill-logo${logoText ? " pill-logo--text" : ""}`}
           href={items[0]?.href || "/"}
           aria-label="Home"
-          onMouseEnter={handleLogoEnter}
           role="menuitem"
           ref={logoRef}
         >
-          {logo && <img src={logo} alt={logoAlt} ref={logoImgRef} />}
+          {logoText ? (
+            <span className="pill-logo-signature">{logoText}</span>
+          ) : (
+            logo && <img src={logo} alt={logoAlt} />
+          )}
         </Link>
 
         <div className="pill-nav-items desktop-only" ref={navItemsRef}>

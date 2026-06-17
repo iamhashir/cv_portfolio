@@ -241,6 +241,7 @@ export default function Home() {
 
         {/* ── Header ── */}
         <PillNav
+          logoText="malik hashir"
           items={[
             { label: "Home", href: "/" },
             { label: "Systems", href: "#systems" },

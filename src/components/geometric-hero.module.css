@@ -12,111 +12,15 @@
   align-items: flex-start;
 }
 
-/* ── Grid Background ─────────────────────────────────────── */
-.gridBackground {
+/* ── Shape Grid Background ───────────────────────────────── */
+.shapeGridContainer {
   position: absolute;
   inset: 0;
   z-index: 0;
   overflow: hidden;
+  opacity: 0.6;
 }
 
-.gridSvg {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-/* ── Grid lines ──────────────────────────────────────────── */
-.gridLine {
-  stroke: var(--accent-color);
-  opacity: 0.06;
-}
-
-.accentLineH {
-  stroke: var(--accent-color);
-  opacity: 0.08;
-}
-
-.accentLineV {
-  stroke: var(--accent-cyan);
-  opacity: 0.06;
-}
-
-/* ── Decorative geometric shapes ─────────────────────────── */
-.geoShapes {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.triTopRight {
-  position: absolute;
-  top: 8%;
-  right: 14%;
-  width: 0;
-  height: 0;
-  border-left: 44px solid transparent;
-  border-right: 44px solid transparent;
-  border-bottom: 76px solid var(--accent-color);
-  opacity: 0.18;
-}
-
-.rectBottomLeft {
-  position: absolute;
-  bottom: 12%;
-  left: 6%;
-  width: 64px;
-  height: 64px;
-  border: 3px solid var(--accent-coral);
-  opacity: 0.22;
-  transform: rotate(18deg);
-}
-
-.circleAccent {
-  position: absolute;
-  top: 55%;
-  right: 6%;
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  border: 3px solid var(--accent-cyan);
-  opacity: 0.15;
-}
-
-.dotGrid {
-  position: absolute;
-  bottom: 20%;
-  right: 18%;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
-  opacity: 0.18;
-}
-
-.dotGrid span {
-  display: block;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--accent-color);
-}
-
-/* ── Squishy Blob ─────────────────────────────────────────── */
-.blob {
-  position: absolute;
-  width: 380px;
-  height: 380px;
-  top: 10%;
-  right: 4%;
-  z-index: 2;
-  filter: drop-shadow(0 0 60px rgba(200, 255, 0, 0.18)) drop-shadow(0 0 120px rgba(0, 229, 255, 0.08));
-  will-change: transform;
-}
-
-/* ── Content Container ────────────────────────────────────── */
 .content {
   position: relative;
   z-index: 10;
@@ -139,62 +43,40 @@
   gap: 10px;
 }
 
-.eyebrow::before {
-  content: '';
-  display: inline-block;
-  width: 28px;
-  height: 2px;
-  background: var(--accent-color);
-}
-
-/* ── Main Heading ─────────────────────────────────────────── */
+/* ── Main heading ────────────────────────────────────────── */
 .heading {
-  font-family: 'Inter', 'Arial Black', sans-serif;
-  font-size: clamp(2.8rem, 8vw, 5.5rem);
-  font-weight: 900;
-  line-height: 1.0;
+  font-size: clamp(2.5rem, 7.5vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
   color: var(--text-primary);
-  margin-bottom: 28px;
-  letter-spacing: -0.04em;
-  text-transform: uppercase;
 }
 
 .accentWord {
   color: var(--accent-color);
-  text-shadow: 0 0 40px rgba(200, 255, 0, 0.35);
-  position: relative;
-  font-weight: 900;
 }
 
-/* ── Subtitle ─────────────────────────────────────────────── */
+/* ── Subtitle ────────────────────────────────────────────── */
 .subtitle {
-  font-family: 'Inter', sans-serif;
-  font-size: 1.05rem;
-  line-height: 1.65;
+  font-size: 0.95rem;
+  line-height: 1.8;
   color: var(--text-secondary);
-  margin-bottom: 36px;
-  max-width: 480px;
-  font-weight: 400;
-  border-left: 3px solid var(--accent-coral);
-  padding-left: 16px;
+  margin-bottom: 32px;
+  max-width: 520px;
 }
 
-/* ── Availability Status ──────────────────────────────────── */
+/* ── Availability badge ──────────────────────────────────── */
 .availability {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.78rem;
+  margin-bottom: 36px;
+  font-size: 0.8rem;
   font-weight: 600;
+  letter-spacing: 0.05em;
   color: var(--text-primary);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 40px;
-  background: var(--bg-secondary);
-  border: 1.5px solid var(--border-muted);
-  padding: 8px 16px;
-  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
 }
 
 .statusDot {
@@ -202,176 +84,203 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--accent-color);
-  box-shadow: 0 0 8px rgba(200, 255, 0, 0.8);
-  animation: pulse 2s infinite;
+  background: var(--status-active);
+  box-shadow: 0 0 12px var(--status-active-glow);
+  animation: pulse 2s ease-in-out infinite;
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(200, 255, 0, 0.8); }
-  50% { opacity: 0.6; box-shadow: 0 0 16px rgba(200, 255, 0, 0.4); }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
-/* ── CTA Group ────────────────────────────────────────────── */
+/* ── CTA Group ───────────────────────────────────────────── */
 .ctaGroup {
   display: flex;
-  gap: 14px;
-  margin-bottom: 48px;
   flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 48px;
 }
 
-.ctaPrimary,
-.ctaSecondary {
+.ctaPrimary, .ctaSecondary {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 16px 32px;
-  font-family: 'Inter', sans-serif;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-weight: 600;
   font-size: 0.9rem;
-  font-weight: 800;
   text-decoration: none;
-  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  position: relative;
-  border-radius: 0;
-  outline: none;
+  transition: all var(--transition-normal);
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  border: none;
+  min-height: 44px;
 }
 
 .ctaPrimary {
   background: var(--accent-color);
   color: var(--bg-primary);
-  border: 2px solid var(--accent-color);
-  box-shadow: 4px 4px 0px var(--accent-muted);
 }
 
 .ctaPrimary:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px var(--accent-muted);
-  background: #d4ff1a;
-}
-
-.ctaPrimary:focus-visible {
-  outline: 3px solid var(--text-primary);
-  outline-offset: 4px;
+  background: var(--text-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px var(--accent-glow-hover);
 }
 
 .ctaPrimary:active {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px var(--accent-muted);
+  transform: translateY(0);
 }
 
 .ctaSecondary {
   background: transparent;
   color: var(--text-primary);
-  border: 2px solid var(--text-primary);
-  box-shadow: 4px 4px 0px var(--border-focus);
+  border: 1px solid var(--border-muted);
 }
 
 .ctaSecondary:hover {
-  background: var(--text-primary);
-  color: var(--bg-primary);
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px var(--border-focus);
-}
-
-.ctaSecondary:focus-visible {
-  outline: 3px solid var(--accent-color);
-  outline-offset: 4px;
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  background: rgba(200, 255, 0, 0.05);
+  transform: translateY(-2px);
 }
 
 .ctaSecondary:active {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px var(--border-focus);
+  transform: translateY(0);
 }
 
 .ctaArrow {
   display: inline-block;
-  transition: transform 0.2s ease;
+  transition: transform var(--transition-fast);
 }
 
-.ctaPrimary:hover .ctaArrow,
-.ctaSecondary:hover .ctaArrow {
-  transform: translateY(3px);
+.ctaPrimary:hover .ctaArrow {
+  transform: translateY(2px);
 }
 
-/* ── Metrics Line ─────────────────────────────────────────── */
+/* ── Metrics ─────────────────────────────────────────────── */
 .metrics {
+  font-size: 0.8rem;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.78rem;
-  font-weight: 600;
   color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.05em;
 }
 
-/* ── Scroll Indicator ─────────────────────────────────────── */
+/* ── Blob ────────────────────────────────────────────────── */
+.blob {
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  top: 10%;
+  right: 4%;
+  z-index: 3;
+  filter: drop-shadow(0 0 60px rgba(200, 255, 0, 0.18)) drop-shadow(0 0 120px rgba(0, 229, 255, 0.08));
+  will-change: transform;
+}
+
+/* ── Scroll indicator ────────────────────────────────────── */
 .scrollIndicator {
   position: absolute;
-  bottom: 36px;
+  bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
-  font-size: 1.4rem;
   color: var(--accent-color);
-  opacity: 0.5;
+  font-size: 1.2rem;
+  animation: fadeIn 0.6s ease-out 1.2s both;
 }
 
-/* ── Responsive ───────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .hero { padding-top: 60px; min-height: 90vh; }
+  .hero {
+    padding-top: 60px;
+  }
 
-  .content { max-width: 100%; padding: 0 24px; }
+  .content {
+    max-width: 100%;
+    padding: 0 24px;
+  }
 
-  .heading { font-size: clamp(2rem, 7vw, 3.5rem); margin-bottom: 20px; }
+  .heading {
+    margin-bottom: 20px;
+  }
 
-  .subtitle { font-size: 0.95rem; margin-bottom: 28px; }
+  .subtitle {
+    margin-bottom: 24px;
+    font-size: 0.9rem;
+  }
 
-  .blob { width: 240px; height: 240px; top: 18%; right: -4%; }
+  .ctaGroup {
+    flex-direction: column;
+    gap: 12px;
+  }
 
-  .ctaGroup { flex-direction: column; gap: 10px; }
+  .ctaPrimary, .ctaSecondary {
+    width: 100%;
+    justify-content: center;
+  }
 
-  .ctaPrimary, .ctaSecondary { width: 100%; justify-content: center; }
+  .blob {
+    width: 240px;
+    height: 240px;
+    top: 18%;
+    right: -4%;
+  }
 
-  .scrollIndicator { bottom: 20px; }
-
-  .triTopRight { right: 4%; }
-
-  .circleAccent { width: 76px; height: 76px; }
-
-  .rectBottomLeft { width: 48px; height: 48px; }
+  .scrollIndicator {
+    bottom: 20px;
+  }
 }
 
 @media (max-width: 480px) {
-  .hero { min-height: 85vh; padding-top: 50px; }
+  .hero {
+    padding-top: 50px;
+    align-items: center;
+    text-align: center;
+  }
 
-  .eyebrow { font-size: 0.65rem; margin-bottom: 18px; }
+  .content {
+    padding: 0 16px;
+  }
 
-  .eyebrow::before { width: 20px; }
+  .heading {
+    font-size: 2rem;
+    margin-bottom: 16px;
+  }
 
-  .heading { font-size: clamp(1.9rem, 6vw, 3rem); }
+  .subtitle {
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+  }
 
-  .subtitle { font-size: 0.9rem; }
+  .eyebrow {
+    margin-bottom: 16px;
+  }
 
-  .blob { width: 170px; height: 170px; top: 22%; right: -2%; }
+  .availability {
+    margin-bottom: 24px;
+  }
 
-  .ctaPrimary, .ctaSecondary { padding: 14px 22px; font-size: 0.82rem; }
+  .blob {
+    width: 170px;
+    height: 170px;
+    top: 22%;
+    right: -2%;
+  }
 
-  .availability { font-size: 0.7rem; margin-bottom: 22px; }
+  .ctaGroup {
+    width: 100%;
+  }
 
-  .metrics { font-size: 0.7rem; }
-
-  .circleAccent { width: 56px; height: 56px; }
-
-  .rectBottomLeft { width: 40px; height: 40px; }
-
-  .dotGrid { display: none; }
-}
-
-/* ── Reduced motion ───────────────────────────────────────── */
-@media (prefers-reduced-motion: reduce) {
-  .statusDot { animation: none; }
-  .scrollIndicator { animation: none; }
-  .ctaArrow { animation: none; }
-  .ctaPrimary, .ctaSecondary { transition: none; }
+  .ctaPrimary, .ctaSecondary {
+    font-size: 0.85rem;
+    padding: 10px 20px;
+  }
 }

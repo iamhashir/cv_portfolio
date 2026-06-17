@@ -35,16 +35,18 @@
 }
 
 .pill-logo {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  text-decoration: none;
+  /* image fallback */
   width: var(--nav-h);
   height: var(--nav-h);
   border-radius: 50%;
   background: rgba(201, 169, 110, 0.1);
   padding: 6px;
-  display: inline-flex;
-  align-items: center;
   justify-content: center;
   overflow: hidden;
-  flex-shrink: 0;
   transition: all 0.3s ease;
 }
 
@@ -57,6 +59,64 @@
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+/* Chalk signature variant */
+.pill-logo--text {
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  overflow: visible;
+}
+
+.pill-logo--text:hover {
+  background: transparent;
+}
+
+.pill-logo-signature {
+  font-family: var(--font-signature), cursive;
+  font-size: 19px;
+  font-weight: 400;
+  color: rgba(250, 244, 232, 0.86);
+  line-height: 1;
+  letter-spacing: 0.08em;
+  display: block;
+  /* chalk powder scatter — layered shadows at tiny offsets */
+  text-shadow:
+    0 0 14px rgba(250, 244, 232, 0.08),
+    1px  0   1px rgba(250, 244, 232, 0.12),
+   -1px  0   1px rgba(250, 244, 232, 0.10),
+    0    1px  1px rgba(250, 244, 232, 0.08),
+    2px  1px  2px rgba(250, 244, 232, 0.05),
+   -2px -1px  2px rgba(250, 244, 232, 0.04),
+    3px  0    3px rgba(250, 244, 232, 0.03);
+  animation: chalk-settle 1.6s ease-out forwards;
+  will-change: opacity, filter;
+}
+
+@keyframes chalk-settle {
+  0%   { opacity: 0;    filter: blur(4px);   }
+  25%  { opacity: 0.55; filter: blur(2px);   }
+  55%  { opacity: 0.92; filter: blur(0.6px); }
+  80%  { opacity: 0.82; filter: blur(0.2px); }
+  100% { opacity: 0.86; filter: blur(0);     }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill-logo-signature { animation: none; opacity: 0.86; }
+}
+
+.pill-logo--text:hover .pill-logo-signature {
+  color: rgba(255, 251, 242, 0.98);
+  text-shadow:
+    0 0 20px rgba(250, 244, 232, 0.18),
+    1px  0   1px rgba(250, 244, 232, 0.18),
+   -1px  0   1px rgba(250, 244, 232, 0.14),
+    2px  1px  2px rgba(250, 244, 232, 0.08),
+   -2px -1px  2px rgba(250, 244, 232, 0.06);
+  transition: color 0.35s ease, text-shadow 0.35s ease;
 }
 
 .pill-list {
@@ -81,27 +141,27 @@
   justify-content: center;
   height: 100%;
   padding: 0 var(--pill-pad-x);
-  background: rgba(201, 169, 110, 0.08);
-  color: rgba(248, 240, 220, 0.75);
+  background: transparent;
+  border: 1px solid rgba(201, 169, 110, 0.18);
+  color: rgba(248, 240, 220, 0.55);
   text-decoration: none;
   border-radius: 9999px;
-  border: none;
   box-sizing: border-box;
-  font-weight: 600;
-  font-size: 13px;
+  font-weight: 500;
+  font-size: 11.5px;
   line-height: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.15px;
+  letter-spacing: 0.07em;
   white-space: nowrap;
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  transition: all 0.2s ease;
+  transition: color 0.25s ease, border-color 0.25s ease;
 }
 
 .pill:hover {
-  background: rgba(201, 169, 110, 0.16);
-  color: rgba(201, 169, 110, 1);
+  background: transparent;
+  border-color: rgba(201, 169, 110, 0.45);
+  color: #c9a96e;
 }
 
 .pill .hover-circle {
@@ -109,7 +169,7 @@
   left: 50%;
   bottom: 0;
   border-radius: 50%;
-  background: rgba(201, 169, 110, 0.25);
+  background: rgba(201, 169, 110, 0.10);
   z-index: 1;
   display: block;
   pointer-events: none;
@@ -132,7 +192,8 @@
 }
 
 .pill.is-active {
-  background: rgba(201, 169, 110, 0.2);
+  background: transparent;
+  border-color: rgba(201, 169, 110, 0.5);
   color: #c9a96e;
 }
 
@@ -142,11 +203,12 @@
   bottom: -8px;
   left: 50%;
   transform: translateX(-50%);
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
   background: #c9a96e;
   border-radius: 50%;
   z-index: 4;
+  opacity: 0.7;
 }
 
 .desktop-only {
@@ -174,9 +236,18 @@
     gap: 12px;
   }
 
-  .pill-logo {
+  .pill-logo:not(.pill-logo--text) {
     width: 36px;
     height: 36px;
+  }
+
+  .pill-logo--text {
+    width: auto;
+    height: auto;
+  }
+
+  .pill-logo-signature {
+    font-size: 16px;
   }
 }
 
@@ -237,21 +308,21 @@
 
 .mobile-menu-popover .mobile-menu-link {
   display: block;
-  padding: 12px 16px;
-  color: rgba(248, 240, 220, 0.8);
-  background-color: rgba(201, 169, 110, 0.08);
+  padding: 11px 16px;
+  color: rgba(248, 240, 220, 0.6);
+  background-color: transparent;
+  border: 1px solid rgba(201, 169, 110, 0.15);
   text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 500;
   border-radius: 8px;
-  border: none;
-  transition: all 0.2s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.15px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  letter-spacing: 0.07em;
 }
 
 .mobile-menu-popover .mobile-menu-link:hover,
 .mobile-menu-popover .mobile-menu-link.is-active {
-  background-color: rgba(201, 169, 110, 0.16);
+  background-color: transparent;
+  border-color: rgba(201, 169, 110, 0.45);
   color: #c9a96e;
 }

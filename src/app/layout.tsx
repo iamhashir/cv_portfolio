@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Inter, JetBrains_Mono } from "next/font/google"
+import { Inter, JetBrains_Mono, Rock_Salt } from "next/font/google"
 import { site } from "@/data/site"
 import { RootClient } from "@/components/RootClient"
 import "./globals.css"
@@ -7,6 +7,13 @@ import "./globals.css"
 const inter = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
+  display: "swap",
+})
+
+const rockSalt = Rock_Salt({
+  variable: "--font-signature",
+  subsets: ["latin"],
+  weight: "400",
   display: "swap",
 })
 
@@ -56,7 +63,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} ${rockSalt.variable}`}>
       <body>
         <RootClient>{children}</RootClient>
       </body>

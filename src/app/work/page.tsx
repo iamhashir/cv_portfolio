@@ -6,13 +6,10 @@ import Link from "next/link"
 import { site } from "@/data/portfolioData"
 import styles from "./work.module.css"
 import headerStyles from "../new-page.module.css"
-import { X } from "lucide-react"
 import { useState, useEffect } from "react"
-import { AnimatedHamburger } from "@/components/AnimatedHamburger"
 import { ProjectsGridNew } from "@/components/ProjectsGridNew"
 
 export default function WorkPage() {
-  const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [expandedSlug, setExpandedSlug] = useState<string | null>(null)
 
@@ -22,17 +19,6 @@ export default function WorkPage() {
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
-  useEffect(() => {
-    const onResize = () => { if (window.innerWidth > 768) setMenuOpen(false) }
-    window.addEventListener("resize", onResize)
-    return () => window.removeEventListener("resize", onResize)
-  }, [])
-
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : ""
-    return () => { document.body.style.overflow = "" }
-  }, [menuOpen])
-
   function handleToggle(slug: string) {
     setExpandedSlug((prev) => (prev === slug ? null : slug))
   }
@@ -41,34 +27,6 @@ export default function WorkPage() {
     <>
       <div className={headerStyles.backgroundStage} aria-hidden="true" />
       <div className={headerStyles.page}>
-        {/* Mobile nav overlay */}
-        <nav
-          className={`${headerStyles.mobileNav} ${menuOpen ? headerStyles.mobileNavOpen : ""}`}
-          aria-label="Mobile navigation"
-          aria-hidden={!menuOpen}
-        >
-          <button className={headerStyles.mobileNavClose} onClick={() => setMenuOpen(false)} aria-label="Close menu">
-            <X size={24} />
-          </button>
-          {[
-            { label: "Home", href: "/" },
-            { label: "About", href: "/about" },
-            { label: "Contact", href: "/#contact" },
-            { label: "GitHub ↗", href: site.github, ext: true },
-          ].map(({ label, href, ext }) => (
-            <a
-              key={label}
-              href={href}
-              target={ext ? "_blank" : undefined}
-              rel={ext ? "noopener noreferrer" : undefined}
-              className={headerStyles.mobileNavLink}
-              onClick={() => setMenuOpen(false)}
-            >
-              {label}
-            </a>
-          ))}
-        </nav>
-
         {/* Header */}
         <header className={`${headerStyles.header} ${scrolled ? headerStyles.headerScrolled : ""}`}>
           <Link href="/" className={headerStyles.headerLogo}>M.H.</Link>
@@ -86,7 +44,6 @@ export default function WorkPage() {
               Download CV →
             </a>
           </nav>
-          <AnimatedHamburger isOpen={menuOpen} onClick={() => setMenuOpen(!menuOpen)} />
         </header>
 
         {/* Work/Systems Section */}

@@ -2,8 +2,11 @@
 
 import React, { useEffect, useId, useRef, useState } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
+import dynamic from "next/dynamic"
 import { site } from "@/data/site"
 import styles from "./geometric-hero.module.css"
+
+const ShapeGrid = dynamic(() => import("./ShapeGrid"), { ssr: false })
 
 /**
  * Squishy + Geometric Hero
@@ -70,33 +73,17 @@ export function GeometricHero() {
 
   return (
     <section ref={heroRef} className={styles.hero}>
-      {/* Geometric grid background */}
-      <div className={styles.gridBackground} aria-hidden="true">
-        <svg className={styles.gridSvg} viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
-          <defs>
-            <pattern id={gridId} width="60" height="60" patternUnits="userSpaceOnUse">
-              <path
-                d="M 60 0 L 0 0 0 60"
-                fill="none"
-                className={styles.gridLine}
-                strokeWidth="1"
-              />
-            </pattern>
-          </defs>
-          <rect width="1200" height="800" fill={`url(#${gridId})`} />
-          <line x1="0" y1="200" x2="400" y2="200" className={styles.accentLineH} strokeWidth="2"/>
-          <line x1="900" y1="0" x2="900" y2="800" className={styles.accentLineV} strokeWidth="2"/>
-        </svg>
-      </div>
-
-      {/* Decorative geometric shapes */}
-      <div className={styles.geoShapes} aria-hidden="true">
-        <div className={styles.triTopRight} />
-        <div className={styles.rectBottomLeft} />
-        <div className={styles.circleAccent} />
-        <div className={styles.dotGrid}>
-          {Array.from({ length: 25 }).map((_, i) => <span key={i} />)}
-        </div>
+      {/* Animated shape grid background */}
+      <div className={styles.shapeGridContainer} aria-hidden="true">
+        <ShapeGrid
+          direction="diagonal"
+          speed={0.3}
+          squareSize={50}
+          borderColor="rgba(200, 255, 0, 0.08)"
+          hoverFillColor="rgba(200, 255, 0, 0.15)"
+          shape="square"
+          hoverTrailAmount={3}
+        />
       </div>
 
       {/* Squishy morphing blob */}
