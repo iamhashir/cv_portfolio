@@ -674,7 +674,6 @@ button[aria-expanded]:hover,
 button[aria-label*="toggle"]:hover {
   background-color: rgba(200, 255, 0, 0.08);
   border-color: var(--border-muted);
-  transform: scale(1.05);
 }
 
 .hamburger:focus-visible,

@@ -17,6 +17,7 @@ import {
 } from "@/data/portfolioData"
 import { PortfolioFrame } from "@/components/PortfolioFrame"
 import PillNav from "@/components/PillNav"
+import BubbleMenu from "@/components/BubbleMenu"
 import dynamic from "next/dynamic"
 import styles from "./new-page.module.css"
 import { GeometricHero } from "@/components/GeometricHero"
@@ -257,6 +258,24 @@ export default function Home() {
           hoveredPillTextColor="#c9a96e"
           pillTextColor="#f8f0dc"
           ease="power2.easeOut"
+        />
+
+        {/* ── BubbleMenu — primary full-screen hamburger overlay ── */}
+        <BubbleMenu
+          menuAriaLabel="Toggle navigation"
+          menuBg="#111111"
+          menuContentColor="#c8ff00"
+          useFixedPosition={true}
+          animationEase="back.out(1.4)"
+          animationDuration={0.42}
+          staggerDelay={0.13}
+          items={[
+            { label: "home",     href: "/",        ariaLabel: "Home",     rotation: -6,  hoverStyles: { bgColor: "#c8ff00", textColor: "#0a0a0a" } },
+            { label: "systems",  href: "#systems",  ariaLabel: "Systems",  rotation:  7,  hoverStyles: { bgColor: "#1a1a1a", textColor: "#c8ff00" } },
+            { label: "about",    href: "#about",    ariaLabel: "About",    rotation: -7,  hoverStyles: { bgColor: "#1a1a1a", textColor: "#c8ff00" } },
+            { label: "contact",  href: "#contact",  ariaLabel: "Contact",  rotation:  6,  hoverStyles: { bgColor: "#ff4d3b", textColor: "#ffffff"  } },
+            { label: "github ↗", href: site.github, ariaLabel: "GitHub",   rotation:  8,  hoverStyles: { bgColor: "#1a1a1a", textColor: "#c8ff00" }, external: true },
+          ]}
         />
 
         {/* ── Geometric Hero ── */}
