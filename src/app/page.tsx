@@ -24,7 +24,7 @@ import { ProjectsGridNew } from "@/components/ProjectsGridNew"
 
 const ArtisticCanvas = dynamic(() => import("@/components/ArtisticCanvas"), {
   ssr: false,
-  loading: () => <div style={{ width: "100%", height: "100%", background: "#F4F0EA" }} />,
+  loading: () => <div style={{ width: "100%", height: "100%", background: "var(--bg-primary, #0f0c08)" }} />,
 })
 
 const ease = [0.25, 0.46, 0.45, 0.94] as const
