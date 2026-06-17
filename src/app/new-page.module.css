@@ -60,7 +60,9 @@
   background: transparent;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  transition: background 0.3s ease;
+  transition: background 0.35s cubic-bezier(0.4, 0, 0.2, 1), backdrop-filter 0.35s ease;
+  border-bottom: 1px solid transparent;
+  transition-property: background, border-color;
 }
 
 .headerScrolled {
@@ -367,8 +369,31 @@
   padding: 13px 26px;
   border: 2px solid var(--accent-color);
   border-radius: 8px;
-  transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+  transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast), letter-spacing var(--transition-fast);
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.01em;
+}
+
+.ctaPrimary::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: var(--bg-primary);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease-out, height 0.6s ease-out, opacity 0.6s ease-out;
+}
+
+.ctaPrimary:active::before {
+  width: 200px;
+  height: 200px;
+  opacity: 0.1;
 }
 
 .ctaPrimary:hover {
@@ -376,6 +401,12 @@
   color: var(--accent-color);
   transform: translateY(-3px);
   box-shadow: 0 8px 24px var(--accent-glow-hover);
+  letter-spacing: 0.03em;
+}
+
+.ctaPrimary:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 3px;
 }
 
 .ctaPrimary:active {
@@ -389,13 +420,30 @@
   text-decoration: none;
   border-bottom: 2px solid transparent;
   padding-bottom: 2px;
-  transition: color var(--transition-fast), border-color var(--transition-fast);
+  transition: color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
   cursor: pointer;
+  position: relative;
+  display: inline-block;
+}
+
+.ctaSecondary::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: var(--accent-color);
+  transition: width var(--transition-normal);
 }
 
 .ctaSecondary:hover {
   color: var(--accent-color);
-  border-bottom-color: var(--accent-color);
+  transform: translateX(2px);
+}
+
+.ctaSecondary:hover::after {
+  width: 100%;
 }
 
 .heroMetrics {
@@ -641,13 +689,37 @@
   display: flex;
   flex-direction: column;
   border-left: 3px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.projectCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--accent-glow) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  pointer-events: none;
 }
 
 .projectCard:hover {
   background: var(--bg-tertiary);
   border-left-color: var(--accent-color);
   transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), 0 0 20px var(--accent-glow-hover);
+}
+
+.projectCard:hover::before {
+  opacity: 0.05;
+}
+
+.projectCard:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
 }
 
 .projectCard:active {
@@ -723,13 +795,30 @@
   font-size: 0.62rem;
   color: var(--text-muted);
   text-decoration: none;
-  transition: color var(--transition-fast), text-decoration var(--transition-fast);
+  transition: color var(--transition-fast), text-decoration var(--transition-fast), transform var(--transition-fast);
   white-space: nowrap;
+  position: relative;
+  display: inline-block;
+}
+
+.projectSourceLink::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0%;
+  height: 1px;
+  background: var(--accent-color);
+  transition: width var(--transition-normal);
 }
 
 .projectSourceLink:hover {
   color: var(--accent-color);
-  text-decoration: underline;
+  transform: translateX(2px);
+}
+
+.projectSourceLink:hover::after {
+  width: 100%;
 }
 
 /* ── Accordion expand panel ───────────────────────────────────── */
@@ -758,6 +847,20 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 40px;
+  animation: slideDownSmooth 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideDownSmooth {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 1000px;
+  }
 }
 
 .accordionClose {
@@ -1142,12 +1245,20 @@
   padding: 18px 0;
   border-bottom: 1px solid var(--border-muted);
   text-decoration: none;
-  transition: padding-left var(--transition-fast), color var(--transition-fast);
+  transition: padding-left var(--transition-fast), color var(--transition-fast), background-color var(--transition-fast);
+  position: relative;
+  background: linear-gradient(90deg, transparent, var(--accent-glow) 0%, transparent);
+  background-size: 0% 100%;
+  background-position: right center;
+  background-repeat: no-repeat;
+  transition: background-size var(--transition-fast), padding-left var(--transition-fast), color var(--transition-fast);
 }
 
 .contactRow:hover {
   padding-left: 8px;
   color: var(--accent-color);
+  background-size: 100% 100%;
+  background-position: left center;
 }
 
 .contactRow:focus-visible {
