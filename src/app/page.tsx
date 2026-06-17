@@ -28,6 +28,11 @@ const ArtisticCanvas = dynamic(() => import("@/components/ArtisticCanvas"), {
   loading: () => <div style={{ width: "100%", height: "100%", background: "var(--bg-primary, #0f0c08)" }} />,
 })
 
+const SplashCursor = dynamic(() => import("@/components/SplashCursor"), {
+  ssr: false,
+  loading: () => null,
+})
+
 const ease = [0.25, 0.46, 0.45, 0.94] as const
 
 // Marquee content pulled from site data — no hardcoding
@@ -186,6 +191,8 @@ export default function Home() {
   const [scrolled,     setScrolled]     = useState(false)
   const [menuOpen,     setMenuOpen]     = useState(false)
   const [expandedSlug, setExpandedSlug] = useState<string | null>(null)
+  const [systemsInView, setSystemsInView] = useState(false)
+  const systemsRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -197,6 +204,15 @@ export default function Home() {
     const onResize = () => { if (window.innerWidth > 768) setMenuOpen(false) }
     window.addEventListener("resize", onResize)
     return () => window.removeEventListener("resize", onResize)
+  }, [])
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => setSystemsInView(entry.isIntersecting),
+      { threshold: 0.1 }
+    )
+    if (systemsRef.current) observer.observe(systemsRef.current)
+    return () => observer.disconnect()
   }, [])
 
   // Lock body scroll when mobile menu is open
@@ -300,7 +316,7 @@ export default function Home() {
         </div>
 
         {/* ── Systems ── */}
-        <section id="systems" className={styles.systems}>
+        <section id="systems" className={styles.systems} ref={systemsRef}>
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -416,6 +432,22 @@ export default function Home() {
           </p>
         </section>
       </div>
+
+      {/* ── Splash Cursor (Systems Section Only) ── */}
+      {systemsInView && (
+        <SplashCursor
+          DENSITY_DISSIPATION={3}
+          VELOCITY_DISSIPATION={1.5}
+          PRESSURE={0.25}
+          CURL={19}
+          SPLAT_RADIUS={0.61}
+          SPLAT_FORCE={5500}
+          COLOR_UPDATE_SPEED={7}
+          COLOR="#84CC16"
+          RAINBOW_MODE={false}
+          SHADING={true}
+        />
+      )}
     </>
   )
 }
