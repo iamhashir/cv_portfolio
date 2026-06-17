@@ -212,14 +212,14 @@
 .cardCta {
   display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 12px 16px;
-  margin-top: 8px;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 20px;
+  margin-top: 12px;
   border: 2px solid var(--accent-coral);
   border-radius: 8px;
   font-family: 'Inter', sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -227,7 +227,8 @@
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   cursor: pointer;
   width: 100%;
-  justify-content: center;
+  min-height: 44px;
+  background: transparent;
 }
 
 .cardCta span:last-child {
@@ -236,12 +237,14 @@
 }
 
 .card:hover .cardCta {
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--accent-coral) 25%, transparent);
-  transform: translateY(-2px);
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--accent-coral) 35%, transparent);
+  transform: translateY(-3px);
+  background: color-mix(in srgb, var(--accent-coral) 8%, transparent);
+  border-color: var(--accent-coral);
 }
 
 .card:active .cardCta {
-  transform: translateY(0);
+  transform: translateY(-1px);
 }
 
 /* ── Hover Glow Effect ───────────────────────────────────────── */

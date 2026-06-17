@@ -20,7 +20,7 @@
   align-items: center;
   gap: 12px;
   font-size: 0.85rem;
-  color: rgba(11, 11, 12, 0.6);
+  color: rgba(11, 11, 12, 0.75);
   margin-bottom: 24px;
   font-family: 'JetBrains Mono', monospace;
 }
@@ -75,8 +75,9 @@
 .ctaLink {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 14px 32px;
+  padding: 16px 36px;
   background: #4F46E5;
   color: #F4F0EA;
   text-decoration: none;
@@ -86,6 +87,7 @@
   transition: all 0.18s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   letter-spacing: 0.05em;
   text-transform: uppercase;
+  min-height: 48px;
 }
 
 .ctaLink:hover {
@@ -149,12 +151,12 @@
   }
 
   .cta {
-    padding: 32px 20px;
+    padding: 32px 16px;
     margin-top: 40px;
   }
 
   .ctaLink {
     width: 100%;
-    justify-content: center;
+    padding: 14px 24px;
   }
 }
