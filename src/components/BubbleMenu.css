@@ -1,24 +1,18 @@
-/* ── BubbleMenu nav bar (logo + toggle) ─────────────────────── */
+/* ── Nav bar (toggle + optional logo) ───────────────────── */
 .bubble-menu {
-  left: 0;
-  right: 0;
-  top: 0;
+  left: 0; right: 0; top: 0;
   display: flex;
   align-items: center;
-  justify-content: flex-end; /* toggle sits on the right when no logo */
+  justify-content: flex-end;
   padding: 1.1em clamp(20px, 4vw, 48px);
   pointer-events: none;
-  z-index: 1001; /* above PillNav's 1000 */
+  z-index: 1001;
 }
-
-/* when a logo-bubble is present, spread logo-left / toggle-right */
-.bubble-menu:has(.logo-bubble) {
-  justify-content: space-between;
-}
-
-.bubble-menu.fixed   { position: fixed; }
+.bubble-menu:has(.logo-bubble) { justify-content: space-between; }
+.bubble-menu.fixed    { position: fixed; }
 .bubble-menu.absolute { position: absolute; }
 
+/* Shared bubble shape */
 .bubble-menu .bubble {
   --bubble-size: 46px;
   width: var(--bubble-size);
@@ -31,9 +25,7 @@
   align-items: center;
   justify-content: center;
   pointer-events: auto;
-  will-change: transform;
 }
-
 .bubble-menu .logo-bubble {
   width: auto;
   min-height: var(--bubble-size);
@@ -42,53 +34,17 @@
   border-radius: calc(var(--bubble-size) / 2);
   gap: 8px;
 }
-
 .bubble-menu .logo-content {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   height: 100%;
 }
-
 .bubble-menu .bubble-logo {
-  max-height: 60%;
-  max-width: 100%;
-  object-fit: contain;
-  display: block;
+  max-height: 60%; max-width: 100%; object-fit: contain; display: block;
 }
 
-/* chalk signature passed as logo prop */
-.bm-logo-sig {
-  font-family: var(--font-signature), cursive;
-  font-size: 17px;
-  font-weight: 400;
-  color: rgba(250, 244, 232, 0.88);
-  line-height: 1;
-  letter-spacing: 0.06em;
-  white-space: nowrap;
-  text-shadow:
-    0 0 14px rgba(250, 244, 232, 0.1),
-    1px 0 1px rgba(250, 244, 232, 0.14),
-   -1px 0 1px rgba(250, 244, 232, 0.1),
-    0 1px 1px rgba(250, 244, 232, 0.08);
-  animation: logo-settle 1.4s ease-out forwards;
-}
-
-@keyframes logo-settle {
-  0%   { opacity: 0; filter: blur(3px); }
-  40%  { opacity: 0.7; filter: blur(1px); }
-  100% { opacity: 0.88; filter: blur(0); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .bm-logo-sig { animation: none; opacity: 0.88; }
-}
-
-@media (min-width: 768px) {
-  .bm-logo-sig { font-size: 19px; }
-}
-
-/* chalk signature inside the logo bubble */
+/* Chalk signature */
+.bm-logo-sig,
 .bubble-menu .logo-signature {
   font-family: var(--font-signature), cursive;
   font-size: 17px;
@@ -104,21 +60,22 @@
     0 1px 1px rgba(250, 244, 232, 0.08);
   animation: logo-settle 1.4s ease-out forwards;
 }
-
 @keyframes logo-settle {
   0%   { opacity: 0; filter: blur(3px); }
   40%  { opacity: 0.7; filter: blur(1px); }
   100% { opacity: 0.88; filter: blur(0); }
 }
-
 @media (prefers-reduced-motion: reduce) {
+  .bm-logo-sig,
   .bubble-menu .logo-signature { animation: none; opacity: 0.88; }
 }
-
-/* toggle button */
-.bubble-menu .toggle-bubble {
-  will-change: auto;
+@media (min-width: 768px) {
+  .bm-logo-sig,
+  .bubble-menu .logo-signature { font-size: 19px; }
 }
+
+/* ── Toggle button ───────────────────────────────────────── */
+.bubble-menu .toggle-bubble { will-change: auto; }
 
 .bubble-menu .menu-btn {
   border: none;
@@ -127,191 +84,215 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 5px;
   padding: 0;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   transform: none !important;
 }
-
 .bubble-menu .menu-btn:hover {
-  border-color: rgba(200, 255, 0, 0.35);
-  box-shadow: 0 0 16px rgba(200, 255, 0, 0.12), 0 4px 20px rgba(0, 0, 0, 0.5);
+  border-color: rgba(200, 255, 0, 0.4);
+  box-shadow: 0 0 18px rgba(200, 255, 0, 0.14), 0 4px 20px rgba(0, 0, 0, 0.5);
   transform: none !important;
 }
-
 .bubble-menu .menu-btn:active,
-.bubble-menu .menu-btn:focus {
-  transform: none !important;
-}
+.bubble-menu .menu-btn:focus { transform: none !important; }
 
 .bubble-menu .menu-line {
-  width: 22px;
+  width: 20px;
   height: 2px;
   background: #c8ff00;
   border-radius: 2px;
   display: block;
-  margin: 0 auto;
-  transition: transform 0.3s ease, opacity 0.3s ease;
   transform-origin: center;
+  transition:
+    transform 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.32s ease,
+    width 0.32s ease;
 }
+.bubble-menu .menu-line.short { width: 13px; }
 
-.bubble-menu .menu-line + .menu-line {
-  margin-top: 5px;
-}
-
+/* Hamburger → X */
 .bubble-menu .menu-btn.open .menu-line:first-child {
   transform: translateY(3.5px) rotate(45deg);
+  width: 20px;
 }
-
-.bubble-menu .menu-btn.open .menu-line:last-child {
+.bubble-menu .menu-btn.open .menu-line.short {
   transform: translateY(-3.5px) rotate(-45deg);
+  width: 20px;
 }
 
 @media (min-width: 768px) {
   .bubble-menu .bubble { --bubble-size: 52px; }
   .bubble-menu .logo-bubble { padding: 0 20px; }
-  .bubble-menu .logo-signature { font-size: 19px; }
 }
 
-/* ── Overlay (full-screen pill grid) ────────────────────────── */
+/* ── Full-screen overlay ─────────────────────────────────── */
 .bubble-menu-items {
   inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
   z-index: 1002;
-  background: rgba(8, 8, 8, 0.97);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  /* hard ceiling — nothing escapes the viewport */
+  background: #080808;     /* solid — backdrop-filter bleeds content through */
   overflow: hidden;
-  max-height: 100vh;
+  pointer-events: auto;
 }
-
-.bubble-menu-items.fixed   { position: fixed; }
+.bubble-menu-items.fixed    { position: fixed; }
 .bubble-menu-items.absolute { position: absolute; }
 
+/* ── Close button wrapper (div avoids button { position: relative } in globals) */
+.bm-close-wrap {
+  position: absolute;
+  top: 1.1em;
+  right: clamp(20px, 4vw, 48px);
+  z-index: 2;
+  pointer-events: auto;
+}
+
+.bm-close-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid rgba(200, 255, 0, 0.35);
+  box-shadow: 0 0 18px rgba(200, 255, 0, 0.12), 0 4px 20px rgba(0, 0, 0, 0.5);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.bm-close-btn:hover {
+  border-color: rgba(200, 255, 0, 0.65);
+  box-shadow: 0 0 28px rgba(200, 255, 0, 0.22), 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+@media (min-width: 768px) {
+  .bm-close-btn { width: 52px; height: 52px; }
+}
+
+/* ── Scattered pill list ─────────────────────────────────── */
 .bubble-menu-items .bm-list {
+  position: absolute;
+  inset: 0;
   list-style: none;
   margin: 0;
-  padding: 0 clamp(20px, 5vw, 60px);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0;
-  row-gap: 6px;
-  width: 100%;
-  max-width: 1400px;
-  pointer-events: auto;
-  /* pack rows together in the centre — prevents stretch across 100vh */
-  align-content: center;
-  justify-content: flex-start;
+  padding: 0;
+  pointer-events: none;
 }
 
 .bubble-menu-items .bm-col {
+  position: absolute;
   display: flex;
-  justify-content: center;
-  align-items: stretch;
-  flex: 0 0 calc(100% / 3);
-  box-sizing: border-box;
+  pointer-events: auto;
 }
 
-/* shift last row items to center when fewer than 3 */
-.bubble-menu-items .bm-col:nth-child(4):nth-last-child(2) {
-  margin-left: calc(100% / 6);
+/* Pill 1 — top left */
+.bubble-menu-items .bm-col:nth-child(1) {
+  top: clamp(70px, 13%, 130px);
+  left: clamp(20px, 4%, 56px);
+  width: clamp(180px, 32%, 420px);
 }
-.bubble-menu-items .bm-col:nth-child(4):last-child {
-  margin-left: calc(100% / 3);
+/* Pill 2 — top right */
+.bubble-menu-items .bm-col:nth-child(2) {
+  top: clamp(44px, 7%, 80px);
+  right: clamp(20px, 4%, 60px);
+  width: clamp(200px, 38%, 500px);
+}
+/* Pill 3 — middle left */
+.bubble-menu-items .bm-col:nth-child(3) {
+  top: clamp(200px, 41%, 380px);
+  left: clamp(60px, 22%, 280px);
+  width: clamp(170px, 30%, 400px);
+}
+/* Pill 4 — lower right */
+.bubble-menu-items .bm-col:nth-child(4) {
+  top: clamp(330px, 60%, 540px);
+  right: clamp(20px, 5%, 72px);
+  width: clamp(200px, 35%, 460px);
+}
+/* Pill 5 — bottom center-left */
+.bubble-menu-items .bm-col:nth-child(5) {
+  bottom: clamp(64px, 10%, 110px);
+  left: clamp(80px, 26%, 340px);
+  width: clamp(190px, 34%, 440px);
 }
 
+/* ── Pill ────────────────────────────────────────────────── */
 .bubble-menu-items .bm-link {
   --pill-bg: #111;
   --pill-color: #c8ff00;
-  --item-rot: 0deg;
-  --hover-bg: #1a1a1a;
-  --hover-color: #c8ff00;
+  --hover-bg: #c8ff00;
+  --hover-color: #0a0a0a;
 
   width: 100%;
-  /* vh-based padding keeps 2 rows inside any viewport height */
-  padding: clamp(0.9rem, 5vh, 5rem) 0;
-  min-height: 0;
-  font-size: clamp(1.2rem, 3.2vw, 3.4rem);
-  font-weight: 400;
+  padding: clamp(1.1rem, 2.8vh, 2.4rem) clamp(1.4rem, 3vw, 2.8rem);
+  font-size: clamp(1.8rem, 4vw, 4.6rem);
+  font-weight: 700;
   font-family: var(--font-sans, sans-serif);
-  line-height: 0;
+  line-height: 1;
+  letter-spacing: -0.025em;
   border-radius: 999px;
   background: var(--pill-bg);
   color: var(--pill-color);
-  text-decoration: none;
-  border: 1px solid rgba(200, 255, 0, 0.1);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  text-decoration: none !important;  /* beats globals.css link-underline rule */
+  border: 1.5px solid rgba(200, 255, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-  will-change: transform;
   box-sizing: border-box;
   white-space: nowrap;
   overflow: hidden;
-  height: 10px;
+  will-change: transform;
+  transition:
+    background 0.22s ease,
+    color 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
+  cursor: pointer;
 }
 
-@media (min-width: 900px) {
-  .bubble-menu-items .bm-link {
-    transform: rotate(var(--item-rot));
-  }
-
-  .bubble-menu-items .bm-link:hover {
-    transform: rotate(var(--item-rot)) scale(1.05);
-    background: var(--hover-bg);
-    color: var(--hover-color);
-    border-color: rgba(200, 255, 0, 0.25);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 40px rgba(200, 255, 0, 0.06);
-  }
-
-  .bubble-menu-items .bm-link:active {
-    transform: rotate(var(--item-rot)) scale(0.96);
-  }
+.bubble-menu-items .bm-link:hover {
+  background: var(--hover-bg);
+  color: var(--hover-color);
+  border-color: transparent;
+  box-shadow: 0 0 28px rgba(200, 255, 0, 0.18);
 }
 
-.bubble-menu-items .bm-link .bm-label {
+.bubble-menu-items .bm-link:active {
+  transition-duration: 0.08s;
+}
+
+.bubble-menu-items .bm-label {
   display: inline-block;
   will-change: transform, opacity;
-  height: 1.2em;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
+  line-height: 1;
+  pointer-events: none;
+  text-decoration: none !important;
 }
 
-/* ── Mobile ─────────────────────────────────────────────────── */
-@media (max-width: 899px) {
-  .bubble-menu-items {
-    align-items: flex-start;
-    padding-top: 80px;
+/* ── Mobile scatter (portrait) ───────────────────────────── */
+@media (max-width: 599px) {
+  /* Zigzag: left, right, left, right, left */
+  .bubble-menu-items .bm-col:nth-child(1) {
+    top: 12%; left: 5%; right: auto; bottom: auto;
+    width: 76%;
   }
-
-  .bubble-menu-items .bm-list {
-    row-gap: 8px;
+  .bubble-menu-items .bm-col:nth-child(2) {
+    top: 26%; right: 5%; left: auto; bottom: auto;
+    width: 76%;
   }
-
-  .bubble-menu-items .bm-col {
-    flex: 0 0 100%;
-    margin-left: 0 !important;
+  .bubble-menu-items .bm-col:nth-child(3) {
+    top: 40%; left: 5%; right: auto; bottom: auto;
+    width: 76%;
   }
-
+  .bubble-menu-items .bm-col:nth-child(4) {
+    top: 54%; right: 5%; left: auto; bottom: auto;
+    width: 76%;
+  }
+  .bubble-menu-items .bm-col:nth-child(5) {
+    top: 68%; left: 5%; right: auto; bottom: auto;
+    width: 76%;
+  }
   .bubble-menu-items .bm-link {
-    font-size: clamp(1.1rem, 4vh, 2rem);
-    /* vh-based so 5 pills + top clearance always fit */
-    padding: clamp(0.6rem, 2.2vh, 2rem) 0;
-    min-height: 0;
-  }
-
-  .bubble-menu-items .bm-link:hover {
-    transform: scale(1.04);
-    background: var(--hover-bg);
-    color: var(--hover-color);
-  }
-
-  .bubble-menu-items .bm-link:active {
-    transform: scale(0.96);
+    font-size: clamp(1.5rem, 5.5vw, 2.2rem);
+    padding: clamp(0.9rem, 2.2vh, 1.5rem) clamp(1.2rem, 4vw, 1.8rem);
   }
 }

@@ -268,13 +268,13 @@ export default function Home() {
           useFixedPosition={true}
           animationEase="back.out(1.4)"
           animationDuration={0.42}
-          staggerDelay={0.13}
+          staggerDelay={0.1}
           items={[
-            { label: "home",     href: "/",        ariaLabel: "Home",     rotation: -6,  hoverStyles: { bgColor: "#c8ff00", textColor: "#0a0a0a" } },
-            { label: "systems",  href: "#systems",  ariaLabel: "Systems",  rotation:  7,  hoverStyles: { bgColor: "#1a1a1a", textColor: "#c8ff00" } },
-            { label: "about",    href: "#about",    ariaLabel: "About",    rotation: -7,  hoverStyles: { bgColor: "#1a1a1a", textColor: "#c8ff00" } },
-            { label: "contact",  href: "#contact",  ariaLabel: "Contact",  rotation:  6,  hoverStyles: { bgColor: "#ff4d3b", textColor: "#ffffff"  } },
-            { label: "github ↗", href: site.github, ariaLabel: "GitHub",   rotation:  8,  hoverStyles: { bgColor: "#1a1a1a", textColor: "#c8ff00" }, external: true },
+            { label: "home",     href: "/",        ariaLabel: "Home",    rotation: -5, hoverStyles: { bgColor: "#c8ff00", textColor: "#0a0a0a" } },
+            { label: "systems",  href: "#systems", ariaLabel: "Systems", rotation:  4, hoverStyles: { bgColor: "#c8ff00", textColor: "#0a0a0a" } },
+            { label: "about",    href: "#about",   ariaLabel: "About",   rotation: -3, hoverStyles: { bgColor: "#c8ff00", textColor: "#0a0a0a" } },
+            { label: "contact",  href: "#contact", ariaLabel: "Contact", rotation:  5, hoverStyles: { bgColor: "#ff4d3b", textColor: "#ffffff"  } },
+            { label: "github ↗", href: site.github, ariaLabel: "GitHub", rotation: -2, hoverStyles: { bgColor: "#c8ff00", textColor: "#0a0a0a" } },
           ]}
         />
 

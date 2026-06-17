@@ -23,15 +23,21 @@
   box-sizing: border-box;
   max-width: 1400px;
   margin: 0 auto;
+  position: relative;           /* anchor for absolutely centred items */
 }
 
 .pill-nav-items {
-  position: relative;
+  /* Centred in the header regardless of logo / hamburger widths */
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
-  height: var(--nav-h);
   gap: var(--pill-gap);
   padding: 0;
+  pointer-events: auto;
 }
 
 .pill-logo {
