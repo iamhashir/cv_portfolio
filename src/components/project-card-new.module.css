@@ -290,7 +290,8 @@
 
   .cardCta {
     padding: 14px 16px;
-    font-size: 0.8rem;
+    font-size: 0.82rem;
+    min-height: 42px;
   }
 
   /* Remove hover effects on touch devices */

@@ -1360,6 +1360,36 @@
   padding: 0 40px;
 }
 
+/* ── Loading & Skeleton Animations ──────────────────────── */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-secondary) 0%, var(--bg-tertiary) 50%, var(--bg-secondary) 100%);
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 8px;
+}
+
+.loadingPulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 /* ── Scroll-Triggered Animations ─────────────────────────── */
 @keyframes fadeInLeft {
   from {
@@ -1412,6 +1442,32 @@
 .scrollRevealZoom {
   animation: zoomIn 0.6s ease-out forwards;
   opacity: 0;
+}
+
+/* ── Delightful Focus Management ────────────────────────── */
+.page:focus-within {
+  outline: none;
+}
+
+/* Focus visible on keyboard navigation */
+*:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 3px;
+}
+
+/* Smooth focus transitions */
+button:focus,
+a:focus,
+input:focus {
+  transition: outline-offset 0.15s ease-out;
 }
 
 /* ── Enhanced Touch Feedback for Mobile ───────────────────── */
