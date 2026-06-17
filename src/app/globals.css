@@ -329,6 +329,19 @@ code {
   gap: 24px;
 }
 
+/* Click squeeze animation */
+@keyframes clickSqueeze {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.92);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 /* --- REDUCED MOTION FALLBACK --- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -545,24 +558,6 @@ input:focus ~ label, textarea:focus ~ label {
   color: var(--accent-color);
 }
 
-/* Skip-to-main link for accessibility */
-.skip-to-main, [href="#main"] {
-  position: absolute;
-  top: -40px;
-  left: 0;
-  background: var(--accent-color);
-  color: var(--bg-primary);
-  padding: 12px 20px;
-  text-decoration: none;
-  border-radius: 4px;
-  font-weight: 600;
-  z-index: 9999;
-  transition: top 0.2s ease;
-}
-
-.skip-to-main:focus, [href="#main"]:focus {
-  top: 10px;
-}
 
 /* Ensure proper spacing for touch on mobile */
 @media (max-width: 480px) {
@@ -649,31 +644,6 @@ a[href*="instagram"]:focus-visible,
   outline-offset: 2px;
 }
 
-/* Skip-to-main link enhanced visibility */
-.skip-to-main,
-[href="#main"],
-[href="#content"],
-.skip-content {
-  font-size: 14px;
-  font-weight: 600;
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  padding: 12px 16px;
-  position: relative;
-  z-index: 9999;
-  transition: all 0.2s ease;
-}
-
-.skip-to-main:focus,
-[href="#main"]:focus,
-[href="#content"]:focus,
-.skip-content:focus {
-  top: 10px;
-  left: 10px;
-  outline: 3px solid;
-  outline-offset: 2px;
-}
 
 /* Hamburger/menu button clarity and accessibility */
 .hamburger,

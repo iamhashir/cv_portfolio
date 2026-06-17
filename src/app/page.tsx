@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
-import { Menu, X } from "lucide-react"
+import { X } from "lucide-react"
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism"
 import {
@@ -17,6 +17,7 @@ import {
   CAPABILITIES,
 } from "@/data/portfolioData"
 import { PortfolioFrame } from "@/components/PortfolioFrame"
+import { AnimatedHamburger } from "@/components/AnimatedHamburger"
 import dynamic from "next/dynamic"
 import styles from "./new-page.module.css"
 import { GeometricHero } from "@/components/GeometricHero"
@@ -102,7 +103,7 @@ function AccordionDetail({ project, onClose }: { project: Project; onClose: () =
             <span className={styles.accordionArchVal}>{project.architecture.database}</span>
           </div>
           <p className={styles.accordionSectionLabel} style={{ marginTop: 20 }}>Tech Stack</p>
-          <div className={styles.accordionStackFull}>{project.techStack.join(" // ")}</div>
+          <div className={styles.accordionStackFull}>{project.techStack.join("  ")}</div>
         </div>
         <div>
           <p className={styles.accordionSectionLabel}>Outcomes</p>
@@ -157,7 +158,7 @@ function ProjectCard({
       <hr className={styles.projectDivider} />
       <div className={styles.projectCategory}>{project.category}</div>
       <p className={styles.projectSummary}>{project.summary}</p>
-      <div className={styles.projectStack}>{project.techStack.join(" // ")}</div>
+      <div className={styles.projectStack}>{project.techStack.join("  ")}</div>
       <div className={styles.projectFooter}>
         <span className={styles.projectBadge}>{badge}</span>
         {project.metric && (
@@ -216,13 +217,33 @@ export default function Home() {
       <div className={styles.page}>
         <PortfolioFrame />
 
+        {/* ── Mobile menu backdrop ── */}
+        {menuOpen && (
+          <div
+            className={styles.mobileBackdrop}
+            onClick={(e) => {
+              e.stopPropagation()
+              setMenuOpen(false)
+            }}
+            aria-hidden="true"
+          />
+        )}
+
         {/* ── Mobile nav overlay ── */}
         <nav
           className={`${styles.mobileNav} ${menuOpen ? styles.mobileNavOpen : ""}`}
           aria-label="Mobile navigation"
           aria-hidden={!menuOpen}
         >
-          <button className={styles.mobileNavClose} onClick={() => setMenuOpen(false)} aria-label="Close menu">
+          <button
+            className={styles.mobileNavClose}
+            onClick={(e) => {
+              e.stopPropagation()
+              setMenuOpen(false)
+            }}
+            aria-label="Close menu"
+            title="Close menu"
+          >
             <X size={24} />
           </button>
           {[
@@ -237,7 +258,10 @@ export default function Home() {
               target={ext ? "_blank" : undefined}
               rel={ext ? "noopener noreferrer" : undefined}
               className={styles.mobileNavLink}
-              onClick={() => setMenuOpen(false)}
+              onClick={(e) => {
+                e.stopPropagation()
+                setMenuOpen(false)
+              }}
             >
               {label}
             </a>
@@ -261,9 +285,7 @@ export default function Home() {
               Download CV →
             </a>
           </nav>
-          <button className={styles.hamburger} onClick={() => setMenuOpen(true)} aria-label="Open menu">
-            <Menu size={22} />
-          </button>
+          <AnimatedHamburger isOpen={menuOpen} onClick={() => setMenuOpen(!menuOpen)} />
         </header>
 
         {/* ── Geometric Hero ── */}
@@ -285,7 +307,7 @@ export default function Home() {
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.65, ease }}
           >
-            <p className={styles.sectionLabel}>02 // SYSTEMS</p>
+            <p className={styles.sectionLabel}>02 SYSTEMS</p>
             <span aria-hidden="true" className={styles.sectionDecorNum}>02</span>
             <h2 className={styles.sectionH2}>Engineering Systems</h2>
             <p className={styles.sectionSubtitle}>
@@ -307,7 +329,7 @@ export default function Home() {
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.65, ease }}
           >
-            <p className={styles.sectionLabel}>03 // ABOUT</p>
+            <p className={styles.sectionLabel}>03 ABOUT</p>
             <span aria-hidden="true" className={styles.sectionDecorNum}>03</span>
             <h2 className={styles.sectionH2}>{site.name}</h2>
             <p style={{ fontSize: "0.9rem", color: "rgba(11,11,12,0.55)", marginBottom: 0 }}>
@@ -358,7 +380,7 @@ export default function Home() {
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.65, ease }}
           >
-            <p className={styles.contactSectionLabel}>04 // CONTACT</p>
+            <p className={styles.contactSectionLabel}>04 CONTACT</p>
             <span aria-hidden="true" className={styles.sectionDecorNumLight}>04</span>
             <h2 className={styles.contactH2}>Get in touch.</h2>
           </motion.div>
@@ -389,7 +411,7 @@ export default function Home() {
           </div>
 
           <p className={styles.contactStatusBar}>
-            01 // {site.location} &nbsp;·&nbsp; 02 // Available for Work &nbsp;·&nbsp;
+            {site.location} &nbsp;·&nbsp; Available for Work &nbsp;·&nbsp;
             uptime: 99.98% &nbsp;·&nbsp; © {new Date().getFullYear()} {site.name}
           </p>
         </section>

@@ -6,8 +6,9 @@ import Link from "next/link"
 import { site } from "@/data/portfolioData"
 import styles from "./work.module.css"
 import headerStyles from "../new-page.module.css"
-import { Menu, X } from "lucide-react"
+import { X } from "lucide-react"
 import { useState, useEffect } from "react"
+import { AnimatedHamburger } from "@/components/AnimatedHamburger"
 import { ProjectsGridNew } from "@/components/ProjectsGridNew"
 
 export default function WorkPage() {
@@ -85,9 +86,7 @@ export default function WorkPage() {
               Download CV →
             </a>
           </nav>
-          <button className={headerStyles.hamburger} onClick={() => setMenuOpen(true)} aria-label="Open menu">
-            <Menu size={22} />
-          </button>
+          <AnimatedHamburger isOpen={menuOpen} onClick={() => setMenuOpen(!menuOpen)} />
         </header>
 
         {/* Work/Systems Section */}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Inter, JetBrains_Mono } from "next/font/google"
 import { site } from "@/data/site"
+import { RootClient } from "@/components/RootClient"
 import "./globals.css"
 
 const inter = Inter({
@@ -57,8 +58,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <body>
-        <a href="#hero" className="skip-to-main">Skip to main content</a>
-        {children}
+        <RootClient>{children}</RootClient>
       </body>
     </html>
   )

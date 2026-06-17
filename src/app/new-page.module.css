@@ -98,7 +98,6 @@
   gap: 28px;
 }
 
-/* Hamburger button — visible only on mobile */
 .hamburger {
   display: none;
   background: none;
@@ -109,11 +108,10 @@
   line-height: 1;
   min-width: 48px;
   min-height: 48px;
-  display: flex;
   align-items: center;
   justify-content: center;
   transition: color var(--transition-fast), opacity var(--transition-fast), transform var(--transition-fast);
-  opacity: 0.7;
+  opacity: 0.8;
 }
 
 .hamburger:hover {
@@ -131,20 +129,15 @@
   border-radius: 4px;
 }
 
-/* Mobile nav overlay */
-.mobileNav {
-  display: none;
+.mobileBackdrop {
   position: fixed;
   inset: 0;
-  z-index: 999;
-  background: var(--glass-bg-heavy);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 36px;
-  animation: fadeIn 0.3s ease-out;
+  z-index: 997;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  animation: fadeIn 0.25s ease;
 }
 
 @keyframes fadeIn {
@@ -152,22 +145,45 @@
   to { opacity: 1; }
 }
 
+.mobileNav {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: #0a0a0a;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  pointer-events: none;
+  opacity: 0;
+}
+
 .mobileNavOpen {
   display: flex;
+  pointer-events: auto;
+  opacity: 1;
 }
 
 .mobileNavLink {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: 700;
   color: var(--text-primary);
   text-decoration: none;
   letter-spacing: -0.02em;
-  transition: color var(--transition-fast), transform var(--transition-fast);
+  transition: color 0.25s ease, transform 0.25s ease;
+  padding: 12px 0;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .mobileNavLink:hover {
   color: var(--accent-color);
-  transform: translateX(6px);
+  transform: translateX(4px);
+}
+
+.mobileNavLink:active {
+  transform: translateX(2px);
 }
 
 .mobileNavLink:focus-visible {
@@ -178,7 +194,7 @@
 
 .mobileNavClose {
   position: absolute;
-  top: 18px;
+  top: 16px;
   right: clamp(20px, 4vw, 48px);
   background: none;
   border: none;
@@ -190,12 +206,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform var(--transition-fast), color var(--transition-fast);
+  transition: color 0.25s ease, transform 0.25s ease;
+  opacity: 0.8;
 }
 
 .mobileNavClose:hover {
-  transform: rotate(90deg);
   color: var(--accent-color);
+  opacity: 1;
+}
+
+.mobileNavClose:active {
+  transform: scale(0.9);
 }
 
 .headerLink {

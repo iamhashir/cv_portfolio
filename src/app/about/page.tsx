@@ -6,8 +6,9 @@ import Link from "next/link"
 import { site, CAPABILITIES } from "@/data/portfolioData"
 import styles from "./about.module.css"
 import headerStyles from "../new-page.module.css"
-import { Menu, X } from "lucide-react"
+import { X } from "lucide-react"
 import { useState, useEffect } from "react"
+import { AnimatedHamburger } from "@/components/AnimatedHamburger"
 
 export default function AboutPage() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -79,9 +80,7 @@ export default function AboutPage() {
               Download CV →
             </a>
           </nav>
-          <button className={headerStyles.hamburger} onClick={() => setMenuOpen(true)} aria-label="Open menu">
-            <Menu size={22} />
-          </button>
+          <AnimatedHamburger isOpen={menuOpen} onClick={() => setMenuOpen(!menuOpen)} />
         </header>
 
         {/* About Section */}
