@@ -1,0 +1,397 @@
+/* Final UI/UX Visibility & Design Polish */
+/* Comprehensive refinements for every interactive component */
+
+/* ═════════════════════════════════════════════════════════════════════════════ */
+/* 1. BUTTON VISIBILITY & FEEDBACK ENHANCEMENTS */
+/* ═════════════════════════════════════════════════════════════════════════════ */
+
+button,
+a[role="button"],
+.btn-primary,
+.btn-secondary,
+.ctaPrimary,
+.ctaSecondary,
+.cardCta {
+  /* Ensure buttons are always clearly interactive */
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  position: relative;
+
+  /* Enhanced transition for smooth feedback */
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Explicitly visible hover states */
+button:hover:not(:disabled),
+a[role="button"]:hover,
+.btn-primary:hover,
+.btn-secondary:hover,
+.ctaPrimary:hover,
+.ctaSecondary:hover,
+.cardCta:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+
+/* Strong active feedback */
+button:active:not(:disabled),
+a[role="button"]:active,
+.btn-primary:active,
+.btn-secondary:active,
+.ctaPrimary:active,
+.ctaSecondary:active,
+.cardCta:active {
+  transform: translateY(0);
+  filter: brightness(0.98);
+}
+
+/* ═════════════════════════════════════════════════════════════════════════════ */
+/* 2. LINK VISIBILITY IMPROVEMENTS */
+/* ═════════════════════════════════════════════════════════════════════════════ */
+
+a:not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.ctaPrimary):not(.ctaSecondary) {
+  /* Ensure all links are distinguishable */
+  position: relative;
+  text-decoration: underline;
+  text-decoration-color: currentColor;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+
+  /* Smooth transitions */
+  transition: all 0.18s ease;
+}
+
+a:not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.ctaPrimary):not(.ctaSecondary):hover {
+  text-decoration-thickness: 2px;
+  opacity: 0.85;
+}
+
+a:not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.ctaPrimary):not(.ctaSecondary):focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 4px;
+  text-decoration-thickness: 2px;
+}
+
+/* ═════════════════════════════════════════════════════════════════════════════ */
+/* 3. TEXT CONTRAST & READABILITY */
+/* ═════════════════════════════════════════════════════════════════════════════ */
+
+/* Ensure all text has sufficient contrast */
+body {
+  background-color: var(--bg-primary, #0a0a0a);
+  color: var(--text-primary, #f0f0f0);
+}
+
+/* Ensure readable text sizes */
+p, li, td, label {
+  min-height: 1.5em;
+  line-height: 1.6;
+}
+
+/* Headings should be bold and clear */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+/* Small text still readable */
+small, .small, [class*="caption"], [class*="label"] {
+  min-font-size: 12px;
+  line-height: 1.4;
+}
+
+/* ═════════════════════════════════════════════════════════════════════════════ */
+/* 4. FORM INPUT VISIBILITY */
+/* ═════════════════════════════════════════════════════════════════════════════ */
+
+input,
+textarea,
+select {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 10px 12px;
+  font-size: 16px;
+  border: 2px solid;
+  border-color: var(--border-muted, #222222);
+  border-radius: 4px;
+  background-color: var(--bg-secondary, #111111);
+  color: var(--text-primary, #f0f0f0);
+  transition: all 0.2s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--accent-color, #c8ff00);
+  background-color: var(--bg-tertiary, #181818);
+  box-shadow: 0 0 0 3px rgba(200, 255, 0, 0.15);
+}
+
+input:hover:not(:focus),
+textarea:hover:not(:focus),
+select:hover:not(:focus) {
+  border-color: var(--border-focus, #444444);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted, #555555);
+  opacity: 0.7;
+}
+
+input:disabled,
+textarea:disabled,
+select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--bg-secondary, #111111);
+}
+
+/* ═════════════════════════════════════════════════════════════════════════════ */
+/* 5. NAVIGATION VISIBILITY */
+/* ═════════════════════════════════════════════════════════════════════════════ */
+
+nav a,
+nav button,
+[role="navigation"] a,
+[role="navigation"] button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: all 0.18s ease;
+}
+
+nav a:hover,
+[role="navigation"] a:hover {
+  background-color: rgba(200, 255, 0, 0.1);
+  color: var(--accent-color, #c8ff00);
+}
+
+nav a:focus-visible,
+[role="navigation"] a:focus-visible {
+  outline: 3px solid var(--accent-color, #c8ff00);
+  outline-offset: 2px;
+}
+
+/* ═════════════════════════════════════════════════════════════════════════════ */
+/* 6. CARD & COMPONENT VISIBILITY */
+/* ═════════════════════════════════════════════════════════════════════════════ */
+
+.card,
+[class*="card"],
+.component,
+[class*="component"] {
+  position: relative;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.card:hover,
+[class*="card"]:hover {
+  border-color: var(--accent-color, #c8ff00);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  transform: translateY(-4px);
+}
+
+.card:focus-within,
+[class*="card"]:focus-within {
+  outline: 3px solid var(--accent-color, #c8ff00);
+  outline-offset: 2px;
+}
+
+/* ═════════════════════════════════════════════════════════════════════════════ */
+/* 7. MOBILE TOUCH OPTIMIZATION */
+/* ═════════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 480px) {
+  /* Larger touch targets on mobile */
+  button,
+  a[role="button"],
+  [role="button"] {
+    min-height: 48px;
+    min-width: 48px;
+    padding: 12px 16px;
+  }
+
+  /* Better spacing between tap targets */
+  button + button,
+  a[role="button"] + a[role="button"] {
+    margin-left: 8px;
+  }
+
+  /* Full-width CTAs on mobile */
+  .ctaPrimary,
+  .ctaSecondary,
+  .cta-button {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  /* Easier to read text on mobile */
+  p, li, label {
+    font-size: 16px;
+  }
+
+  /* Better spacing in mobile */
+  section {
+    padding: 20px 16px;
+  }
+
+  /* Improved mobile card spacing */
+  .card,
+  [class*="card"] {
+    margin-bottom: 16px;
+    padding: 20px;
+  }
+}
+
+/* ═════════════════════════════════════════════════════════════════════════════ */
+/* 8. ACCESSIBILITY FEATURES */
+/* ═════════════════════════════════════════════════════════════════════════════ */
+
+/* Skip-to-main link */
+.skip-to-main,
+[href="#main"],
+.skip-content {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--accent-color, #c8ff00);
+  color: var(--bg-primary, #0a0a0a);
+  padding: 12px 20px;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 700;
+  z-index: 9999;
+  transition: top 0.2s ease;
+}
+
+.skip-to-main:focus,
+[href="#main"]:focus,
+.skip-content:focus {
+  top: 10px;
+  outline: 3px solid;
+  outline-offset: 2px;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Screen reader only text */
+.sr-only,
+.sr-only-focusable:not(:focus),
+.visually-hidden:not(:focus),
+.invisible-but-focusable:not(:focus) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only-focusable:focus,
+.visually-hidden:focus,
+.invisible-but-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* ═════════════════════════════════════════════════════════════════════════════ */
+/* 9. STATUS & STATE INDICATORS */
+/* ═════════════════════════════════════════════════════════════════════════════ */
+
+/* Ensure states are clear (not color-alone) */
+.success,
+.error,
+.warning,
+.info,
+[aria-live] {
+  position: relative;
+  padding-left: 24px;
+}
+
+.success::before,
+.error::before,
+.warning::before,
+.info::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+.success::before {
+  background: #22c55e;
+}
+
+.error::before {
+  background: #ef4444;
+}
+
+.warning::before {
+  background: #f59e0b;
+}
+
+.info::before {
+  background: #3b82f6;
+}
+
+/* ═════════════════════════════════════════════════════════════════════════════ */
+/* 10. FOCUS & KEYBOARD NAVIGATION */
+/* ═════════════════════════════════════════════════════════════════════════════ */
+
+/* Universal clear focus indicator */
+:focus-visible {
+  outline: 3px solid var(--accent-color, #c8ff00);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Ensure tab navigation is obvious */
+*:focus-visible {
+  position: relative;
+  z-index: 1;
+}
+
+/* Tabindex should never be > 0 (except for accessibility) */
+[tabindex="0"],
+[tabindex="1"],
+[tabindex="2"],
+[tabindex="3"] {
+  outline: 3px solid var(--accent-color, #c8ff00);
+  outline-offset: 2px;
+}
+
+/* No focus ring on click (mouse users) */
+:focus:not(:focus-visible) {
+  outline: none;
+}
