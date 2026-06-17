@@ -1,20 +1,24 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useId, useRef, useState } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import { site } from "@/data/site"
 import styles from "./geometric-hero.module.css"
 
 /**
- * Warm + Earthy Geometric Hero
+ * Squishy + Geometric Hero
  * - Playful squishy blob that reacts to scroll
  * - Geometric grid background
- * - Crafted color palette (terracotta, sage, cream)
+ * - High-contrast electric palette (lime, coral, cyan) via design tokens
  */
 
 export function GeometricHero() {
   const heroRef = useRef<HTMLDivElement>(null)
   const blobRef = useRef<SVGSVGElement>(null)
+  // Unique SVG ids so multiple hero instances never collide
+  const uid = useId()
+  const gridId = `grid-${uid}`
+  const blobGradId = `blobGradient-${uid}`
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const [blobScale, setBlobScale] = useState(1)
   const [isVisible, setIsVisible] = useState(true)
@@ -70,7 +74,7 @@ export function GeometricHero() {
       <div className={styles.gridBackground} aria-hidden="true">
         <svg className={styles.gridSvg} viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
           <defs>
-            <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+            <pattern id={gridId} width="60" height="60" patternUnits="userSpaceOnUse">
               <path
                 d="M 60 0 L 0 0 0 60"
                 fill="none"
@@ -79,7 +83,7 @@ export function GeometricHero() {
               />
             </pattern>
           </defs>
-          <rect width="1200" height="800" fill="url(#grid)" />
+          <rect width="1200" height="800" fill={`url(#${gridId})`} />
           <line x1="0" y1="200" x2="400" y2="200" className={styles.accentLineH} strokeWidth="2"/>
           <line x1="900" y1="0" x2="900" y2="800" className={styles.accentLineV} strokeWidth="2"/>
         </svg>
@@ -109,18 +113,15 @@ export function GeometricHero() {
         }}
       >
         <defs>
-          <linearGradient id="blobGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id={blobGradId} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="var(--accent-color)" stopOpacity="0.35" />
             <stop offset="50%" stopColor="var(--accent-cyan)" stopOpacity="0.25" />
             <stop offset="100%" stopColor="var(--accent-coral)" stopOpacity="0.3" />
           </linearGradient>
-          <filter id="blobBlur">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
-          </filter>
         </defs>
         <motion.path
           d="M100,20 C120,20 140,30 150,50 C160,70 155,90 145,110 C140,125 130,140 110,150 C90,160 70,160 50,150 C30,140 20,125 15,110 C5,90 10,70 20,50 C30,30 80,20 100,20"
-          fill="url(#blobGradient)"
+          fill={`url(#${blobGradId})`}
           animate={{
             d: [
               "M100,20 C120,20 140,30 150,50 C160,70 155,90 145,110 C140,125 130,140 110,150 C90,160 70,160 50,150 C30,140 20,125 15,110 C5,90 10,70 20,50 C30,30 80,20 100,20",
