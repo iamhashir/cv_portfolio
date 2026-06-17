@@ -436,13 +436,13 @@ export default function Home() {
       {/* ── Splash Cursor (Systems Section Only) ── */}
       {systemsInView && (
         <SplashCursor
-          DENSITY_DISSIPATION={3}
-          VELOCITY_DISSIPATION={1.5}
-          PRESSURE={0.25}
-          CURL={19}
-          SPLAT_RADIUS={0.61}
-          SPLAT_FORCE={5500}
-          COLOR_UPDATE_SPEED={7}
+          DENSITY_DISSIPATION={3.5}
+          VELOCITY_DISSIPATION={2}
+          PRESSURE={0.1}
+          CURL={3}
+          SPLAT_RADIUS={0.2}
+          SPLAT_FORCE={6000}
+          COLOR_UPDATE_SPEED={10}
           COLOR="#84CC16"
           RAINBOW_MODE={false}
           SHADING={true}
