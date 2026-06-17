@@ -251,10 +251,10 @@ export default function Home() {
             { label: "CV →", href: site.cvPath },
           ]}
           activeHref={`#${activeNav}`}
-          baseColor="#0f0c08"
-          pillColor="#f8f0dc"
-          hoveredPillTextColor="#0f0c08"
-          pillTextColor="#0f0c08"
+          baseColor="#c9a96e"
+          pillColor="transparent"
+          hoveredPillTextColor="#c9a96e"
+          pillTextColor="#f8f0dc"
           ease="power2.easeOut"
         />
 
