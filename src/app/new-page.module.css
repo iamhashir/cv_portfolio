@@ -387,7 +387,8 @@
   background: var(--bg-primary);
   opacity: 0;
   transform: translate(-50%, -50%);
-  transition: width 0.6s ease-out, height 0.6s ease-out, opacity 0.6s ease-out;
+  transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), height 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s ease-out;
+  pointer-events: none;
 }
 
 .ctaPrimary:active::before {
@@ -685,12 +686,13 @@
   -webkit-backdrop-filter: blur(8px);
   padding: 28px 28px 24px;
   cursor: pointer;
-  transition: background var(--transition-fast), border-left-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+  transition: background 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), border-left-color 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   display: flex;
   flex-direction: column;
   border-left: 3px solid transparent;
   position: relative;
   overflow: hidden;
+  will-change: transform, box-shadow;
 }
 
 .projectCard::before {
@@ -1287,8 +1289,14 @@
 }
 
 .contactRow:hover .contactRowArrow {
-  transform: translateX(4px);
+  transform: translateX(6px) scale(1.1);
   color: var(--accent-color);
+}
+
+/* ── Contact Row Active State ────────────────────────────── */
+.contactRow:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease-out;
 }
 
 .contactStatusBar {
@@ -1334,6 +1342,81 @@
   color: var(--text-muted);
   text-transform: uppercase;
   padding: 0 40px;
+}
+
+/* ── Scroll-Triggered Animations ─────────────────────────── */
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.scrollReveal {
+  animation: fadeInUp 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.scrollRevealLeft {
+  animation: fadeInLeft 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.scrollRevealRight {
+  animation: fadeInRight 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.scrollRevealZoom {
+  animation: zoomIn 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+/* ── Enhanced Touch Feedback for Mobile ───────────────────── */
+@media (hover: none) and (pointer: coarse) {
+  .projectCard:active {
+    background: var(--bg-secondary);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+  }
+
+  .ctaPrimary:active {
+    opacity: 0.85;
+  }
+
+  .ctaSecondary:active {
+    opacity: 0.7;
+  }
+
+  button:active,
+  a:active {
+    opacity: 0.8;
+  }
 }
 
 /* ── Responsive ──────────────────────────────────────────────── */
