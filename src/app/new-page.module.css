@@ -1561,6 +1561,34 @@ a:hover {
   opacity: 0;
 }
 
+/* ── Ultra-Refined Micro-Interactions ───────────────────── */
+@keyframes subtleGlow {
+  0%, 100% {
+    text-shadow: 0 0 0 rgba(200, 255, 0, 0);
+  }
+  50% {
+    text-shadow: 0 0 12px rgba(200, 255, 0, 0.3);
+  }
+}
+
+@keyframes elevate {
+  0% {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+  100% {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(200, 255, 0, 0.2);
+  }
+}
+
+/* Ultra-smooth transition tokens */
+:root {
+  --ultra-fast: 0.12s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --hyper-smooth: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --premium: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
 /* ── Delightful Focus Management ────────────────────────── */
 .page:focus-within {
   outline: none;
