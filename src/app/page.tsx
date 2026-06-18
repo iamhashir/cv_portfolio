@@ -1,9 +1,7 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState, lazy, Suspense } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
-import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism"
 import {
   site,
   projects,
@@ -32,6 +30,11 @@ const SplashCursor = dynamic(() => import("@/components/SplashCursor"), {
   ssr: false,
   loading: () => null,
 })
+
+const CodeSnippetComponent = dynamic(
+  () => import("@/app/CodeSnippetLazy"),
+  { ssr: false, loading: () => <div style={{ background: "rgba(30,30,30,0.5)", height: "200px", borderRadius: "8px" }} /> }
+)
 
 const ease = [0.25, 0.46, 0.45, 0.94] as const
 
@@ -64,20 +67,15 @@ function WorkflowSteps({ steps }: { steps: WorkflowStep[] }) {
   )
 }
 
-// ─── Code snippet with syntax highlighting ───────────────────────
+// ─── Code snippet with syntax highlighting (lazy loaded) ───────────────────────
 function CodeSnippet({ snippet }: { snippet: DemoSnippet }) {
   return (
     <div className={styles.codeSection}>
       <p className={styles.codeLabel}>{snippet.label}</p>
       <div className={styles.codeBlock}>
-        <SyntaxHighlighter
-          language={snippet.language}
-          style={oneDark}
-          customStyle={{ margin: 0, background: "transparent", padding: "20px 22px" }}
-          codeTagProps={{ style: { fontFamily: "var(--font-mono, monospace)", fontSize: "0.72rem" } }}
-        >
-          {snippet.code}
-        </SyntaxHighlighter>
+        <Suspense fallback={<div style={{ padding: "20px 22px", color: "rgba(255,255,255,0.5)" }}>Loading code...</div>}>
+          <CodeSnippetComponent snippet={snippet} />
+        </Suspense>
       </div>
     </div>
   )
@@ -188,44 +186,71 @@ function ProjectCard({
 
 // ─── Page ────────────────────────────────────────────────────────
 export default function Home() {
-  const [scrolled,     setScrolled]     = useState(false)
   const [expandedSlug, setExpandedSlug] = useState<string | null>(null)
   const [systemsInView, setSystemsInView] = useState(false)
   const [activeNav, setActiveNav] = useState("")
+  const [isMobile, setIsMobile] = useState(false)
+  const [canvasLoaded, setCanvasLoaded] = useState(false)
   const systemsRef = useRef<HTMLElement>(null)
   const aboutRef = useRef<HTMLElement>(null)
   const contactRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
-    window.addEventListener("scroll", onScroll, { passive: true })
-    return () => window.removeEventListener("scroll", onScroll)
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768)
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+    return () => window.removeEventListener("resize", checkMobile)
   }, [])
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => setSystemsInView(entry.isIntersecting),
-      { threshold: 0.1 }
-    )
-    if (systemsRef.current) observer.observe(systemsRef.current)
-    return () => observer.disconnect()
+    const timer = setTimeout(() => setCanvasLoaded(true), 100)
+    return () => clearTimeout(timer)
   }, [])
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveNav(entry.target.id)
-          }
-        })
-      },
-      { threshold: 0.3 }
-    )
-    if (systemsRef.current) observer.observe(systemsRef.current)
-    if (aboutRef.current) observer.observe(aboutRef.current)
-    if (contactRef.current) observer.observe(contactRef.current)
-    return () => observer.disconnect()
+    const setupObserver = () => {
+      const observer = new IntersectionObserver(
+        ([entry]) => setSystemsInView(entry.isIntersecting),
+        { threshold: 0.1 }
+      )
+      if (systemsRef.current) observer.observe(systemsRef.current)
+      return () => observer.disconnect()
+    }
+
+    if (typeof requestIdleCallback !== 'undefined') {
+      const id = requestIdleCallback(setupObserver)
+      return () => cancelIdleCallback(id)
+    } else {
+      const id = setTimeout(setupObserver, 0)
+      return () => clearTimeout(id)
+    }
+  }, [])
+
+  useEffect(() => {
+    const setupNavObserver = () => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setActiveNav(entry.target.id)
+            }
+          })
+        },
+        { threshold: 0.3 }
+      )
+      if (systemsRef.current) observer.observe(systemsRef.current)
+      if (aboutRef.current) observer.observe(aboutRef.current)
+      if (contactRef.current) observer.observe(contactRef.current)
+      return () => observer.disconnect()
+    }
+
+    if (typeof requestIdleCallback !== 'undefined') {
+      const id = requestIdleCallback(setupNavObserver)
+      return () => cancelIdleCallback(id)
+    } else {
+      const id = setTimeout(setupNavObserver, 0)
+      return () => clearTimeout(id)
+    }
   }, [])
 
   function handleToggle(slug: string) {
@@ -235,7 +260,7 @@ export default function Home() {
   return (
     <>
       <div className={styles.backgroundStage} aria-hidden="true">
-        <ArtisticCanvas />
+        {canvasLoaded && <ArtisticCanvas />}
       </div>
       <div className={styles.page}>
         <PortfolioFrame />
@@ -408,8 +433,11 @@ export default function Home() {
       </div>
 
       {/* ── Splash Cursor (Systems Section Only) ── */}
-      {systemsInView && (
+      {systemsInView && !isMobile && (
         <SplashCursor
+          DYE_RESOLUTION={960}
+          SIM_RESOLUTION={128}
+          PRESSURE_ITERATIONS={10}
           DENSITY_DISSIPATION={3.5}
           VELOCITY_DISSIPATION={2}
           PRESSURE={0.1}
@@ -420,6 +448,7 @@ export default function Home() {
           COLOR="#84CC16"
           RAINBOW_MODE={false}
           SHADING={true}
+          enablePerformanceMode={true}
         />
       )}
     </>

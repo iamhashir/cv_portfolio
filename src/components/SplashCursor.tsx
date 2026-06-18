@@ -18,16 +18,17 @@ interface SplashCursorProps {
   COLOR?: string;
   BACK_COLOR?: { r: number; g: number; b: number };
   TRANSPARENT?: boolean;
+  enablePerformanceMode?: boolean;
 }
 
 function SplashCursor({
   SIM_RESOLUTION = 128,
-  DYE_RESOLUTION = 1440,
+  DYE_RESOLUTION = 960,
   CAPTURE_RESOLUTION = 512,
   DENSITY_DISSIPATION = 3.5,
   VELOCITY_DISSIPATION = 2,
   PRESSURE = 0.1,
-  PRESSURE_ITERATIONS = 20,
+  PRESSURE_ITERATIONS = 10,
   CURL = 3,
   SPLAT_RADIUS = 0.2,
   SPLAT_FORCE = 6000,
@@ -36,7 +37,8 @@ function SplashCursor({
   BACK_COLOR = { r: 0.5, g: 0, b: 0 },
   TRANSPARENT = true,
   RAINBOW_MODE = true,
-  COLOR = '#ff0000'
+  COLOR = '#ff0000',
+  enablePerformanceMode = true
 }: SplashCursorProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameId = useRef<number | null>(null);
@@ -81,6 +83,20 @@ function SplashCursor({
     };
 
     let pointers: any[] = [new (pointerPrototype as any)()];
+
+    // Pre-generate color palette for performance (Phase 1 optimization)
+    const COLOR_PALETTE = (() => {
+      const palette = [];
+      for (let hue = 0; hue <= 360; hue += 1) {
+        const c = HSVtoRGB(hue / 360, 1.0, 1.0);
+        palette.push({
+          r: c.r * 0.15,
+          g: c.g * 0.15,
+          b: c.b * 0.15
+        });
+      }
+      return palette;
+    })();
 
     const { gl: glContext, ext } = getWebGLContext(canvas);
     if (!glContext) throw new Error('Unable to initialize WebGL context');
@@ -939,11 +955,8 @@ function SplashCursor({
       if (!config.RAINBOW_MODE) {
         return hexToRGB(config.COLOR);
       }
-      let c = HSVtoRGB(Math.random(), 1.0, 1.0);
-      c.r *= 0.15;
-      c.g *= 0.15;
-      c.b *= 0.15;
-      return c;
+      // Use pre-generated palette instead of HSV conversion (Phase 1 optimization)
+      return COLOR_PALETTE[Math.floor(Math.random() * COLOR_PALETTE.length)];
     }
 
     function HSVtoRGB(h: number, s: number, v: number) {
@@ -1031,7 +1044,10 @@ function SplashCursor({
     }
 
     let firstMouseMoveHandled = false;
-    function handleMouseMove(e: MouseEvent) {
+    let lastMoveTime = 0;
+    const MOUSE_THROTTLE = enablePerformanceMode ? 1000 / 30 : 0; // 30Hz throttle in performance mode
+
+    function handleMouseMoveImpl(e: MouseEvent) {
       let pointer = pointers[0];
       let posX = scaleByPixelRatio((e as any).clientX);
       let posY = scaleByPixelRatio((e as any).clientY);
@@ -1044,6 +1060,15 @@ function SplashCursor({
       }
     }
 
+    function handleMouseMove(e: MouseEvent) {
+      if (MOUSE_THROTTLE > 0) {
+        const now = Date.now();
+        if (now - lastMoveTime < MOUSE_THROTTLE) return;
+        lastMoveTime = now;
+      }
+      handleMouseMoveImpl(e);
+    }
+
     function handleTouchStart(e: TouchEvent) {
       const touches = e.targetTouches;
       let pointer = pointers[0];
@@ -1054,7 +1079,7 @@ function SplashCursor({
       }
     }
 
-    function handleTouchMove(e: TouchEvent) {
+    function handleTouchMoveImpl(e: TouchEvent) {
       const touches = e.targetTouches;
       let pointer = pointers[0];
       for (let i = 0; i < touches.length; i++) {
@@ -1062,6 +1087,15 @@ function SplashCursor({
         let posY = scaleByPixelRatio(touches[i].clientY);
         updatePointerMoveData(pointer, posX, posY, pointer.color);
       }
+    }
+
+    function handleTouchMove(e: TouchEvent) {
+      if (MOUSE_THROTTLE > 0) {
+        const now = Date.now();
+        if (now - lastMoveTime < MOUSE_THROTTLE) return;
+        lastMoveTime = now;
+      }
+      handleTouchMoveImpl(e);
     }
 
     function handleTouchEnd(e: TouchEvent) {

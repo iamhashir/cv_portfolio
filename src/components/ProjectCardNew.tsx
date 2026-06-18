@@ -1,9 +1,20 @@
 "use client"
 
-import React, { useRef, useState } from "react"
+import React, { useRef, useState, useCallback } from "react"
 import { motion, useMotionValue, useSpring } from "framer-motion"
 import { Project } from "@/data/portfolioData"
 import styles from "./project-card-new.module.css"
+
+const throttle = (fn: (...args: any[]) => void, delay: number) => {
+  let lastCall = 0
+  return function (...args: any[]) {
+    const now = Date.now()
+    if (now - lastCall >= delay) {
+      lastCall = now
+      fn(...args)
+    }
+  }
+}
 
 const SPRING = { damping: 30, stiffness: 100, mass: 2 }
 const TOOLTIP_SPRING = { stiffness: 350, damping: 30, mass: 1 }
@@ -39,7 +50,7 @@ export function ProjectCardNew({ project, isExpanded, onToggle, index, disableEf
 
   const accentColor = CATEGORY_ACCENT[project.categoryGroup] ?? "#C17A5F"
 
-  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+  const handleMouseMoveImpl = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return
     const rect = ref.current.getBoundingClientRect()
     const offsetX = e.clientX - rect.left - rect.width / 2
@@ -50,7 +61,12 @@ export function ProjectCardNew({ project, isExpanded, onToggle, index, disableEf
     tooltipY.set(e.clientY - rect.top)
     tooltipRotate.set(-(offsetY - lastOffsetY) * 0.6)
     setLastOffsetY(offsetY)
-  }
+  }, [lastOffsetY, rotateX, rotateY, tooltipX, tooltipY, tooltipRotate])
+
+  const handleMouseMove = useCallback(
+    throttle(handleMouseMoveImpl, 16),
+    [handleMouseMoveImpl]
+  )
 
   function handleMouseEnter() {
     setIsHovered(true)

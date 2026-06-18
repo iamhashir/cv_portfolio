@@ -10,6 +10,7 @@ const ShapeGrid = ({ direction = 'right', speed = 1, borderColor = '#999', squar
   const hoveredSquare = useRef(null);
   const trailCells = useRef([]);
   const cellOpacities = useRef(new Map());
+  const cachedGradient = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -252,7 +253,12 @@ const ShapeGrid = ({ direction = 'right', speed = 1, borderColor = '#999', squar
       }
     };
 
+    let lastMouseMoveTime = 0;
     const handleMouseMove = event => {
+      const now = Date.now();
+      if (now - lastMouseMoveTime < 16) return;
+      lastMouseMoveTime = now;
+
       const rect = canvas.getBoundingClientRect();
       const mouseX = event.clientX - rect.left;
       const mouseY = event.clientY - rect.top;

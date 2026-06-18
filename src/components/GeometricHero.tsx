@@ -1,30 +1,22 @@
 "use client"
 
-import React, { useEffect, useId, useRef, useState } from "react"
-import { motion, useScroll, useTransform } from "framer-motion"
+import React, { useEffect, useId, useRef } from "react"
+import { motion, useMotionValue, useScroll, useTransform } from "framer-motion"
 import dynamic from "next/dynamic"
 import { site } from "@/data/site"
 import styles from "./geometric-hero.module.css"
 
 const ShapeGrid = dynamic(() => import("./ShapeGrid"), { ssr: false })
 
-/**
- * Squishy + Geometric Hero
- * - Playful squishy blob that reacts to scroll
- * - Geometric grid background
- * - High-contrast electric palette (lime, coral, cyan) via design tokens
- */
-
 export function GeometricHero() {
   const heroRef = useRef<HTMLDivElement>(null)
   const blobRef = useRef<SVGSVGElement>(null)
-  // Unique SVG ids so multiple hero instances never collide
   const uid = useId()
-  const gridId = `grid-${uid}`
   const blobGradId = `blobGradient-${uid}`
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
-  const [blobScale, setBlobScale] = useState(1)
-  const [isVisible, setIsVisible] = useState(true)
+
+  // useMotionValue avoids React re-renders on every mouse move
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
 
   // Scroll animation
   const { scrollYProgress } = useScroll({
@@ -37,39 +29,17 @@ export function GeometricHero() {
   const blobRotate = useTransform(scrollYProgress, [0, 1], [0, 180])
   const blobScale2 = useTransform(scrollYProgress, [0, 1], [1, 1.15])
 
-  // Mouse tracking for blob
+  // Mouse tracking — updates MotionValues directly, no React re-renders
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!heroRef.current) return
       const rect = heroRef.current.getBoundingClientRect()
-      const x = (e.clientX - rect.left) / rect.width
-      const y = (e.clientY - rect.top) / rect.height
-      setMousePos({ x: x * 20 - 10, y: y * 20 - 10 })
+      mouseX.set((e.clientX - rect.left) / rect.width * 20 - 10)
+      mouseY.set((e.clientY - rect.top) / rect.height * 20 - 10)
     }
-
     window.addEventListener("mousemove", handleMouseMove)
     return () => window.removeEventListener("mousemove", handleMouseMove)
-  }, [])
-
-  // Intersection Observer to pause animations when off-screen
-  useEffect(() => {
-    if (!heroRef.current) return
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsVisible(entry.isIntersecting),
-      { threshold: 0 }
-    )
-    observer.observe(heroRef.current)
-    return () => observer.disconnect()
-  }, [])
-
-  // Blob animation loop (paused when off-screen)
-  useEffect(() => {
-    if (!isVisible) return
-    const interval = setInterval(() => {
-      setBlobScale(1 + Math.sin(Date.now() / 2000) * 0.08)
-    }, 30)
-    return () => clearInterval(interval)
-  }, [isVisible])
+  }, [mouseX, mouseY])
 
   return (
     <section ref={heroRef} className={styles.hero}>
@@ -93,8 +63,8 @@ export function GeometricHero() {
         viewBox="0 0 200 200"
         xmlns="http://www.w3.org/2000/svg"
         style={{
-          x: mousePos.x,
-          y: mousePos.y,
+          x: mouseX,
+          y: mouseY,
           rotate: blobRotate,
           scale: blobScale2,
         }}
@@ -115,11 +85,13 @@ export function GeometricHero() {
               "M100,15 C130,15 155,25 165,55 C175,85 165,105 150,125 C140,140 125,150 105,155 C85,160 60,155 40,145 C20,135 10,115 10,90 C10,60 25,30 50,20 C75,15 85,15 100,15",
               "M100,20 C120,20 140,30 150,50 C160,70 155,90 145,110 C140,125 130,140 110,150 C90,160 70,160 50,150 C30,140 20,125 15,110 C5,90 10,70 20,50 C30,30 80,20 100,20",
             ],
+            scale: [0.92, 1.08, 0.92],
           }}
           transition={{
             duration: 6,
             repeat: Infinity,
             ease: "easeInOut",
+            scale: { duration: 4, repeat: Infinity, ease: "easeInOut" },
           }}
         />
       </motion.svg>
