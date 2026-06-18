@@ -20,9 +20,10 @@ interface ProjectCardNewProps {
   isExpanded: boolean
   onToggle: () => void
   index: number
+  disableEffects?: boolean
 }
 
-export function ProjectCardNew({ project, isExpanded, onToggle, index }: ProjectCardNewProps) {
+export function ProjectCardNew({ project, isExpanded, onToggle, index, disableEffects = false }: ProjectCardNewProps) {
   const ref = useRef<HTMLDivElement>(null)
   const [isHovered, setIsHovered] = useState(false)
   const [lastOffsetY, setLastOffsetY] = useState(0)
@@ -75,15 +76,13 @@ export function ProjectCardNew({ project, isExpanded, onToggle, index }: Project
       data-category={project.categoryGroup}
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       style={{
-        rotateX,
-        rotateY,
-        scale,
+        ...(!disableEffects && { rotateX, rotateY, scale }),
         transformStyle: "preserve-3d",
         "--card-accent": accentColor,
       } as any}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseMove={disableEffects ? undefined : handleMouseMove}
+      onMouseEnter={disableEffects ? undefined : handleMouseEnter}
+      onMouseLeave={disableEffects ? undefined : handleMouseLeave}
       onClick={onToggle}
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -193,25 +192,29 @@ export function ProjectCardNew({ project, isExpanded, onToggle, index }: Project
       </div>
 
       {/* Hover Glow */}
-      <motion.div
-        className={styles.cardGlow}
-        style={{ opacity: glowOpacity }}
-        aria-hidden="true"
-      />
+      {!disableEffects && (
+        <motion.div
+          className={styles.cardGlow}
+          style={{ opacity: glowOpacity }}
+          aria-hidden="true"
+        />
+      )}
 
       {/* Floating tooltip — TiltedCard style */}
-      <motion.div
-        className={styles.cardTooltip}
-        style={{
-          x: tooltipX,
-          y: tooltipY,
-          opacity: tooltipOpacity,
-          rotate: tooltipRotate,
-        }}
-        aria-hidden="true"
-      >
-        {project.categoryGroup}
-      </motion.div>
+      {!disableEffects && (
+        <motion.div
+          className={styles.cardTooltip}
+          style={{
+            x: tooltipX,
+            y: tooltipY,
+            opacity: tooltipOpacity,
+            rotate: tooltipRotate,
+          }}
+          aria-hidden="true"
+        >
+          {project.categoryGroup}
+        </motion.div>
+      )}
     </motion.div>
   )
 }

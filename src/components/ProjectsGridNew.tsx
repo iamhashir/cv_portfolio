@@ -1,9 +1,10 @@
 "use client"
 
-import React, { useMemo } from "react"
-import { motion } from "framer-motion"
+import React, { useMemo, useState, useEffect } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { projects, Project } from "@/data/portfolioData"
 import { ProjectCardNew } from "./ProjectCardNew"
+import ScrollStack, { ScrollStackItem } from "./ScrollStack"
 import styles from "./projects-grid-new.module.css"
 
 interface ProjectsGridNewProps {
@@ -81,12 +82,25 @@ function AccordionDetail({ project, onClose }: { project: Project; onClose: () =
   )
 }
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)")
+    setIsMobile(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener("change", handler)
+    return () => mq.removeEventListener("change", handler)
+  }, [])
+  return isMobile
+}
+
 export function ProjectsGridNew({
   expandedSlug,
   onToggle,
   onClose,
 }: ProjectsGridNewProps) {
-  // Stabilize card indices with useMemo to prevent jitter on re-render
+  const isMobile = useIsMobile()
+
   const cardIndices = useMemo(() => {
     const indices: { [slug: string]: number } = {}
     projects.forEach((project, i) => {
@@ -94,6 +108,52 @@ export function ProjectsGridNew({
     })
     return indices
   }, [])
+
+  const expandedProject = expandedSlug
+    ? projects.find((p) => p.slug === expandedSlug) ?? null
+    : null
+
+  if (isMobile) {
+    return (
+      <div className={styles.mobileWrapper}>
+        <ScrollStack
+          useWindowScroll
+          itemDistance={0}
+          itemStackDistance={10}
+          stackPosition="0%"
+          scaleEndPosition="0%"
+          baseScale={0.9}
+          itemScale={0.025}
+          onStackComplete={undefined}
+        >
+          {projects.map((project) => {
+            const idx = cardIndices[project.slug]
+            return (
+              <ScrollStackItem key={project.slug}>
+                <ProjectCardNew
+                  project={project}
+                  isExpanded={expandedSlug === project.slug}
+                  onToggle={() => onToggle(project.slug)}
+                  index={idx}
+                  disableEffects
+                />
+              </ScrollStackItem>
+            )
+          })}
+        </ScrollStack>
+
+        <AnimatePresence>
+          {expandedProject && (
+            <AccordionDetail
+              key={`accordion-${expandedProject.slug}`}
+              project={expandedProject}
+              onClose={onClose}
+            />
+          )}
+        </AnimatePresence>
+      </div>
+    )
+  }
 
   const COL_COUNT = 3
   const rows: Project[][] = []
@@ -104,7 +164,7 @@ export function ProjectsGridNew({
   return (
     <div className={styles.grid}>
       {rows.map((row, ri) => {
-        const expandedProject = row.find((p) => p.slug === expandedSlug) ?? null
+        const expandedInRow = row.find((p) => p.slug === expandedSlug) ?? null
         return (
           <React.Fragment key={`row-${ri}`}>
             {row.map((project) => {
@@ -119,10 +179,10 @@ export function ProjectsGridNew({
                 />
               )
             })}
-            {expandedProject && (
+            {expandedInRow && (
               <AccordionDetail
-                key={`accordion-${expandedProject.slug}`}
-                project={expandedProject}
+                key={`accordion-${expandedInRow.slug}`}
+                project={expandedInRow}
                 onClose={onClose}
               />
             )}

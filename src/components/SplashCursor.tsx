@@ -82,7 +82,9 @@ function SplashCursor({
 
     let pointers: any[] = [new (pointerPrototype as any)()];
 
-    const { gl, ext } = getWebGLContext(canvas);
+    const { gl: glContext, ext } = getWebGLContext(canvas);
+    if (!glContext) throw new Error('Unable to initialize WebGL context');
+    const gl = glContext as WebGL2RenderingContext | WebGLRenderingContext;
     if (!ext.supportLinearFiltering) {
       config.DYE_RESOLUTION = 256;
       config.SHADING = false;
@@ -96,30 +98,32 @@ function SplashCursor({
         antialias: false,
         preserveDrawingBuffer: false
       };
-      let gl = canvas.getContext('webgl2', params as any);
+      let gl: WebGL2RenderingContext | WebGLRenderingContext | null = canvas.getContext('webgl2', params as any) as WebGL2RenderingContext | null;
       const isWebGL2 = !!gl;
-      if (!isWebGL2) gl = canvas.getContext('webgl', params as any) || (canvas as any).getContext('experimental-webgl', params);
+      if (!isWebGL2) gl = (canvas.getContext('webgl', params as any) || (canvas as any).getContext('experimental-webgl', params)) as WebGLRenderingContext | null;
 
       let halfFloat;
       let supportLinearFiltering;
       if (isWebGL2) {
-        gl!.getExtension('EXT_color_buffer_float');
-        supportLinearFiltering = gl!.getExtension('OES_texture_float_linear');
+        const glWebGL2 = gl as WebGL2RenderingContext;
+        glWebGL2.getExtension('EXT_color_buffer_float');
+        supportLinearFiltering = glWebGL2.getExtension('OES_texture_float_linear');
       } else {
-        halfFloat = gl!.getExtension('OES_texture_half_float');
         supportLinearFiltering = gl!.getExtension('OES_texture_half_float_linear');
+        halfFloat = gl!.getExtension('OES_texture_half_float');
       }
       gl!.clearColor(0.0, 0.0, 0.0, 1.0);
 
-      const halfFloatTexType = isWebGL2 ? gl!.HALF_FLOAT : (halfFloat as any)?.HALF_FLOAT_OES;
+      const halfFloatTexType = isWebGL2 ? (gl as WebGL2RenderingContext).HALF_FLOAT : (halfFloat as any)?.HALF_FLOAT_OES;
       let formatRGBA;
       let formatRG;
       let formatR;
 
       if (isWebGL2) {
+        const glWebGL2 = gl as WebGL2RenderingContext;
         formatRGBA = getSupportedFormat(gl!, (gl as any).RGBA16F, (gl as any).RGBA, halfFloatTexType);
         formatRG = getSupportedFormat(gl!, (gl as any).RG16F, (gl as any).RG, halfFloatTexType);
-        formatR = getSupportedFormat(gl!, (gl as any).R16F, gl!.RED, halfFloatTexType);
+        formatR = getSupportedFormat(gl!, (gl as any).R16F, glWebGL2.RED, halfFloatTexType);
       } else {
         formatRGBA = getSupportedFormat(gl!, gl!.RGBA, gl!.RGBA, halfFloatTexType);
         formatRG = getSupportedFormat(gl!, gl!.RGBA, gl!.RGBA, halfFloatTexType);
@@ -597,8 +601,10 @@ function SplashCursor({
       const rgba = ext.formatRGBA;
       const rg = ext.formatRG;
       const r = ext.formatR;
-      const filtering = ext.supportLinearFiltering ? gl!.LINEAR : gl!.NEAREST;
-      gl!.disable(gl!.BLEND);
+      const filtering = ext.supportLinearFiltering ? gl.LINEAR : gl.NEAREST;
+      gl.disable(gl.BLEND);
+
+      if (!rgba || !rg || !r) throw new Error('Unsupported texture format');
 
       if (!dye)
         dye = createDoubleFBO(dyeRes.width, dyeRes.height, rgba.internalFormat, rgba.format, texType, filtering);
@@ -618,9 +624,9 @@ function SplashCursor({
           filtering
         );
 
-      divergence = createFBO(simRes.width, simRes.height, r.internalFormat, r.format, texType, gl!.NEAREST);
-      curl = createFBO(simRes.width, simRes.height, r.internalFormat, r.format, texType, gl!.NEAREST);
-      pressure = createDoubleFBO(simRes.width, simRes.height, r.internalFormat, r.format, texType, gl!.NEAREST);
+      divergence = createFBO(simRes.width, simRes.height, r.internalFormat, r.format, texType, gl.NEAREST);
+      curl = createFBO(simRes.width, simRes.height, r.internalFormat, r.format, texType, gl.NEAREST);
+      pressure = createDoubleFBO(simRes.width, simRes.height, r.internalFormat, r.format, texType, gl.NEAREST);
     }
 
     function createFBO(w: number, h: number, internalFormat: number, format: number, type: number, param: number) {
@@ -734,11 +740,11 @@ function SplashCursor({
     }
 
     function resizeCanvas() {
-      let width = scaleByPixelRatio(canvas.clientWidth);
-      let height = scaleByPixelRatio(canvas.clientHeight);
-      if (canvas.width !== width || canvas.height !== height) {
-        canvas.width = width;
-        canvas.height = height;
+      let width = scaleByPixelRatio(canvas!.clientWidth);
+      let height = scaleByPixelRatio(canvas!.clientHeight);
+      if (canvas!.width !== width || canvas!.height !== height) {
+        canvas!.width = width;
+        canvas!.height = height;
         return true;
       }
       return false;
@@ -860,22 +866,22 @@ function SplashCursor({
 
     function splat(x: number, y: number, dx: number, dy: number, color: any) {
       splatProgram.bind();
-      gl!.uniform1i(splatProgram.uniforms.uTarget, velocity.read.attach(0));
-      gl!.uniform1f(splatProgram.uniforms.aspectRatio, canvas.width / canvas.height);
-      gl!.uniform2f(splatProgram.uniforms.point, x, y);
-      gl!.uniform3f(splatProgram.uniforms.color, dx, dy, 0.0);
-      gl!.uniform1f(splatProgram.uniforms.radius, correctRadius(config.SPLAT_RADIUS / 100.0));
+      gl.uniform1i(splatProgram.uniforms.uTarget, velocity.read.attach(0));
+      gl.uniform1f(splatProgram.uniforms.aspectRatio, canvas!.width / canvas!.height);
+      gl.uniform2f(splatProgram.uniforms.point, x, y);
+      gl.uniform3f(splatProgram.uniforms.color, dx, dy, 0.0);
+      gl.uniform1f(splatProgram.uniforms.radius, correctRadius(config.SPLAT_RADIUS / 100.0));
       blit(velocity.write);
       velocity.swap();
 
-      gl!.uniform1i(splatProgram.uniforms.uTarget, dye.read.attach(0));
-      gl!.uniform3f(splatProgram.uniforms.color, color.r, color.g, color.b);
+      gl.uniform1i(splatProgram.uniforms.uTarget, dye.read.attach(0));
+      gl.uniform3f(splatProgram.uniforms.color, color.r, color.g, color.b);
       blit(dye.write);
       dye.swap();
     }
 
     function correctRadius(radius: number) {
-      let aspectRatio = canvas.width / canvas.height;
+      let aspectRatio = canvas!.width / canvas!.height;
       if (aspectRatio > 1) radius *= aspectRatio;
       return radius;
     }
@@ -884,8 +890,8 @@ function SplashCursor({
       pointer.id = id;
       pointer.down = true;
       pointer.moved = false;
-      pointer.texcoordX = posX / canvas.width;
-      pointer.texcoordY = 1.0 - posY / canvas.height;
+      pointer.texcoordX = posX / canvas!.width;
+      pointer.texcoordY = 1.0 - posY / canvas!.height;
       pointer.prevTexcoordX = pointer.texcoordX;
       pointer.prevTexcoordY = pointer.texcoordY;
       pointer.deltaX = 0;
@@ -896,8 +902,8 @@ function SplashCursor({
     function updatePointerMoveData(pointer: any, posX: number, posY: number, color: any) {
       pointer.prevTexcoordX = pointer.texcoordX;
       pointer.prevTexcoordY = pointer.texcoordY;
-      pointer.texcoordX = posX / canvas.width;
-      pointer.texcoordY = 1.0 - posY / canvas.height;
+      pointer.texcoordX = posX / canvas!.width;
+      pointer.texcoordY = 1.0 - posY / canvas!.height;
       pointer.deltaX = correctDeltaX(pointer.texcoordX - pointer.prevTexcoordX);
       pointer.deltaY = correctDeltaY(pointer.texcoordY - pointer.prevTexcoordY);
       pointer.moved = Math.abs(pointer.deltaX) > 0 || Math.abs(pointer.deltaY) > 0;
@@ -909,13 +915,13 @@ function SplashCursor({
     }
 
     function correctDeltaX(delta: number) {
-      let aspectRatio = canvas.width / canvas.height;
+      let aspectRatio = canvas!.width / canvas!.height;
       if (aspectRatio < 1) delta *= aspectRatio;
       return delta;
     }
 
     function correctDeltaY(delta: number) {
-      let aspectRatio = canvas.width / canvas.height;
+      let aspectRatio = canvas!.width / canvas!.height;
       if (aspectRatio > 1) delta /= aspectRatio;
       return delta;
     }
@@ -993,11 +999,11 @@ function SplashCursor({
     }
 
     function getResolution(resolution: number) {
-      let aspectRatio = gl!.drawingBufferWidth / gl!.drawingBufferHeight;
+      let aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight;
       if (aspectRatio < 1) aspectRatio = 1.0 / aspectRatio;
       const min = Math.round(resolution);
       const max = Math.round(resolution * aspectRatio);
-      if (gl!.drawingBufferWidth > gl!.drawingBufferHeight) return { width: max, height: min };
+      if (gl.drawingBufferWidth > gl.drawingBufferHeight) return { width: max, height: min };
       else return { width: min, height: max };
     }
 

@@ -1,0 +1,29 @@
+.scroll-stack-scroller {
+  position: relative;
+  width: 100%;
+  overflow-x: visible;
+}
+
+/* When used with useWindowScroll, the scroller is just a layout wrapper */
+.scroll-stack-inner {
+  padding-bottom: 60vh;
+}
+
+/* Full-screen card container — inner .card fills it */
+.scroll-stack-card {
+  transform-origin: top center;
+  will-change: transform, filter;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  position: relative;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+.scroll-stack-end {
+  width: 100%;
+  height: 1px;
+}

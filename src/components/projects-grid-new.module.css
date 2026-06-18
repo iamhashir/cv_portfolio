@@ -1,6 +1,11 @@
 /* ── Projects Grid Layout ────────────────────────────────────── */
 /* Colors centralized via globals.css tokens. */
 
+/* Mobile: full-width wrapper for ScrollStack + accordion */
+.mobileWrapper {
+  width: 100%;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
