@@ -163,7 +163,7 @@ export default function ArtisticCanvas() {
 
   return (
     <Canvas
-      dpr={[1, 2]}
+      dpr={[1, 1.5]}
       camera={{ position: [0, 0, 9], fov: 52 }}
       style={{ width: "100%", height: "100%" }}
       gl={{ antialias: true, alpha: true }}

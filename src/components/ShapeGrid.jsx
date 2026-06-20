@@ -25,6 +25,8 @@ const ShapeGrid = ({ direction = 'right', speed = 1, borderColor = '#999', squar
       canvas.height = canvas.offsetHeight;
       numSquaresX.current = Math.ceil(canvas.width / squareSize) + 1;
       numSquaresY.current = Math.ceil(canvas.height / squareSize) + 1;
+      // Invalidate cached gradient on resize
+      cachedGradient.current = null;
     };
 
     window.addEventListener('resize', resizeCanvas);
@@ -64,6 +66,7 @@ const ShapeGrid = ({ direction = 'right', speed = 1, borderColor = '#999', squar
 
     const drawGrid = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = borderColor;
 
       if (isHex) {
         const colShift = Math.floor(gridOffset.current.x / hexHoriz);
@@ -88,7 +91,6 @@ const ShapeGrid = ({ direction = 'right', speed = 1, borderColor = '#999', squar
             }
 
             drawHex(cx, cy, squareSize);
-            ctx.strokeStyle = borderColor;
             ctx.stroke();
           }
         }
@@ -118,7 +120,6 @@ const ShapeGrid = ({ direction = 'right', speed = 1, borderColor = '#999', squar
             }
 
             drawTriangle(cx, cy, squareSize, flip);
-            ctx.strokeStyle = borderColor;
             ctx.stroke();
           }
         }
@@ -144,7 +145,6 @@ const ShapeGrid = ({ direction = 'right', speed = 1, borderColor = '#999', squar
             }
 
             drawCircle(cx, cy, squareSize);
-            ctx.strokeStyle = borderColor;
             ctx.stroke();
           }
         }
@@ -168,22 +168,22 @@ const ShapeGrid = ({ direction = 'right', speed = 1, borderColor = '#999', squar
               ctx.globalAlpha = 1;
             }
 
-            ctx.strokeStyle = borderColor;
             ctx.strokeRect(sx, sy, squareSize, squareSize);
           }
         }
       }
 
-      const gradient = ctx.createRadialGradient(
-        canvas.width / 2,
-        canvas.height / 2,
-        0,
-        canvas.width / 2,
-        canvas.height / 2,
-        Math.sqrt(canvas.width ** 2 + canvas.height ** 2) / 2
-      );
-      gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
-      ctx.fillStyle = gradient;
+      // Reuse cached gradient — only rebuild when canvas resizes
+      if (!cachedGradient.current) {
+        const g = ctx.createRadialGradient(
+          canvas.width / 2, canvas.height / 2, 0,
+          canvas.width / 2, canvas.height / 2,
+          Math.sqrt(canvas.width ** 2 + canvas.height ** 2) / 2
+        );
+        g.addColorStop(0, 'rgba(0, 0, 0, 0)');
+        cachedGradient.current = g;
+      }
+      ctx.fillStyle = cachedGradient.current;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     };
 
