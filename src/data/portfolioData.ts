@@ -3,8 +3,24 @@
 // one import path and zero knowledge of the underlying files.
 
 export { site } from "./site"
-export { projects, projectCategoryGroups } from "./projects"
+
+import {
+  projects as rawProjects,
+  projectCategoryGroups,
+} from "./projects"
+
+export { projectCategoryGroups }
 export type { Project, WorkflowStep, DemoSnippet } from "./projects"
+
+// Legacy portfolio entries still reference an old GitHub handle whose
+// repositories no longer resolve. Hide those URLs from recruiter-facing UI
+// until each project can be mapped to a verified public source.
+export const projects = rawProjects.map((project) => ({
+  ...project,
+  githubUrl: project.githubUrl?.includes("github.com/ihashirr/")
+    ? undefined
+    : project.githubUrl,
+}))
 
 // ─── Display filename for each project slug ──────────────────────
 export const PROJECT_FILENAMES: Record<string, string> = {
