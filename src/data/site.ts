@@ -9,29 +9,29 @@ export const site = {
   location: "Abu Dhabi, UAE",
 
   // ── Professional ──────────────────────────────────────────────
-  role:  "Full-Stack & AI Engineer",
-  roles: ["Full-Stack Developer", "AI Automations Engineer", "Systems Architect"] as const,
+  role:  "Software Engineer — Full-Stack, AI & Systems",
+  roles: ["Full-Stack Engineer", "AI Automation Engineer", "Systems Engineer"] as const,
 
-  bio: "Full-stack developer building CRM, workflow automation, and internal operations tools. Custom operations software and AI-assisted workflows in React, TS, and Node.js.",
+  bio: "Software engineer building full-stack business systems, real-time applications, and AI automation. I work across React/Next.js, TypeScript, Node.js, APIs, databases, and systems-level engineering.",
 
   availability:
-    "Currently open to technical contracts, operations system consulting, and full-stack software development roles in Abu Dhabi and remote worldwide.",
+    "Open to software engineering roles in the UAE and remote, with a focus on full-stack, backend, AI automation, and real-time systems.",
 
   // ── Social / Links ────────────────────────────────────────────
-  github:         "https://github.com/ihashirr",
-  githubHandle:   "ihashirr",
+  github:         "https://github.com/iamhashir",
+  githubHandle:   "iamhashir",
   linkedin:       "https://linkedin.com/in/malikhashir",
   linkedinHandle: "linkedin.com/in/malikhashir",
   cvPath:         "/Malik_Hashir_CV.pdf",
 
   // ── SEO ───────────────────────────────────────────────────────
   seo: {
-    title:       "Malik Hashir | Full-Stack Developer for CRM & Business Systems",
-    description: "Full-stack developer building CRM, workflow automation, and internal operations tools. Custom operations software and AI-assisted workflows in React, TS, and Node.js.",
+    title:       "Malik Hashir | Software Engineer — Full-Stack, AI & Systems",
+    description: "Software engineer building full-stack business systems, real-time applications, and AI automation with React, Next.js, TypeScript, Node.js, APIs, and databases.",
     keywords: [
-      "Malik Hashir", "Full Stack Developer", "CRM", "Automation",
-      "Operations Software", "Internal Tools", "React", "TypeScript",
-      "Node.js", "Abu Dhabi", "UAE",
+      "Malik Hashir", "Software Engineer", "Full Stack Engineer", "AI Automation",
+      "Systems Engineering", "CRM", "Operations Software", "React", "Next.js",
+      "TypeScript", "Node.js", "PostgreSQL", "Abu Dhabi", "UAE",
     ],
   },
 
