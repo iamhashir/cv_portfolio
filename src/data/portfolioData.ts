@@ -21,9 +21,12 @@ export function getFilename(slug: string): string {
 }
 
 export function getBadgeLabel(status: string, githubUrl?: string): string {
-  if (status.toLowerCase().includes("private")) return "[PRIVATE]"
-  if (githubUrl) return "[MIT LICENSE]"
-  return "[PRODUCTION]"
+  const normalized = status.toLowerCase()
+
+  if (normalized.includes("private")) return "[PRIVATE]"
+  if (normalized.includes("case study")) return "[CASE STUDY]"
+  if (githubUrl) return "[SOURCE]"
+  return "[PROJECT]"
 }
 
 // ─── Capabilities list for About section ─────────────────────────
